@@ -16,7 +16,7 @@ UnicodeMath is based on standard conventions for mathematical symbols and operat
 * terms built from function symbols applied to variables, constants and terms
 * prefix/infix relation symbols with lower precedence than function symbols (∈,=,≤,<,≥,>,…)
 * atomic formulas built from relation symbols applied to terms
-* prefix/infix logical symbols with lower precedence than relation symbols (¬,∨,∧,→,↔,∃,∀,…)
+* prefix/infix logical symbols with lower precedence than relation symbols (¬ ,or, and, ⟹, ⟺, ∃, ∀, …)
 * formulas built from logical symbols applied to atomic formulas and formulas
 * metalogical symbols and large operator symbols that combine mathematical expressions from several of the above types (⊢,⊨,⋁,⋀,⋃,⋂,∑,∏,lim,∫,…)
 
@@ -26,6 +26,26 @@ Standard mathematical notation makes liberal use of invisible "\cdot" and functi
  
 Infix symbols that are usually considered associative (+,⋅,=) have variable arity and chain over a list of arguments (rather than having left or right associated parse trees).
 
-Many symbols are overloaded, but types are used to disambigute these situations. Each symbol has a default type, but its type can be changed dynamically.
+Many symbols are overloaded, but types are used to disambiguate these situations. Each symbol has a default type, but its type can be changed dynamically.
 
 The abstract syntax tree contains the symbol (sym:string), type (typ:string) and arguments (arg, arg2, arg3), where the latter three are either a tree or a list of trees.
+
+### Examples of valid UnicodeMath expressions from discrete mathematics
+
+𝔹 = {𝐓, 𝐅}
+ℕ = {0,1,2,…}
+A ⊆ B ⟺ ∀x(x ∈ A ⟹ x ∈ B)
+A = B ⟺ ∀x(x ∈ A ⟺ x ∈ B) ⟺ A ⊆ B and B ⊆ A
+A ⊂ B ⟺ A ⊆ B and A ≠ B
+∅ = {}
+∀x(x ∉ ∅)
+𝒫(A) = {S | S ⊆ A}
+(a,b) = (c,d) ⟺ a=c and b=d
+A × B = {(a, b) | a ∈ A and b ∈ B}
+(a_1,…,a_n) = (b_1,…,b_n) ⟺ ∀i, a_i = b_i
+A_1 × ⋯ × A_n = {(a_1,…,a_n) | a_i ∈ A_i for i = 1,…,n}
+A^n = {(a_1,…,a_n) | a_i ∈ A for i = 1,…,n} = A × ⋯ × A
+A ∪ B = {x | x ∈ A or x ∈ B}
+A ∩ B = {x | x ∈ A and x ∈ B}
+A − B = {x | x ∈ A and x ∉ B}
+A ⊕ B = {x | x ∈ A∪B and x ∉ A∩B}
