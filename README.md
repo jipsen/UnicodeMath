@@ -39,13 +39,24 @@ The abstract syntax tree contains the symbol (sym:string), type (typ:string) and
 * A ⊂ B ⟺ A ⊆ B and A ≠ B
 * ∅ = {}
 * ∀x(x ∉ ∅)
+* {1,2,2,1} = {1,2}
 * 𝒫(A) = {S | S ⊆ A}
 * (a,b) = (c,d) ⟺ a=c and b=d
 * A × B = {(a, b) | a ∈ A and b ∈ B}
 * (a_1,…,a_n) = (b_1,…,b_n) ⟺ ∀i, a_i = b_i
 * A_1 × ⋯ × A_n = {(a_1,…,a_n) | a_i ∈ A_i for i = 1,…,n}
 * A^n = {(a_1,…,a_n) | a_i ∈ A for all i = 1,…,n} = A × ⋯ × A
-* A ∪ B = {x | x ∈ A or x ∈ B} and ⋃_(i\in I) A_i = {x | x ∈ A_i for some i ∈ I}
+* A ∪ B = {x | x ∈ A or x ∈ B} and ⋃_(i∈I) A_i = {x | x ∈ A_i for some i ∈ I}
 * A ∩ B = {x | x ∈ A and x ∈ B}
 * A − B = {x | x ∈ A and x ∉ B}
 * A ⊕ B = {x | x ∈ A∪B and x ∉ A∩B}
+* f : ℝ → ℝ and S ⊆ ℝ
+* f[S] = {f(x) | x ∈ S}
+* a < b ⟹ f(a) ≤ f(b)
+* (a,b] = {x | a < x ≤ b}
+* ⌊x⌋ = n ⟺ n ∈ ℤ and n ≤ x < n+1
+* |x| = −x if x < 0 else x
+* x = a/b ⟺ bx = a and b ≠ 0
+* (f+g)(x) = f(x) + g(x)
+* (fg)(x) = f(x)g(x)
+* (f/g)(x) = f(x)/g(x) if g(x) ≠ 0
