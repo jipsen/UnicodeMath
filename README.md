@@ -44,9 +44,8 @@ The abstract syntax tree contains the symbol (sym:string), type (typ:string) and
 * A × B = {(a, b) | a ∈ A and b ∈ B}
 * (a_1,…,a_n) = (b_1,…,b_n) ⟺ ∀i, a_i = b_i
 * A_1 × ⋯ × A_n = {(a_1,…,a_n) | a_i ∈ A_i for i = 1,…,n}
-* A^n = {(a_1,…,a_n) | a_i ∈ A for i = 1,…,n} = A × ⋯ × A
-* A ∪ B = {x | x ∈ A or x ∈ B}
+* A^n = {(a_1,…,a_n) | a_i ∈ A for all i = 1,…,n} = A × ⋯ × A
+* A ∪ B = {x | x ∈ A or x ∈ B} and ⋃_(i\in I) A_i = {x | x ∈ A_i for some i ∈ I}
 * A ∩ B = {x | x ∈ A and x ∈ B}
 * A − B = {x | x ∈ A and x ∉ B}
 * A ⊕ B = {x | x ∈ A∪B and x ∉ A∩B}
-
