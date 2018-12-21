@@ -32,20 +32,21 @@ The abstract syntax tree contains the symbol (sym:string), type (typ:string) and
 
 ### Examples of valid UnicodeMath expressions from discrete mathematics
 
-𝔹 = {𝐓, 𝐅}
-ℕ = {0,1,2,…}
-A ⊆ B ⟺ ∀x(x ∈ A ⟹ x ∈ B)
-A = B ⟺ ∀x(x ∈ A ⟺ x ∈ B) ⟺ A ⊆ B and B ⊆ A
-A ⊂ B ⟺ A ⊆ B and A ≠ B
-∅ = {}
-∀x(x ∉ ∅)
-𝒫(A) = {S | S ⊆ A}
-(a,b) = (c,d) ⟺ a=c and b=d
-A × B = {(a, b) | a ∈ A and b ∈ B}
-(a_1,…,a_n) = (b_1,…,b_n) ⟺ ∀i, a_i = b_i
-A_1 × ⋯ × A_n = {(a_1,…,a_n) | a_i ∈ A_i for i = 1,…,n}
-A^n = {(a_1,…,a_n) | a_i ∈ A for i = 1,…,n} = A × ⋯ × A
-A ∪ B = {x | x ∈ A or x ∈ B}
-A ∩ B = {x | x ∈ A and x ∈ B}
-A − B = {x | x ∈ A and x ∉ B}
-A ⊕ B = {x | x ∈ A∪B and x ∉ A∩B}
+* 𝔹 = {𝐓, 𝐅}
+* ℕ = {0,1,2,…}
+* A ⊆ B ⟺ ∀x(x ∈ A ⟹ x ∈ B)
+* A = B ⟺ ∀x(x ∈ A ⟺ x ∈ B) ⟺ A ⊆ B and B ⊆ A
+* A ⊂ B ⟺ A ⊆ B and A ≠ B
+* ∅ = {}
+* ∀x(x ∉ ∅)
+* 𝒫(A) = {S | S ⊆ A}
+* (a,b) = (c,d) ⟺ a=c and b=d
+* A × B = {(a, b) | a ∈ A and b ∈ B}
+* (a_1,…,a_n) = (b_1,…,b_n) ⟺ ∀i, a_i = b_i
+* A_1 × ⋯ × A_n = {(a_1,…,a_n) | a_i ∈ A_i for i = 1,…,n}
+* A^n = {(a_1,…,a_n) | a_i ∈ A for i = 1,…,n} = A × ⋯ × A
+* A ∪ B = {x | x ∈ A or x ∈ B}
+* A ∩ B = {x | x ∈ A and x ∈ B}
+* A − B = {x | x ∈ A and x ∉ B}
+* A ⊕ B = {x | x ∈ A∪B and x ∉ A∩B}
+
