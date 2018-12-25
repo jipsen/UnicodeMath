@@ -50,13 +50,372 @@ The abstract syntax tree contains the symbol (sym:string), type (typ:string) and
 * A ∩ B = {x | x ∈ A and x ∈ B}
 * A − B = {x | x ∈ A and x ∉ B}
 * A ⊕ B = {x | x ∈ A∪B and x ∉ A∩B}
+* f : A → B ⟺ ∀x∈A, ∃!y∈B, f(x)=y
 * f : ℝ → ℝ and S ⊆ ℝ
 * f[S] = {f(x) | x ∈ S}
-* a < b ⟹ f(a) ≤ f(b)
+* f is increasing ⟺ (a < b ⟹ f(a) ≤ f(b))
 * (a,b] = {x | a < x ≤ b}
+* ⌊_⌋ : ℝ → ℤ
 * ⌊x⌋ = n ⟺ n ∈ ℤ and n ≤ x < n+1
 * |x| = −x if x < 0 else x
 * x = a/b ⟺ bx = a and b ≠ 0
 * (f+g)(x) = f(x) + g(x)
 * (fg)(x) = f(x)g(x)
 * (f/g)(x) = f(x)/g(x) if g(x) ≠ 0
+* (f∘g)(x) = f(g(x))
+* id_A : A → A and ∀x, id_A(x) = x
+* graph(f) = {(x,y) | f(x) = y}
+
+
+Math fonts A
+𝔸 BbbA
+𝐀 mbfA
+𝔄 mfrakA, 𝕬 mbffrakA
+𝐴 mitA, 𝑨 mbfitA
+𝖠 msansA, 𝗔 mbfsansA, 𝘈 mitsansA, 𝘼 mbfitsansA
+𝒜 mscrA, 𝓐 mbfscrA
+𝙰 mttA
+
+Greek alphabet
+α alpha
+β beta
+χ chi
+δ delta, Δ Delta
+γ gamma, Γ Gamma
+ϵ epsilon, ɛ varepsilon
+η eta
+κ kappa
+λ lambda, Λ Lambda
+μ mu
+ν nu
+ω omega, Ω Omega
+ϕ phi, φ varphi, Φ Phi
+π pi, Π Pi
+ψ psi, Ψ Psi
+ρ rho
+σ sigma, Σ Sigma
+τ tau
+θ theta, ϑ vartheta, Θ Theta
+υ upsilon
+ξ xi, Ξ Xi
+ζ zeta
+
+Logic symbols
+¬ neg, ∨ vee, ∧ wedge
+⟹ Longrightarrow, ⟸ Longleftarrow
+⟺ Longleftrightarrow
+∀ forall, ∃ exists, ∄ nexists
+◊ lozenge, □ square
+⊢ vdash, ⊬ nvdash, ⊩ Vdash
+⊨ vDash, ⊭ nvDash, ⊧ models
+↯ downzigzagarrow
+∴ therefore, ∎ QED
+
+Set symbols
+∈ in, ∉ notin
+∋ ni, ∌ nni
+∅ emptyset, ℘ wp
+⊂ subset, ⊄ nsubset
+⊆ subseteq, ⊈ nsubseteq, ⊊ subsetneq
+⊃ supset, ⊅ nsupset
+⊇ supseteq, ⊉ nsupseteq, ⊋ supsetneq
+∩ cap, ∪ cup, ⊎ uplus
+∖ setminus, ∁ complement
+⋂ bigcap, ⋃ bigcup, ⨄ biguplus
+ℵ aleph, ℶ beth
+
+Infix operations +, -, *, /, \, ^, _, ;
+⩃ barcap, ⩂ barcup
+⊽ barvee, ⊼ barwedge
+⋅ cdot, ∘ circ, • bullet
+÷ div, ∸ dotminus, ⨪ minusdot
+∓ mp, ± pm
+⊙ odot, ⊖ ominus, ⊕ oplus
+⊘ oslash, ⦸ obslash
+⊓ sqcap, ⊔ sqcup, ⨿ amalg
+× times, ⋉ ltimes, ⋊ rtimes, ⋈ bowtie
+◃ triangleleft, ▹ triangleright
+⅋ upand, ≀ wr
+
+Functions cos, sin, tan, cot, csc, sec, log, exp
+ℑ Im, ℜ Re
+√ sqrt, ∛ cbrt, ∜ fourthroot
+
+Infix relations =, <, >, |, :
+≈ approx, ≅ cong, ≡ equiv
+≤ le, leq, ≰ nleq, ≥ ge, geq, ≱ ngeq
+≦ leqq, ≧ geqq
+≪ ll, ≫ gg
+≠ ne, neq
+≯ ngtr, ≮ nless
+∣ mid, ∤ nmid
+≺ prec, ⊀ nprec
+⪯ preceq, ⪯̸ npreceq
+≻ succ, ⊁ nsucc
+⪰ succeq, ⪰̸ nsucceq
+∥ parallel, ∦ nparallel
+∝ propto, ∼ sim
+⊏ sqsubset, ⊑ sqsubseteq
+⊐ sqsupset, ⊒ sqsupseteq
+
+Operators lim, sup, inf, d/d, max, min
+○ bigcirc, ⨀ bigodot
+⨁ bigoplus, ⨂ bigotimes
+⨅ bigsqcap, ⨆ bigsqcup
+★ bigstar, ⨉ bigtimes, ⨃ bigcupdot
+⋁ bigvee, ⋀ bigwedge
+∫ int, ∬ iint, ∭ iiint, ⨌ iiiint
+∮ oint, ∯ oiint, ∰ oiiint
+∂ partial, ∇ del
+∏ prod, ∑ sum, ∐ coprod
+
+Arrows
+↓ downarrow, ↑ uparrow, ↕ updownarrow
+⇓ Downarrow, ⇑ Uparrow, ⇕ Updownarrow
+↪ hookrightarrow, ↣ rightarrowtail, ↠ twoheadrightarrow
+↦ mapsto, ↤ mapsfrom
+→ to, rightarrow, ← leftarrow, ↔ leftrightarrow
+⇒ Rightarrow, ⇐ Leftarrow, ⇔ Leftrightarrow
+
+Brackets (, ), [, ], {, }
+⟨ langle, ⟩ rangle
+⌈ lceil, ⌉ rceil
+⌊ lfloor, ⌋ rfloor
+⟦ llbracket, ⟧ rrbracket
+
+Other !, @, #, $, %, ?, ., ', `, ~
+∠ angle, ⦜ Angle
+⊥ bot, ⊤ top
+ ̆ breve,  ̌ check,  ̂ hat, %\vec does not work??
+✓ checkmark
+♣ clubsuit, ♢ diamondsuit, ♡ heartsuit, ♠ spadesuit
+† dagger
+° degree
+… dots, ⋰ adots, ⋯ cdots, ⋱ ddots
+ℓ ell
+€ euro
+♭ flat, ♯ sharp
+⌢ frown, ⌣ smile
+ħ hbar
+∞ infty
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+⋰ adots
+ℵ aleph
+α alpha
+⨿ amalg
+∠ angle
+⦜ Angle
+≈ approx
+𝔸 BbbA
+𝒜 mscrA
+𝓐 mbfscrA
+𝔄 mfrakA
+𝕬 mbffrakA
+𝙰 mttA
+𝐀 mbfA
+𝐴 mitA
+𝑨 mbfitA
+𝖠 msansA
+𝗔 mbfsansA
+𝘈 mitsansA
+𝘼 mbfitsansA
+⩃ barcap
+⩂ barcup
+⊽ barvee
+⊼ barwedge
+⋂ bigcap
+○ bigcirc
+⋃ bigcup
+⨃ bigcupdot
+⨀ bigodot
+⨁ bigoplus
+⨂ bigotimes
+⨅ bigsqcap
+⨆ bigsqcup
+★ bigstar
+⨉ bigtimes
+⨄ biguplus
+⋁ bigvee
+⋀ bigwedge
+⊥ bot
+⋈ bowtie
+̆ breve
+• bullet
+∩ cap
+∛ cbrt
+⋅ cdot
+⋯ cdots
+̌ check
+✓ checkmark
+χ chi
+∘ circ
+♣ clubsuit
+∁ complement
+≅ cong
+∐ coprod
+∪ cup
+† dagger
+⋱ ddots
+° degree
+∇ del
+δ delta
+♢ diamondsuit
+÷ div
+∸ dotminus
+… dots
+↓ downarrow
+↯ downzigzagarrow
+Δ Delta
+⇓ Downarrow
+ℓ ell
+∅ emptyset
+ϵ epsilon
+ɛ varepsilon
+≡ equiv
+η eta
+€ euro
+∃ exists
+♭ flat
+∀ forall
+∜ fourthroot
+⌢ frown
+γ gamma
+≥ ge, geq
+≧ geqq
+≫ gg
+Γ Gamma
+̂ hat
+ħ hbar
+♡ heartsuit
+↪ hookrightarrow
+⨌ iiiint
+∭ iiint
+∬ iint
+∫ int
+∈ in
+∞ infty
+ℑ Im
+κ kappa
+λ lambda
+⟨ langle
+⌈ lceil
+≤ le, leq
+← leftarrow
+≦ leqq
+⌊ lfloor
+≪ ll
+⟦ llbracket
+◊ lozenge
+⋉ ltimes
+Λ Lambda
+⟸ Longleftarrow
+⟺ Longleftrightarrow
+↤ mapsfrom
+↦ mapsto
+∣ mid
+⨪ minusdot
+⊧ models
+∓ mp
+μ mu
+≠ ne, neq
+¬ neg
+∄ nexists
+≱ ngeq
+≯ ngtr
+∋ ni
+≰ nleq
+≮ nless
+∤ nmid
+∌ nni
+∉ notin
+∦ nparallel
+⊀ nprec
+⪯̸ npreceq
+⊄ nsubset
+⊈ nsubseteq
+ν nu
+⊬ nvdash
+⦸ obslash
+⊙ odot
+∰ oiiint
+∯ oiint
+∮ oint
+ω omega
+⊖ ominus
+⊕ oplus
+⊘ oslash
+Ω Omega
+∥ parallel
+∂ partial
+ϕ phi
+Φ Phi
+π pi
+± pm
+≺ prec
+⪯ preceq
+∏ prod
+∝ propto
+ψ psi
+Π Pi
+Ψ Psi
+∎ QED
+⟩ rangle
+⌉ rceil
+⌋ rfloor
+ρ rho
+→ rightarrow, to
+⟧ rrbracket
+⋊ rtimes
+ℜ Re
+∖ setminus
+♯ sharp
+σ sigma
+Σ Sigma
+∼ sim
+♠ spadesuit
+⊓ sqcap
+⊔ sqcup
+√ sqrt
+⊏ sqsubset
+⊑ sqsubseteq
+⊐ sqsupset
+⊒ sqsupseteq
+□ square
+⊂ subset
+⊆ subseteq
+⊊ subsetneq
+≻ succ
+⪰ succeq
+∑ sum
+⊃ supset
+⊇ supseteq
+⊋ supsetneq
+τ tau
+∴ therefore
+θ theta
+Θ Theta
+× times
+⊤ top
+◃ triangleleft
+▹ triangleright
+↠ twoheadrightarrow
+⅋ upand
+↑ uparrow
+⊎ uplus
+υ upsilon
+⇑ Uparrow
+⇕ Updownarrow
+ɛ varepsilon
+φ varphi
+ϑ vartheta
+⊢ vdash
+⊩ Vdash
+∨ vee
+∧ wedge
+℘ wp
+≀ wr
+ξ xi
+Ξ Xi
+ζ zeta
