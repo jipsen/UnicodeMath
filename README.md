@@ -170,7 +170,7 @@ Operators lim, sup, inf, d/d, max, min
 * ∏ prod, ∑ sum, ∐ coprod
 
 Arrows
-↓ downarrow, ↑ uparrow, ↕ updownarrow
+* ↓ downarrow, ↑ uparrow, ↕ updownarrow
 * ⇓ Downarrow, ⇑ Uparrow, ⇕ Updownarrow
 * ↪ hookrightarrow, ↣ rightarrowtail, ↠ twoheadrightarrow
 * ↦ mapsto, ↤ mapsfrom
