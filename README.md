@@ -40,21 +40,21 @@ The abstract syntax tree contains the symbol (sym:string), type (typ:string) and
 * ∅ = {}
 * ∀x(x ∉ ∅)
 * {1,2,2,1} = {1,2}
-* 𝒫(A) = {S | S ⊆ A}
+* 𝒫(A) = {S ∣ S ⊆ A}
 * (a,b) = (c,d) ⟺ a=c and b=d
-* A × B = {(a, b) | a ∈ A and b ∈ B}
+* A × B = {(a, b) ∣ a ∈ A and b ∈ B}
 * (a_1,…,a_n) = (b_1,…,b_n) ⟺ ∀i, a_i = b_i
-* A_1 × ⋯ × A_n = {(a_1,…,a_n) | a_i ∈ A_i for i = 1,…,n}
-* A^n = {(a_1,…,a_n) | a_i ∈ A for all i = 1,…,n} = A × ⋯ × A
-* A ∪ B = {x | x ∈ A or x ∈ B} and ⋃_(i∈I) A_i = {x | x ∈ A_i for some i ∈ I}
-* A ∩ B = {x | x ∈ A and x ∈ B}
-* A − B = {x | x ∈ A and x ∉ B}
-* A ⊕ B = {x | x ∈ A∪B and x ∉ A∩B}
+* A_1 × ⋯ × A_n = {(a_1,…,a_n) ∣ a_i ∈ A_i for i = 1,…,n}
+* A^n = {(a_1,…,a_n) ∣ a_i ∈ A for all i = 1,…,n} = A × ⋯ × A
+* A ∪ B = {x ∣ x ∈ A or x ∈ B} and ⋃_(i∈I) A_i = {x ∣ x ∈ A_i for some i ∈ I}
+* A ∩ B = {x ∣ x ∈ A and x ∈ B}
+* A − B = {x ∣ x ∈ A and x ∉ B}
+* A ⊕ B = {x ∣ x ∈ A∪B and x ∉ A∩B}
 * f : A → B ⟺ ∀x∈A, ∃!y∈B, f(x)=y
 * f : ℝ → ℝ and S ⊆ ℝ
-* f[S] = {f(x) | x ∈ S}
+* f[S] = {f(x) ∣ x ∈ S}
 * f is increasing ⟺ (a < b ⟹ f(a) ≤ f(b))
-* (a,b] = {x | a < x ≤ b}
+* (a,b] = {x ∣ a < x ≤ b}
 * ⌊_⌋ : ℝ → ℤ
 * ⌊x⌋ = n ⟺ n ∈ ℤ and n ≤ x < n+1
 * |x| = −x if x < 0 else x
@@ -64,8 +64,23 @@ The abstract syntax tree contains the symbol (sym:string), type (typ:string) and
 * (f/g)(x) = f(x)/g(x) if g(x) ≠ 0
 * (f∘g)(x) = f(g(x))
 * id_A : A → A and ∀x, id_A(x) = x
-* graph(f) = {(x,y) | f(x) = y}
+* graph(f) = {(x,y) ∣ f(x) = y}
 
+The axioms of Zermelo-Fraenkel set theory with choice ZFC
+
+In principle all of mathematics can be derived from these axioms
+1. Extensionality:  ∀X,Y [X=Y ⟺ ∀z(z∈X ⟺ z∈Y)]
+2. Pairing:         ∀x,y ∃Z ∀z [z∈Z ⟺ z=x or z=y]
+3. Union:           ∀X ∃Y ∀y [y∈Y ⟺ ∃Z(Z∈X and y∈Z)]
+4. Empty set:       ∃X ∀y [y ∉ X] (this set X is denoted by ∅)
+5. Infinity:        ∃X [∅ ∈ X and ∀x(x ∈ X ⟹ x ∪ {x} ∈ X)]
+6. Power set:       ∀X ∃Y ∀Z [Z∈Y ⟺ ∀z(z∈Z ⟹ z∈X)]
+7. Replacement:     ∀x∈X ∃!y P(x,y) ⟹ [∃Y ∀y (y∈Y ⟺ ∃x∈X (P(x,y)))]
+8. Regularity:      ∀X [X ≠ ∅ ⟹ ∃Y∈X (X∩Y = ∅)]
+9. Axiom of choice: ∀X [∅ ∉ X and ∀Y,Z∈X(Y≠Z ⟹ Y∩Z = ∅) ⟹ ∃Y ∀Z∈X ∃!z∈Z (z ∈ Y)]
+
+* ∀ = for all, ∃! = there exists a unique, P is any formula that does not contain Y
+* z ∈ X∪Y ⟺ z∈X or z∈Y,  z ∈ X∩Y ⟺ z∈X and z∈Y
 
 Math fonts A
 * 𝔸 BbbA

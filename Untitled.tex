@@ -1,0 +1,351 @@
+\documentclass{article}   
+\usepackage{amsmath, unicode-math}
+%\setmathfont{texgyrepagella-math.otf}
+\begin{document}
+
+To improve the display, use
+
+\verb|and -> \text{ and }|
+
+\verb|or -> \text{ or }|
+
+\verb|not -> \text{ not }|
+
+\verb|if -> \text{ if }|
+
+\verb|else -> \text{ else }|
+
+\verb|implies -> \text{ implies }|
+
+\verb|for all -> \text{ for all }|
+
+\verb|for some -> \text{ for some }|
+
+\verb!| -> \mid!
+
+$𝔹 = \{𝐓, 𝐅\}$
+
+$ℕ = \{0,1,2,…\}$
+
+$A ⊆ B ⟺ ∀x(x ∈ A ⟹ x ∈ B)$
+
+$A = B ⟺ ∀x(x ∈ A ⟺ x ∈ B) ⟺ A ⊆ B \text{ and } B ⊆ A$
+
+$A ⊂ B ⟺ A ⊆ B \text{ and } A ≠ B$
+
+$∅ = \{\}$
+
+$∀x(x ∉ ∅)$
+
+$\{1,2,2,1\} = \{1,2\}$
+
+$𝒫(A) = \{S ∣ S ⊆ A\}$
+
+$(a,b) = (c,d) ⟺ a=c \text{ and } b=d$
+
+$A × B = \{(a, b) ∣ a ∈ A \text{ and } b ∈ B\}$
+
+$(a_1,…,a_n) = (b_1,…,b_n) ⟺ ∀i, a_i = b_i$
+
+$A_1 × ⋯ × A_n = \{(a_1,…,a_n) ∣ a_i ∈ A_i \text{ for all } i ∈ \{1,…,n\}\}$
+
+$A^n = \{(a_1,…,a_n) ∣ a_i ∈ A \text{ for all } i = 1,…,n\} = A × ⋯ × A$
+
+$A ∪ B = \{x ∣ x ∈ A \text{ or } x ∈ B\} \text{ and } ⋃_{i∈I} A_i = \{x ∣ x ∈ A_i \text{ for some } i ∈ I\}$
+
+$A ∩ B = \{x ∣ x ∈ A \text{ and } x ∈ B\}$
+
+$A − B = \{x ∣ x ∈ A \text{ and } x ∉ B\}$
+
+$A ⊕ B = \{x ∣ x ∈ A∪B \text{ and } x ∉ A∩B\}$
+
+$f : A → B ⟺ ∀x∈A, ∃!y∈B, f(x)=y$
+
+$f : ℝ → ℝ \text{ and } S ⊆ ℝ$
+
+$f[S] = \{f(x) ∣ x ∈ S\}$
+
+$f \text{ is increasing } ⟺ (a < b ⟹ f(a) ≤ f(b))$
+
+$(a,b] = \{x ∣ a < x ≤ b\}$
+
+$⌊\_⌋ : ℝ → ℤ$ 
+
+$⌊x⌋ = n ⟺ n ∈ ℤ \text{ and } n ≤ x < n+1$
+
+$|x| = −x \text{ if } x < 0 \text{ else } x$
+
+$x = a/b ⟺ bx = a \text{ and } b ≠ 0$
+
+$(f+g)(x) = f(x) + g(x)$
+
+$(fg)(x) = f(x)g(x)$
+
+$(f/g)(x) = f(x)/g(x) \text{ if } g(x) ≠ 0$
+
+$(f∘g)(x) = f(g(x))$
+
+$id_A : A → A \text{ and } ∀x, id_A(x) = x$
+
+$graph(f) = \{(x,y) ∣ f(x) = y\}$
+
+$asso(\cdot) = ((x\cdot y)\cdot z=x\cdot (y\cdot z))$
+
+$comm(\cdot) = (x\cdot y=y\cdot x)$
+
+$idem(\cdot) = (x\cdot x=x)$
+
+$Sgrp(\cdot) = \{asso(\cdot)\}$
+
+$CSgrp(\cdot) = Sgrp(\cdot)\cup \{comm(\cdot)\}$
+
+$Slat(\cdot) = CSgrp(\cdot)\cup\{idem(\cdot)\}$
+
+$Lat(\vee,\wedge) = Slat(\vee) \cup Slat(\wedge) \cup 
+\{(x\wedge y)\vee x=x,\ (x\vee y)\wedge x=x\}$
+
+$\mbfL=\langle L,\vee,\wedge\rangle \text{ is a lattice if } \mbfL\models Lat(\vee,\wedge)$
+
+Math fonts A
+
+$𝔸 BbbA$
+
+$𝐀 mbfA$
+
+$𝔄 mfrakA, 𝕬 mbffrakA$
+
+$𝐴 mitA, 𝑨 mbfitA$
+
+$𝖠 msansA, 𝗔 mbfsansA, 𝘈 mitsansA, 𝘼 mbfitsansA$
+
+$𝒜 mscrA, 𝓐 mbfscrA$
+
+$𝙰 mttA$
+
+Greek alphabet
+
+$α alpha$
+
+$β beta$
+
+$χ chi$
+
+$δ delta, Δ Delta$
+
+$γ gamma, Γ Gamma$
+
+$ϵ epsilon, ɛ varepsilon$
+
+$η eta$
+
+$κ kappa$
+
+$λ lambda, Λ Lambda$
+
+$μ mu$
+
+$ν nu$
+
+$ω omega, Ω Omega$
+
+$ϕ phi, φ varphi, Φ Phi$
+
+$π pi, Π Pi$
+
+$ψ psi, Ψ Psi$
+
+$ρ rho$
+
+$σ sigma, Σ Sigma$
+
+$τ tau$
+
+$θ theta, ϑ vartheta, Θ Theta$
+
+$υ upsilon$
+
+$ξ xi, Ξ Xi$
+
+$ζ zeta$
+
+Logic symbols
+
+$¬ neg, ∨ vee, ∧ wedge$
+
+$⟹ Longrightarrow, ⟸ Longleftarrow$
+
+$⟺ Longleftrightarrow$
+
+$∀ forall, ∃ exists, ∄ nexists$
+
+$◊ lozenge, □ square$
+
+$⊢ vdash, ⊬ nvdash, ⊩ Vdash$
+
+$⊨ vDash, ⊭ nvDash, ⊧ models$
+
+$↯ downzigzagarrow$
+
+$∴ therefore, ∎ QED$
+
+Set symbols
+
+$∈ in, ∉ notin$
+
+$∋ ni, ∌ nni$
+
+$∅ emptyset, ℘ wp$
+
+$⊂ subset, ⊄ nsubset$
+
+$⊆ subseteq, ⊈ nsubseteq, ⊊ subsetneq$
+
+$⊃ supset, ⊅ nsupset$
+
+$⊇ supseteq, ⊉ nsupseteq, ⊋ supsetneq$
+
+$∩ cap, ∪ cup, ⊎ uplus$
+
+$∖ setminus, ∁ complement$
+
+$⋂ bigcap, ⋃ bigcup, ⨄ biguplus$
+
+$ℵ aleph, ℶ beth$
+
+Infix operations +, -, *, /, %, ^, _, ;
+
+$⩃ barcap, ⩂ barcup$
+
+$⊽ barvee, ⊼ barwedge$
+
+$⋅ cdot, ∘ circ, • bullet$
+
+$÷ div, ∸ dotminus, ⨪ minusdot$
+
+$∓ mp, ± pm$
+
+$⊙ odot, ⊖ ominus, ⊕ oplus$
+
+$⊘ oslash, ⦸ obslash$
+
+$⊓ sqcap, ⊔ sqcup, ⨿ amalg$
+
+$× times, ⋉ ltimes, ⋊ rtimes, ⋈ bowtie$
+
+$◃ triangleleft, ▹ triangleright$
+
+$⅋ upand, ≀ wr$
+
+Functions cos, sin, tan, cot, csc, sec, log, exp, ln
+
+$ℑ Im, ℜ Re$
+
+$√ sqrt, ∛ cbrt, ∜ fourthroot$
+
+Infix relations =, <, >, |, :
+
+$≈ approx, ≅ cong, ≡ equiv$
+
+$≤ le, leq, ≰ nleq, ≥ ge, geq, ≱ ngeq$
+
+$≦ leqq, ≧ geqq$
+
+$≪ ll, ≫ gg$
+
+$≠ ne, neq$
+
+$≯ ngtr, ≮ nless$
+
+$∣ mid, ∤ nmid$
+
+$≺ prec, ⊀ nprec$
+
+$⪯ preceq, ⪯̸ npreceq$
+
+$≻ succ, ⊁ nsucc$
+
+$⪰ succeq, ⪰̸ nsucceq$
+
+$∥ parallel, ∦ nparallel$
+
+$∝ propto, ∼ sim$
+
+$⊏ sqsubset, ⊑ sqsubseteq$
+
+$⊐ sqsupset, ⊒ sqsupseteq$
+
+Operators lim, sup, inf, d/d, max, min
+
+$○ bigcirc, ⨀ bigodot$
+
+$⨁ bigoplus, ⨂ bigotimes$
+
+$⨅ bigsqcap, ⨆ bigsqcup$
+
+$★ bigstar, ⨉ bigtimes, ⨃ bigcupdot$
+
+$⋁ bigvee, ⋀ bigwedge$
+
+$∫ int, ∬ iint, ∭ iiint, ⨌ iiiint$
+
+$∮ oint, ∯ oiint, ∰ oiiint$
+
+$∂ partial, ∇ del$
+
+$∏ prod, ∑ sum, ∐ coprod$
+
+Arrows 
+
+$↓ downarrow, ↑ uparrow, ↕ updownarrow$
+
+$⇓ Downarrow, ⇑ Uparrow, ⇕ Updownarrow$
+
+$↪ hookrightarrow, ↣ rightarrowtail, ↠ twoheadrightarrow$
+
+$↦ mapsto, ↤ mapsfrom$
+
+$→ to, rightarrow, ← leftarrow, ↔ leftrightarrow$
+
+$⇒ Rightarrow, ⇐ Leftarrow, ⇔ Leftrightarrow$
+
+Brackets (, ), [, ], \{, \}
+
+$⟨ langle, ⟩ rangle$
+
+$⌈ lceil, ⌉ rceil$
+
+$⌊ lfloor, ⌋ rfloor$
+
+$⟦ llbracket, ⟧ rrbracket$
+
+Other !, %@, #, $, %, ?, ., ', `, ~$
+
+$∠ angle, ⦜ Angle$
+
+$⊥ bot, ⊤ top$
+
+$̆ breve, ̌ check, ̂ hat,$ %\vec does not work??$
+
+$✓ checkmark$
+
+$♣ clubsuit, ♢ diamondsuit, ♡ heartsuit, ♠ spadesuit$
+
+$† dagger$
+
+$° degree$
+
+$… dots, ⋰ adots, ⋯ cdots, ⋱ ddots$
+
+$ℓ ell$
+
+$€ euro$
+
+$♭ flat, ♯ sharp$
+
+$⌢ frown, ⌣ smile$
+
+$ħ hbar$
+
+$∞ infty$
+
+\end{document}
