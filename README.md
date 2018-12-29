@@ -40,6 +40,10 @@ The abstract syntax tree contains the symbol (sym:string), type (typ:string) and
 * ∅ = {}
 * ∀x(x ∉ ∅)
 * {1,2,2,1} = {1,2}
+* y ∈ {x ∣ P(x)} ⟺ P(y)
+* {f(x) ∣ P(x)} = {y ∣ ∃x (y=f(x) and P(x))}
+* ∃x∈A P(x) ⟺ ∃x (x∈A and P(x))
+* ∀x∈A P(x) ⟺ ∀x (x∈A ⟹ P(x))
 * 𝒫(A) = {S ∣ S ⊆ A}
 * (a,b) = (c,d) ⟺ a=c and b=d
 * A × B = {(a, b) ∣ a ∈ A and b ∈ B}
