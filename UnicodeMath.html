@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.js" integrity="sha384-K3vbOmF2BtaVai+Qk37uypf7VrgBubhQreNQe9aGsz9lB63dIFiQVlJbr92dw2Lx" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/contrib/auto-render.min.js" integrity="sha384-kmZOZB5ObwgQnS/DuDg6TScgOiWWBiVt0plIRkZCmE6rDZGrEOQeHM5PcHi+nyqe" crossorigin="anonymous"
+        onload="renderMathInElement(document.body,{delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false},]});"></script>
+    <style>.katex { font-size: 1.1em; }</style>
+  </head>
+<body>
+    
+To improve the display, use</br>
+
+\verb|and -> \text{ and }|</br>
+
+\verb|or -> \text{ or }|</br>
+
+\verb|not -> \text{ not }|</br>
+
+\verb|if -> \text{ if }|</br>
+
+\verb|else -> \text{ else }|</br>
+
+\verb|implies -> \text{ implies }|</br>
+
+\verb|for all -> \text{ for all }|</br>
+
+\verb|for some -> \text{ for some }|</br>
+
+$𝔹 = \{𝐓, 𝐅\}$</br>
+
+$ℕ = \{0,1,2,…\}$</br>
+
+$A ⊆ B ⟺ ∀x(x ∈ A ⟹ x ∈ B)$</br>
+
+$A = B ⟺ ∀x(x ∈ A ⟺ x ∈ B) ⟺ A ⊆ B \text{ and } B ⊆ A$</br>
+
+$A ⊂ B ⟺ A ⊆ B \text{ and } A ≠ B$</br>
+
+$∅ = \{\}$</br>
+
+$∀x(x ∉ ∅)$</br>
+
+$\{1,2,2,1\} = \{1,2\}$</br>
+
+$𝒫(A) = \{S ∣ S ⊆ A\}$</br>
+
+$(a,b) = (c,d) ⟺ a=c \text{ and } b=d$</br>
+
+$A × B = \{(a, b) ∣ a ∈ A \text{ and } b ∈ B\}$</br>
+
+$(a_1,…,a_n) = (b_1,…,b_n) ⟺ ∀i, a_i = b_i$</br>
+
+$A_1 × ⋯ × A_n = \{(a_1,…,a_n) ∣ a_i ∈ A_i \text{ for all } i ∈ \{1,…,n\}\}$</br>
+
+$A^n = \{(a_1,…,a_n) ∣ a_i ∈ A \text{ for all } i = 1,…,n\} = A × ⋯ × A$</br>
+
+$A ∪ B = \{x ∣ x ∈ A \text{ or } x ∈ B\} \text{ and } ⋃_{i∈I} A_i = \{x ∣ x ∈ A_i \text{ for some } i ∈ I\}$</br>
+
+$A ∩ B = \{x ∣ x ∈ A \text{ and } x ∈ B\}$</br>
+
+$A − B = \{x ∣ x ∈ A \text{ and } x ∉ B\}$</br>
+
+$A ⊕ B = \{x ∣ x ∈ A∪B \text{ and } x ∉ A∩B\}$</br>
+
+$f : A → B ⟺ ∀x∈A, ∃!y∈B, f(x)=y$</br>
+
+$f : ℝ → ℝ \text{ and } S ⊆ ℝ$</br>
+
+$f[S] = \{f(x) ∣ x ∈ S\}$</br>
+
+$f \text{ is increasing } ⟺ (a < b ⟹ f(a) ≤ f(b))$</br>
+
+$(a,b] = \{x ∣ a < x ≤ b\}$</br>
+
+$⌊\_⌋ : ℝ → ℤ$ </br>
+
+$⌊x⌋ = n ⟺ n ∈ ℤ \text{ and } n ≤ x < n+1$</br>
+
+$|x| = −x \text{ if } x < 0 \text{ else } x$</br>
+
+$x = a/b ⟺ bx = a \text{ and } b ≠ 0$</br>
+
+$(f+g)(x) = f(x) + g(x)$</br>
+
+$(fg)(x) = f(x)g(x)$</br>
+
+$(f/g)(x) = f(x)/g(x) \text{ if } g(x) ≠ 0$</br>
+
+$(f∘g)(x) = f(g(x))$</br>
+
+$id_A : A → A \text{ and } ∀x, id_A(x) = x$</br>
+
+$graph(f) = \{(x,y) ∣ f(x) = y\}$</br>
+
+$asso(⋅) = ((x⋅y)⋅z=x⋅(y⋅z))$</br>
+$comm(⋅) = (x⋅y=y⋅x)$</br>
+
+$idem(⋅) = (x⋅x=x)$</br>
+
+$Sgrp(⋅) = \{asso( ⋅)\}$</br>
+
+$CSgrp(⋅) = Sgrp(⋅) ∪ \{comm(⋅)\}$</br>
+
+$Slat(⋅) = CSgrp(⋅) ∪ \{idem(⋅)\}$</br>
+
+$Lat(∨,∧) = Slat(∨) ∪ Slat(∧) ∪ \{(x ∧ y) ∨ x = x,\ (x ∨ y) ∧ x = x\}$</br>
+
+$𝐋 = ⟨L,∨,∧⟩ \text{ is a lattice if } 𝐋 ⊨ Lat(∨,∧)$</br>
+
+Math fonts A</br>
+
+$𝔸 BbbA$</br>
+
+$𝐀 mbfA$</br>
+<pre>
+$𝔄 mfrakA, 𝕬 mbffrakA$</br>
+
+$𝐴 mitA, 𝑨 mbfitA$</br>
+
+$𝖠 msansA, 𝗔 mbfsansA, 𝘈 mitsansA, 𝘼 mbfitsansA$</br>
+
+$𝒜 mscrA, 𝓐 mbfscrA$</br>
+
+$𝙰 mttA$</br>
+</pre>
+
+Greek alphabet</br>
+
+$α alpha$</br>
+
+$β beta$</br>
+
+$χ chi$</br>
+
+$δ delta, Δ Delta$</br>
+
+$γ gamma, Γ Gamma$</br>
+
+$ϵ epsilon, ɛɛ varepsilon$</br>
+
+$η eta$</br>
+
+$κ kappa$</br>
+
+$λ lambda, Λ Lambda$</br>
+
+$μ mu$</br>
+
+$ν nu$</br>
+
+$ω omega, Ω Omega$</br>
+
+$ϕ phi, φ varphi, Φ Phi$</br>
+
+$π pi, Π Pi$</br>
+
+$ψ psi, Ψ Psi$</br>
+
+$ρ rho$</br>
+
+$σ sigma, Σ Sigma$</br>
+
+$τ tau$</br>
+
+$θ theta, ϑ vartheta, Θ Theta$</br>
+
+$υ upsilon$</br>
+
+$ξ xi, Ξ Xi$</br>
+
+$ζ zeta$</br>
+
+Logic symbols</br>
+
+$¬ neg, ∨ vee, ∧ wedge$</br>
+
+$⟹ Longrightarrow, ⟸ Longleftarrow$</br>
+
+$⟺ Longleftrightarrow$</br>
+
+$∀ forall, ∃ exists, ∄ nexists$</br>
+
+$◊ lozenge, □ square$</br>
+
+$⊢ vdash, ⊬ nvdash, ⊩ Vdash$</br>
+
+$⊨ vDash, ⊭ nvDash, ⊧ models$</br>
+
+$↯ downzigzagarrow$</br>
+
+$∴ therefore, ∎ QED$</br>
+
+Set symbols</br>
+
+$∈ in, ∉ notin$</br>
+
+$∋ ni, ∌ nni$</br>
+
+$∅ emptyset, ℘ wp$</br>
+
+$⊂ subset, ⊄ nsubset$</br>
+
+$⊆ subseteq, ⊈ nsubseteq, ⊊ subsetneq$</br>
+
+$⊃ supset, ⊅ nsupset$</br>
+
+$⊇ supseteq, ⊉ nsupseteq, ⊋ supsetneq$</br>
+
+$∩ cap, ∪ cup, ⊎ uplus$</br>
+
+$∖ setminus, ∁ complement$</br>
+
+$⋂ bigcap, ⋃ bigcup, ⨄ biguplus$</br>
+
+$ℵ aleph, ℶ beth$</br>
+
+Infix operations +, -, *, /, %, ^, _, ;</br>
+
+$⩃ barcap, ⩂ barcup$</br>
+
+$⊽ barvee, ⊼ barwedge$</br>
+
+$⋅ cdot, ∘ circ, • bullet$</br>
+
+$÷ div, ∸ dotminus, ⨪ minusdot$</br>
+
+$∓ mp, ± pm$</br>
+
+$⊙ odot, ⊖ ominus, ⊕ oplus$</br>
+
+$⊘ oslash, ⦸ obslash$</br>
+
+$⊓ sqcap, ⊔ sqcup, ⨿ amalg$</br>
+
+$× times, ⋉ ltimes, ⋊ rtimes, ⋈ bowtie$</br>
+
+$◃ triangleleft, ▹ triangleright$</br>
+
+$⅋ upand, ≀ wr$</br>
+
+Functions cos, sin, tan, cot, csc, sec, log, exp, ln</br>
+
+$ℑ Im, ℜ Re$</br>
+
+$√ sqrt, ∛ cbrt, ∜ fourthroot$</br>
+
+Infix relations =, <, >, |, :</br>
+
+$≈ approx, ≅ cong, ≡ equiv$</br>
+
+$≤ le, leq, ≰ nleq, ≥ ge, geq, ≱ ngeq$</br>
+
+$≦ leqq, ≧ geqq$</br>
+
+$≪ ll, ≫ gg$</br>
+
+$≠ ne, neq$</br>
+
+$≯ ngtr, ≮ nless$</br>
+
+$∣ mid, ∤ nmid$</br>
+
+$≺ prec, ⊀ nprec$</br>
+
+$⪯ preceq, ⪯̸ npreceq$</br>
+
+$≻ succ, ⊁ nsucc$</br>
+
+$⪰ succeq, ⪰̸ nsucceq$</br>
+
+$∥ parallel, ∦ nparallel$</br>
+
+$∝ propto, ∼ sim$</br>
+
+$⊏ sqsubset, ⊑ sqsubseteq$</br>
+
+$⊐ sqsupset, ⊒ sqsupseteq$</br>
+
+Operators lim, sup, inf, d/d, max, min</br>
+
+$○ bigcirc, ⨀ bigodot$</br>
+
+$⨁ bigoplus, ⨂ bigotimes$</br>
+
+$⨅ bigsqcap, ⨆ bigsqcup$</br>
+
+$★ bigstar, ⨉ bigtimes, ⨃ bigcupdot$</br>
+
+$⋁ bigvee, ⋀ bigwedge$</br>
+
+$∫ int, ∬ iint, ∭ iiint, ⨌ iiiint$</br>
+
+$∮ oint, ∯ oiint, ∰ oiiint$</br>
+
+$∂ partial, ∇ del$</br>
+
+$∏ prod, ∑ sum, ∐ coprod$</br>
+
+Arrows </br>
+
+$↓ downarrow, ↑ uparrow, ↕ updownarrow$</br>
+
+$⇓ Downarrow, ⇑ Uparrow, ⇕ Updownarrow$</br>
+
+$↪ hookrightarrow, ↣ rightarrowtail, ↠ twoheadrightarrow$</br>
+
+$↦ mapsto, ↤ mapsfrom$</br>
+
+$→ to, rightarrow, ← leftarrow, ↔ leftrightarrow$</br>
+
+$⇒ Rightarrow, ⇐ Leftarrow, ⇔ Leftrightarrow$</br>
+
+Brackets (, ), [, ], \{, \}</br>
+
+$⟨ langle, ⟩ rangle$</br>
+
+$⌈ lceil, ⌉ rceil$</br>
+
+$⌊ lfloor, ⌋ rfloor$</br>
+
+$⟦ llbracket, ⟧ rrbracket$</br>
+
+Other !, %@, #, $, %, ?, ., ', `, ~$</br>
+
+$∠ angle, ⦜ Angle$</br>
+
+$⊥ bot, ⊤ top$</br>
+
+$̆ breve, ̌ check, ̂ hat,$ %\vec does not work??$</br>
+
+$✓ checkmark$</br>
+
+$♣ clubsuit, ♢ diamondsuit, ♡ heartsuit, ♠ spadesuit$</br>
+
+$† dagger$</br>
+
+$° degree$</br>
+
+$… dots, ⋰ adots, ⋯ cdots, ⋱ ddots$</br>
+
+$ℓ ell$</br>
+
+$€ euro$</br>
+
+$♭ flat, ♯ sharp$</br>
+
+$⌢ frown, ⌣ smile$</br>
+
+$ħ hbar$</br>
+
+$∞ infty$
+</pre>
+</body>
+</html>

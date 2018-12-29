@@ -1,8 +1,8 @@
 # UnicodeMath, a formal math language for us and them
 
-Unicode contains a large number of mathematical symbols, making it suitable for a human **and** computer readable mathematical language that aims to be as close to standard mathematics as possible. UnicodeMath is a linear format (with ^, _ for super- and subscripts), and Unicode characters correspond to standard LaTeX equivalents. Simple bidirectional textual conversions exist between UnicodeMath and a controlled subset of LaTeX.
+Unicode contains a large number of mathematical symbols, making it suitable for a human **and** computer readable mathematical language that aims to be as close to standard mathematics as possible. UnicodeMath is a linear format (with _, ^ for sub- and superscripts), and Unicode characters correspond to standard LaTeX equivalents. Simple bidirectional textual conversions exist between UnicodeMath and a controlled subset of LaTeX.
 
-Most programming languages and computer algebra system languages were designed before Unicode became widely available. UnicodeMath aims to be a universal pseudocode that can be reliably translated to many different programming languages and other formal languages, used for example in theorem provers or computer algebra systems. It uses a large number of infix symbols, usually with their standard mathematical meaning, and has various dialects that cater to different mathematical notational preferences.
+Most programming languages and computer algebra system languages were designed before Unicode became widely available. UnicodeMath aims to be a universal pseudocode that can be reliably translated to many different programming languages and other formal languages, used for example in theorem provers or computer algebra systems. It uses a large number of infix symbols, usually with their standard mathematical meaning (if there is one), and has various dialects that cater to different mathematical notational preferences.
 
 Examples below are given in the standard (default) dialect, and variations are discussed later.
 
@@ -10,7 +10,7 @@ All valid UnicodeMath expressions can be parsed into an abstract syntax tree (AS
 
 UnicodeMath is based on standard conventions for mathematical symbols and operations. The types for symbols and expressions are:
 
-* variable symbols single latin letters (u,v,w,x,y,z) with possible subscripts (u_0,u_1,…,z_0,z_1,…)
+* variable symbols are single latin letters (u,v,w,x,y,z) with possible subscripts (u_0,u_1,…,z_0,z_1,…)
 * constant symbols, the default type for all LaTeX symbols not assigned to other types (a,b,…,α,β,…,∅,∞,0,1,…)
 * prefix/infix/postfix/mixfix function symbols with standard precedence (+,−,⋅,/,∪,∩,√,ln,sin,…)
 * terms built from function symbols applied to variables, constants and terms
@@ -33,24 +33,27 @@ The abstract syntax tree contains the symbol (sym:string), type (typ:string) and
 ### Examples of valid UnicodeMath expressions from discrete mathematics
 
 * 𝔹 = {𝐓, 𝐅}
-* ℕ = {0,1,2,…}
+* ℕ = {0,1,2,…} (or ℕ = {1,2,3,…})
 * A ⊆ B ⟺ ∀x(x ∈ A ⟹ x ∈ B)
 * A = B ⟺ ∀x(x ∈ A ⟺ x ∈ B) ⟺ A ⊆ B and B ⊆ A
 * A ⊂ B ⟺ A ⊆ B and A ≠ B
 * ∅ = {}
 * ∀x(x ∉ ∅)
 * {1,2,2,1} = {1,2}
+* P : A → 𝔹
 * y ∈ {x ∣ P(x)} ⟺ P(y)
 * {f(x) ∣ P(x)} = {y ∣ ∃x (y=f(x) and P(x))}
 * ∃x∈A P(x) ⟺ ∃x (x∈A and P(x))
 * ∀x∈A P(x) ⟺ ∀x (x∈A ⟹ P(x))
 * 𝒫(A) = {S ∣ S ⊆ A}
+* x ∈ {a_1,…,a_n} ⟺ ∃i (x=a_i and 1≤i≤n)
+* {a_1,…,a_{n+1}} = {a_1,…,a_n} ∪ {a_{n+1}}
 * (a,b) = (c,d) ⟺ a=c and b=d
 * A × B = {(a, b) ∣ a ∈ A and b ∈ B}
-* (a_1,…,a_n) = (b_1,…,b_n) ⟺ ∀i, a_i = b_i
-* A_1 × ⋯ × A_n = {(a_1,…,a_n) ∣ a_i ∈ A_i for i = 1,…,n}
-* A^n = {(a_1,…,a_n) ∣ a_i ∈ A for all i = 1,…,n} = A × ⋯ × A
-* A ∪ B = {x ∣ x ∈ A or x ∈ B} and ⋃_(i∈I) A_i = {x ∣ x ∈ A_i for some i ∈ I}
+* (a_1,…,a_n) = (b_1,…,b_n) ⟺ ∀i (1≤i≤n ⟹ a_i = b_i)
+* A_1 × ⋯ × A_n = {(a_1,…,a_n) ∣ a_i ∈ A_i for all i ∈ {1,…,n}}
+* A^n = {(a_1,…,a_n) ∣ a_i ∈ A for all i ∈ {1,…,n}} = A × ⋯ × A
+* A ∪ B = {x ∣ x ∈ A or x ∈ B} and ⋃_{i∈I} A_i = {x ∣ x ∈ A_i for some i ∈ I}
 * A ∩ B = {x ∣ x ∈ A and x ∈ B}
 * A − B = {x ∣ x ∈ A and x ∉ B}
 * A ⊕ B = {x ∣ x ∈ A∪B and x ∉ A∩B}
@@ -85,6 +88,15 @@ In principle all of mathematics can be derived from these axioms
 
 * ∀ = for all, ∃! = there exists a unique, P is any formula that does not contain Y
 * z ∈ X∪Y ⟺ z∈X or z∈Y,  z ∈ X∩Y ⟺ z∈X and z∈Y
+
+* asso(⋅) = ((x⋅y)⋅z=x⋅(y⋅z))
+* comm(⋅) = (x⋅y=y⋅x)
+* idem(⋅) = (x⋅x=x)
+* Sgrp(⋅) = \{asso( ⋅)\}
+* CSgrp(⋅) = Sgrp(⋅) ∪ \{comm(⋅)\}
+* Slat(⋅) = CSgrp(⋅) ∪ \{idem(⋅)\}
+* Lat(∨,∧) = Slat(∨) ∪ Slat(∧) ∪ \{(x ∧ y) ∨ x = x,\ (x ∨ y) ∧ x = x\}
+* 𝐋 = ⟨L,∨,∧⟩ \text{ is a lattice if } 𝐋 ⊨ Lat(∨,∧)
 
 Math fonts A
 * 𝔸 BbbA
