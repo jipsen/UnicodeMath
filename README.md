@@ -2,6 +2,20 @@
 
 Unicode contains a large number of mathematical symbols, making it suitable for a human **and** computer readable mathematical language that aims to be as close to standard mathematics as possible. UnicodeMath is a linear format (with _, ^ for sub- and superscripts), and Unicode characters correspond to standard LaTeX equivalents. Simple bidirectional textual conversions exist between UnicodeMath and a controlled subset of LaTeX.
 
+### 240 useful Unicode math characters
+
+¬ ∨ ∧ ⟹ ⟸ ⟺ ∀ ∃ ∄ ◊ □ ⊥ ⊤ ⊢ ⊬ ⊩ ⊨ ⊭ ∈ ∉ ∋ ∌ ∅ ℘ ⊂ ⊄ ⊆ ⊈ ⊊ ⊃ ⊅ ⊇ ⊉ ⊋ ∩ ∪ ⊎ ∁ ⋂ ⋃ ⨄ ℵ ℶ ∞
+
+⋅ ∘ • ÷ ∸ ⨪ ∓ ± ⊙ ⊖ ⊕ ⊘ ⦸ ⊓ ⊔ ⨿ × ⋉ ⋊ ⋈ ◃ ▹ ⩃ ⩂ ⊽ ⊼ ≀ ℑ ℜ √ ∛ ∜ ⟨ ⟩ ⌈ ⌉ ⌊ ⌋ ⟦ ⟧ … ⋰ ⋯ ⋱ ∴
+
+≈ ≅ ≡ ≤ ≰ ≥ ≱ ≦ ≧ ≪ ≫ ≠ ≯ ≮ ∣ ∤ ≺ ⊀ ⪯ ≻ ⊁ ⪰ ∥ ∦ ∝ ∼ ⊏ ⊑ ⊐ ⊒ ∠ ⦜ ✓ ♣ ♢ ♡ ♠ † ° ℓ € ♭ ♯ ⌢ ⌣ ħ ↯ ∎
+
+⨁ ⨂ ⨀ ⨅ ⨆ ★ ⨉ ⨃ ⋁ ⋀ ∫ ∬ ∭ ∮ ∯ ∰ ∂ ∇ ∑ ∏ ∐ ↓ ↑ ↕ ⇓ ⇑ ⇕ ↪ ↣ ↠ ↦ ↤ → ← ↔ ⇒ ⇐ ⇔ 𝔹 ℂ 𝔽 ℕ ℙ ℚ ℝ 𝕋 ℤ
+
+α β χ δ Δ γ Γ ϵ ɛ η κ λ Λ μ ν ω Ω ϕ φ Φ π Π ψ Ψ ρ σ Σ τ θ ϑ Θ υ ξ Ξ ζ 𝔸 𝐀 𝔄 𝕬 𝐴 𝑨 𝖠 𝗔 𝘈 𝘼 𝒜 𝓐 𝙰
+
+There are thousands more unicode math characters, but the above 5 lines cover over 90% of all use cases.
+
 Most programming languages and computer algebra system languages were designed before Unicode became widely available. UnicodeMath aims to be a universal pseudocode that can be reliably translated to many different programming languages and other formal languages, used for example in theorem provers or computer algebra systems. It uses a large number of infix symbols, usually with their standard mathematical meaning (if there is one), and has various dialects that cater to different mathematical notational preferences.
 
 Examples below are given in the standard (default) dialect, and variations are discussed later.
@@ -245,19 +259,7 @@ Other !, @, #, $, %, ?, ., ', `, ~
 * ħ hbar
 * ∞ infty
 
-### 240 useful Unicode math characters
-
-¬ ∨ ∧ ⟹ ⟸ ⟺ ∀ ∃ ∄ ◊ □ ⊥ ⊤ ⊢ ⊬ ⊩ ⊨ ⊭ ∈ ∉ ∋ ∌ ∅ ℘ ⊂ ⊄ ⊆ ⊈ ⊊ ⊃ ⊅ ⊇ ⊉ ⊋ ∩ ∪ ⊎ ∁ ⋂ ⋃ ⨄ ℵ ℶ ∞
-
-⋅ ∘ • ÷ ∸ ⨪ ∓ ± ⊙ ⊖ ⊕ ⊘ ⦸ ⊓ ⊔ ⨿ × ⋉ ⋊ ⋈ ◃ ▹ ⩃ ⩂ ⊽ ⊼ ≀ ℑ ℜ √ ∛ ∜ ⟨ ⟩ ⌈ ⌉ ⌊ ⌋ ⟦ ⟧ … ⋰ ⋯ ⋱ ∴
-
-≈ ≅ ≡ ≤ ≰ ≥ ≱ ≦ ≧ ≪ ≫ ≠ ≯ ≮ ∣ ∤ ≺ ⊀ ⪯ ≻ ⊁ ⪰ ∥ ∦ ∝ ∼ ⊏ ⊑ ⊐ ⊒ ∠ ⦜ ✓ ♣ ♢ ♡ ♠ † ° ℓ € ♭ ♯ ⌢ ⌣ ħ ↯ ∎
-
-⨁ ⨂ ⨀ ⨅ ⨆ ★ ⨉ ⨃ ⋁ ⋀ ∫ ∬ ∭ ∮ ∯ ∰ ∂ ∇ ∑ ∏ ∐ ↓ ↑ ↕ ⇓ ⇑ ⇕ ↪ ↣ ↠ ↦ ↤ → ← ↔ ⇒ ⇐ ⇔ 𝔹 ℂ 𝔽 ℕ ℙ ℚ ℝ 𝕋 ℤ
-
-α β χ δ Δ γ Γ ϵ ɛ η κ λ Λ μ ν ω Ω ϕ φ Φ π Π ψ Ψ ρ σ Σ τ θ ϑ Θ υ ξ Ξ ζ 𝔸 𝐀 𝔄 𝕬 𝐴 𝑨 𝖠 𝗔 𝘈 𝘼 𝒜 𝓐 𝙰
-
-There are thousands more, but the above 5 lines cover over 90% of all use cases.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 ⋰ adots
 ℵ aleph
