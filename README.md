@@ -73,6 +73,19 @@ The abstract syntax tree contains the symbol (sym:string), type (typ:string) and
 * id_A : A → A and ∀x, id_A(x) = x
 * graph(f) = {(x,y) ∣ f(x) = y}
 
+* ∀x>0 (x^ax^b=x^{a+b})
+* ∀x,y>0 ((xy)^a=x^ay^a)
+* |x+y| ≤ |x|+|y|
+* |xy| = |x||y|
+* a∣b ⟺ ∃c∈ℤ (ac = b)
+* \lim_{x→a}f(x) = L ⟺ ∀ε>0 ∃δ>0 ∀x(0 < |x−a| < δ ⟹ |f(x)−L| < ε)
+* d/dx(f(x)) = \lim_{h→0}(f(x+h)−f(x))/h
+* ∫_a^b f(x)dx = \lim_{n→∞}∑_{i=1}^n f(x_i^*)(b−a)/n
+* ∏_{i=1}^{n+1}a_i = (∏_{i=1}^n a_i)a_{n+1}
+* ∑_{i=1}^n i = n(n+1)/2
+
+
+
 The axioms of Zermelo-Fraenkel set theory with choice ZFC
 
 In principle all of mathematics can be derived from these axioms
