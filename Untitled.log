@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.99998 (TeX Live 2017) (preloaded format=xelatex 2017.5.23)  27 DEC 2018 16:23
+This is XeTeX, Version 3.14159265-2.6-0.99998 (TeX Live 2017) (preloaded format=xelatex 2017.5.23)  31 DEC 2018 09:28
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -617,20 +617,21 @@ LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `bold'
 (Font)                  OMX/cmex/m/n --> TU/latinmodern-math.otf(2)/bx/n on inp
 ut line 4.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
-(Font)              scaled to size 10.00015pt on input line 26.
+(Font)              scaled to size 10.00015pt on input line 6.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
-(Font)              scaled to size 7.01247pt on input line 26.
+(Font)              scaled to size 7.01247pt on input line 6.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
-(Font)              scaled to size 4.9808pt on input line 26.
+(Font)              scaled to size 4.9808pt on input line 6.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
-(Font)              scaled to size 9.99985pt on input line 26.
+(Font)              scaled to size 9.99985pt on input line 6.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
-(Font)              scaled to size 7.01224pt on input line 26.
+(Font)              scaled to size 7.01224pt on input line 6.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
-(Font)              scaled to size 4.98067pt on input line 26.
+(Font)              scaled to size 4.98067pt on input line 6.
  [1
 
 ]
+Missing character: There is no ɛ in font cmmi10!
 Missing character: There is no ɛ in font cmmi10!
 Missing character: There is no ↯ in font [latinmodern-math.otf]/OT:script=math;
 language=DFLT;!
@@ -655,9 +656,9 @@ Missing character: There is no ∜ in font [latinmodern-math.otf]/OT:script=math
 language=DFLT;!
 Missing character: There is no ̸ in font cmmi10!
 Missing character: There is no ̸ in font cmmi10!
- [3]
 Missing character: There is no ★ in font [latinmodern-math.otf]/OT:script=math;
 language=DFLT;!
+ [3]
 Missing character: There is no ⦜ in font [latinmodern-math.otf]/OT:script=math;
 language=DFLT;!
 Missing character: There is no ̆ in font cmmi10!
@@ -666,11 +667,11 @@ Missing character: There is no ̂ in font cmmi10!
 Missing character: There is no ħ in font cmmi10!
  [4] (./Untitled.aux) ) 
 Here is how much of TeX's memory you used:
- 13852 strings out of 493005
- 278928 string characters out of 6134596
- 437320 words of memory out of 5000000
- 17802 multiletter control sequences out of 15000+600000
- 5051 words of font info for 32 fonts, out of 8000000 for 9000
+ 13863 strings out of 493005
+ 278945 string characters out of 6134596
+ 439320 words of memory out of 5000000
+ 17815 multiletter control sequences out of 15000+600000
+ 5043 words of font info for 31 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
  42i,5n,71p,10375b,251s stack positions out of 5000i,500n,10000p,200000b,80000s
 

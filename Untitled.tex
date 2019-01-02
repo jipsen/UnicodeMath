@@ -3,35 +3,36 @@
 %\setmathfont{texgyrepagella-math.otf}
 \begin{document}
 
-To improve the display, use
-
-\verb|and -> \text{ and }|
-
-\verb|or -> \text{ or }|
-
-\verb|not -> \text{ not }|
-
-\verb|if -> \text{ if }|
-
-\verb|else -> \text{ else }|
-
-\verb|implies -> \text{ implies }|
-
-\verb|for all -> \text{ for all }|
-
-\verb|for some -> \text{ for some }|
-
-\verb!| -> \mid!
+$
+\gdef\and{\text{ and }}
+\gdef\Or{\text{ or }}
+\gdef\Not{\text{ not }}
+\gdef\forAll{\text{ for all }}
+\gdef\forSome{\text{ for some }}
+\gdef\If{\text{ if }}
+\gdef\Then{\text{ then }}
+\gdef\Else{\text{ else }}
+\gdef\is{\text{ is }}
+\gdef\Assume{\text{ Assume }}
+\gdef\Suppose{\text{ Suppose }}
+\gdef\Let{\text{ Let }}
+\gdef\Take{\text{ Take }}
+\gdef\Lemma{\text{ Lemma }}
+\gdef\Theorem{\text{ Theorem }}
+\gdef\Corollary{\text{ Corollary }}
+\gdef\Proof{\text{ Proof }}
+\gdef\t#1{\text{#1}}
+$
 
 $𝔹 = \{𝐓, 𝐅\}$
 
-$ℕ = \{0,1,2,…\}$
+$ℕ = \{0,1,2,…\} \Or ℕ = \{1,2,3,…\}$
 
 $A ⊆ B ⟺ ∀x(x ∈ A ⟹ x ∈ B)$
 
-$A = B ⟺ ∀x(x ∈ A ⟺ x ∈ B) ⟺ A ⊆ B \text{ and } B ⊆ A$
+$A = B ⟺ ∀x(x ∈ A ⟺ x ∈ B) ⟺ A ⊆ B \and B ⊆ A$
 
-$A ⊂ B ⟺ A ⊆ B \text{ and } A ≠ B$
+$A ⊂ B ⟺ A ⊆ B \and A ≠ B$
 
 $∅ = \{\}$
 
@@ -41,70 +42,69 @@ $\{1,2,2,1\} = \{1,2\}$
 
 $𝒫(A) = \{S ∣ S ⊆ A\}$
 
-$(a,b) = (c,d) ⟺ a=c \text{ and } b=d$
+$(a,b) = (c,d) ⟺ a=c \and b=d$
 
-$A × B = \{(a, b) ∣ a ∈ A \text{ and } b ∈ B\}$
+$A × B = \{(a, b) ∣ a ∈ A \and b ∈ B\}$
 
 $(a_1,…,a_n) = (b_1,…,b_n) ⟺ ∀i, a_i = b_i$
 
-$A_1 × ⋯ × A_n = \{(a_1,…,a_n) ∣ a_i ∈ A_i \text{ for all } i ∈ \{1,…,n\}\}$
+$A_1 × ⋯ × A_n = \{(a_1,…,a_n) ∣ a_i ∈ A_i \forAll i ∈ \{1,…,n\}\}$
 
-$A^n = \{(a_1,…,a_n) ∣ a_i ∈ A \text{ for all } i = 1,…,n\} = A × ⋯ × A$
+$A^n = \{(a_1,…,a_n) ∣ a_i ∈ A \forAll i = 1,…,n\} = A × ⋯ × A$
 
-$A ∪ B = \{x ∣ x ∈ A \text{ or } x ∈ B\} \text{ and } ⋃_{i∈I} A_i = \{x ∣ x ∈ A_i \text{ for some } i ∈ I\}$
+$A ∪ B = \{x ∣ x ∈ A \Or x ∈ B\} \and ⋃_{i∈I} A_i = \{x ∣ x ∈ A_i \forSome i ∈ I\}$
 
-$A ∩ B = \{x ∣ x ∈ A \text{ and } x ∈ B\}$
+$A ∩ B = \{x ∣ x ∈ A \and x ∈ B\}$
 
-$A − B = \{x ∣ x ∈ A \text{ and } x ∉ B\}$
+$A − B = \{x ∣ x ∈ A \and x ∉ B\}$
 
-$A ⊕ B = \{x ∣ x ∈ A∪B \text{ and } x ∉ A∩B\}$
+$A ⊕ B = \{x ∣ x ∈ A∪B \and x ∉ A∩B\}$
 
 $f : A → B ⟺ ∀x∈A, ∃!y∈B, f(x)=y$
 
-$f : ℝ → ℝ \text{ and } S ⊆ ℝ$
+$f : ℝ → ℝ \and S ⊆ ℝ$
 
 $f[S] = \{f(x) ∣ x ∈ S\}$
 
-$f \text{ is increasing } ⟺ (a < b ⟹ f(a) ≤ f(b))$
+$f \is \t{ increasing } ⟺ (a < b ⟹ f(a) ≤ f(b))$
 
 $(a,b] = \{x ∣ a < x ≤ b\}$
 
 $⌊\_⌋ : ℝ → ℤ$ 
 
-$⌊x⌋ = n ⟺ n ∈ ℤ \text{ and } n ≤ x < n+1$
+$⌊x⌋ = n ⟺ n ∈ ℤ \and n ≤ x < n+1$
 
-$|x| = −x \text{ if } x < 0 \text{ else } x$
+$|x| = −x \If x < 0 \Else x$
 
-$x = a/b ⟺ bx = a \text{ and } b ≠ 0$
+$x = a/b ⟺ bx = a \and b ≠ 0$
 
 $(f+g)(x) = f(x) + g(x)$
 
 $(fg)(x) = f(x)g(x)$
 
-$(f/g)(x) = f(x)/g(x) \text{ if } g(x) ≠ 0$
+$(f/g)(x) = f(x)/g(x) \If g(x) ≠ 0$
 
 $(f∘g)(x) = f(g(x))$
 
-$id_A : A → A \text{ and } ∀x, id_A(x) = x$
+$id_A : A → A \and ∀x, id_A(x) = x$
 
 $graph(f) = \{(x,y) ∣ f(x) = y\}$
 
-$asso(\cdot) = ((x\cdot y)\cdot z=x\cdot (y\cdot z))$
+$asso(⋅) = ((x⋅y)⋅z=x⋅(y⋅z))$
 
-$comm(\cdot) = (x\cdot y=y\cdot x)$
+$comm(⋅) = (x⋅y=y⋅x)$
 
-$idem(\cdot) = (x\cdot x=x)$
+$idem(⋅) = (x⋅x=x)$
 
-$Sgrp(\cdot) = \{asso(\cdot)\}$
+$Sgrp(⋅) = \{asso( ⋅)\}$
 
-$CSgrp(\cdot) = Sgrp(\cdot)\cup \{comm(\cdot)\}$
+$CSgrp(⋅) = Sgrp(⋅) ∪ \{comm(⋅)\}$
 
-$Slat(\cdot) = CSgrp(\cdot)\cup\{idem(\cdot)\}$
+$Slat(⋅) = CSgrp(⋅) ∪ \{idem(⋅)\}$
 
-$Lat(\vee,\wedge) = Slat(\vee) \cup Slat(\wedge) \cup 
-\{(x\wedge y)\vee x=x,\ (x\vee y)\wedge x=x\}$
+$Lat(∨,∧) = Slat(∨) ∪ Slat(∧) ∪ \{(x ∧ y) ∨ x = x,\ (x ∨ y) ∧ x = x\}$
 
-$\mbfL=\langle L,\vee,\wedge\rangle \text{ is a lattice if } \mbfL\models Lat(\vee,\wedge)$
+$𝐋 = ⟨L,∨,∧⟩ \is \t{ a lattice }\If 𝐋 ⊨ Lat(∨,∧)$
 
 Math fonts A
 

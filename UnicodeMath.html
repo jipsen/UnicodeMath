@@ -13,16 +13,28 @@
   </head>
 <body>
 <h3>Unicode examples</h3>
+$
+\gdef\and{\text{ and }}
+\gdef\or{\text{ or }}
+\gdef\Not{\text{ not }}
+\gdef\forAll{\text{ for all }}
+\gdef\forSome{\text{ for some }}
+\gdef\if{\text{ if }}
+\gdef\then{\text{ then }}
+\gdef\else{\text{ else }}
+\gdef\is{\text{ is }}
+\gdef\t#1{\text{#1}}
+$
 
 $𝔹 = \{𝐓, 𝐅\}$</br>
 
-$ℕ = \{0,1,2,…\}$</br>
+$ℕ = \{0,1,2,…\} \or ℕ = \{1,2,3,…\}$</br>
 
 $A ⊆ B ⟺ ∀x(x ∈ A ⟹ x ∈ B)$</br>
 
-$A = B ⟺ ∀x(x ∈ A ⟺ x ∈ B) ⟺ A ⊆ B \text{ and } B ⊆ A$</br>
+$A = B ⟺ ∀x(x ∈ A ⟺ x ∈ B) ⟺ A ⊆ B \and B ⊆ A$</br>
 
-$A ⊂ B ⟺ A ⊆ B \text{ and } A ≠ B$</br>
+$A ⊂ B ⟺ A ⊆ B \and A ≠ B$</br>
 
 $∅ = \{\}$</br>
 
@@ -32,55 +44,56 @@ $\{1,2,2,1\} = \{1,2\}$</br>
 
 $𝒫(A) = \{S ∣ S ⊆ A\}$</br>
 
-$(a,b) = (c,d) ⟺ a=c \text{ and } b=d$</br>
+$(a,b) = (c,d) ⟺ a=c \and b=d$</br>
 
-$A × B = \{(a, b) ∣ a ∈ A \text{ and } b ∈ B\}$</br>
+$A × B = \{(a, b) ∣ a ∈ A \and b ∈ B\}$</br>
 
 $(a_1,…,a_n) = (b_1,…,b_n) ⟺ ∀i, a_i = b_i$</br>
 
-$A_1 × ⋯ × A_n = \{(a_1,…,a_n) ∣ a_i ∈ A_i \text{ for all } i ∈ \{1,…,n\}\}$</br>
+$A_1 × ⋯ × A_n = \{(a_1,…,a_n) ∣ a_i ∈ A_i \forAll i ∈ \{1,…,n\}\}$</br>
 
-$A^n = \{(a_1,…,a_n) ∣ a_i ∈ A \text{ for all } i = 1,…,n\} = A × ⋯ × A$</br>
+$A^n = \{(a_1,…,a_n) ∣ a_i ∈ A \forAll i = 1,…,n\} = A × ⋯ × A$</br>
 
-$A ∪ B = \{x ∣ x ∈ A \text{ or } x ∈ B\} \text{ and } ⋃_{i∈I} A_i = \{x ∣ x ∈ A_i \text{ for some } i ∈ I\}$</br>
+$A ∪ B = \{x ∣ x ∈ A \or x ∈ B\} \and ⋃_{i∈I} A_i = \{x ∣ x ∈ A_i \forSome i ∈ I\}$</br>
 
-$A ∩ B = \{x ∣ x ∈ A \text{ and } x ∈ B\}$</br>
+$A ∩ B = \{x ∣ x ∈ A \and x ∈ B\}$</br>
 
-$A − B = \{x ∣ x ∈ A \text{ and } x ∉ B\}$</br>
+$A − B = \{x ∣ x ∈ A \and x ∉ B\}$</br>
 
-$A ⊕ B = \{x ∣ x ∈ A∪B \text{ and } x ∉ A∩B\}$</br>
+$A ⊕ B = \{x ∣ x ∈ A∪B \and x ∉ A∩B\}$</br>
 
 $f : A → B ⟺ ∀x∈A, ∃!y∈B, f(x)=y$</br>
 
-$f : ℝ → ℝ \text{ and } S ⊆ ℝ$</br>
+$f : ℝ → ℝ \and S ⊆ ℝ$</br>
 
 $f[S] = \{f(x) ∣ x ∈ S\}$</br>
 
-$f \text{ is increasing } ⟺ (a < b ⟹ f(a) ≤ f(b))$</br>
+$f \is \t{ increasing } ⟺ (a < b ⟹ f(a) ≤ f(b))$</br>
 
 $(a,b] = \{x ∣ a < x ≤ b\}$</br>
 
 $⌊\_⌋ : ℝ → ℤ$ </br>
 
-$⌊x⌋ = n ⟺ n ∈ ℤ \text{ and } n ≤ x < n+1$</br>
+$⌊x⌋ = n ⟺ n ∈ ℤ \and n ≤ x < n+1$</br>
 
-$|x| = −x \text{ if } x < 0 \text{ else } x$</br>
+$|x| = −x \if x < 0 \else x$</br>
 
-$x = a/b ⟺ bx = a \text{ and } b ≠ 0$</br>
+$x = a/b ⟺ bx = a \and b ≠ 0$</br>
 
 $(f+g)(x) = f(x) + g(x)$</br>
 
 $(fg)(x) = f(x)g(x)$</br>
 
-$(f/g)(x) = f(x)/g(x) \text{ if } g(x) ≠ 0$</br>
+$(f/g)(x) = f(x)/g(x) \if g(x) ≠ 0$</br>
 
 $(f∘g)(x) = f(g(x))$</br>
 
-$id_A : A → A \text{ and } ∀x, id_A(x) = x$</br>
+$id_A : A → A \and ∀x, id_A(x) = x$</br>
 
 $graph(f) = \{(x,y) ∣ f(x) = y\}$</br>
 
 $asso(⋅) = ((x⋅y)⋅z=x⋅(y⋅z))$</br>
+
 $comm(⋅) = (x⋅y=y⋅x)$</br>
 
 $idem(⋅) = (x⋅x=x)$</br>
@@ -93,7 +106,7 @@ $Slat(⋅) = CSgrp(⋅) ∪ \{idem(⋅)\}$</br>
 
 $Lat(∨,∧) = Slat(∨) ∪ Slat(∧) ∪ \{(x ∧ y) ∨ x = x,\ (x ∨ y) ∧ x = x\}$</br>
 
-$𝐋 = ⟨L,∨,∧⟩ \text{ is a lattice if } 𝐋 ⊨ Lat(∨,∧)$</br>
+$𝐋 = ⟨L,∨,∧⟩ \is \t{ a lattice }\if 𝐋 ⊨ Lat(∨,∧)$</br>
 
 Math fonts A</br>
 

@@ -76,18 +76,20 @@ The abstract syntax tree contains the symbol (sym:string), type (typ:string) and
 The axioms of Zermelo-Fraenkel set theory with choice ZFC
 
 In principle all of mathematics can be derived from these axioms
-1. Extensionality:  ∀X,Y [X=Y ⟺ ∀z(z∈X ⟺ z∈Y)]
-2. Pairing:         ∀x,y ∃Z ∀z [z∈Z ⟺ z=x or z=y]
-3. Union:           ∀X ∃Y ∀y [y∈Y ⟺ ∃Z(Z∈X and y∈Z)]
-4. Empty set:       ∃X ∀y [y ∉ X] (this set X is denoted by ∅)
-5. Infinity:        ∃X [∅ ∈ X and ∀x(x ∈ X ⟹ x ∪ {x} ∈ X)]
-6. Power set:       ∀X ∃Y ∀Z [Z∈Y ⟺ ∀z(z∈Z ⟹ z∈X)]
-7. Replacement:     ∀x∈X ∃!y P(x,y) ⟹ [∃Y ∀y (y∈Y ⟺ ∃x∈X (P(x,y)))]
-8. Regularity:      ∀X [X ≠ ∅ ⟹ ∃Y∈X (X∩Y = ∅)]
-9. Axiom of choice: ∀X [∅ ∉ X and ∀Y,Z∈X(Y≠Z ⟹ Y∩Z = ∅) ⟹ ∃Y ∀Z∈X ∃!z∈Z (z ∈ Y)]
+1. Extensionality:  ∀X,Y (X=Y ⟺ ∀z(z∈X ⟺ z∈Y))
+2. Pairing:         ∀x,y ∃Z ∀z (z∈Z ⟺ z=x or z=y)
+3. Union:           ∀X ∃Y ∀y (y∈Y ⟺ ∃Z(Z∈X and y∈Z))
+4. Empty set:       ∃X ∀y (y ∉ X) -- this set X is denoted by ∅
+5. Infinity:        ∃X (∅ ∈ X and ∀x(x ∈ X ⟹ x ∪ {x} ∈ X))
+6. Power set:       ∀X ∃Y ∀Z (Z∈Y ⟺ ∀z(z∈Z ⟹ z∈X))
+7. Replacement:     ∀x∈X ∃!y P(x,y) ⟹ ∃Y ∀y (y∈Y ⟺ ∃x∈X P(x,y))
+8. Regularity:      ∀X (X ≠ ∅ ⟹ ∃Y∈X (X∩Y = ∅))
+9. Axiom of choice: ∀X (∅ ∉ X and ∀Y,Z∈X(Y≠Z ⟹ Y∩Z = ∅) ⟹ ∃Y ∀Z∈X ∃!z∈Z (z ∈ Y))
 
 * ∀ = for all, ∃! = there exists a unique, P is any formula that does not contain Y
 * z ∈ X∪Y ⟺ z∈X or z∈Y,  z ∈ X∩Y ⟺ z∈X and z∈Y
+
+* ∀n∈ℕ ∃p∈ℙ (n < p ≤ 2n)
 
 * asso(⋅) = ((x⋅y)⋅z=x⋅(y⋅z))
 * comm(⋅) = (x⋅y=y⋅x)
