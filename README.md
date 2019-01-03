@@ -127,18 +127,18 @@ In principle all of mathematics can be derived from these axioms
 * asso(⋅) = ((x⋅y)⋅z = x⋅(y⋅z))
 * comm(⋅) = (x⋅y = y⋅x)
 * idem(⋅) = (x⋅x = x)
-* Sgrp(⋅) = \{asso( ⋅)\}
-* CSgrp(⋅) = Sgrp(⋅) ∪ \{comm(⋅)\}
-* Slat(⋅) = CSgrp(⋅) ∪ \{idem(⋅)\}
-* Lat(∨,∧) = Slat(∨) ∪ Slat(∧) ∪ \{(x ∧ y) ∨ x = x, (x ∨ y) ∧ x = x\}
-* 𝐋 = ⟨L,∨,∧⟩ \text{ is a lattice if } 𝐋 ⊨ Lat(∨,∧)
+* Semigroup(⋅) = \{asso( ⋅)\}
+* CSemigroup(⋅) = Semigroup(⋅) ∪ \{comm(⋅)\}
+* Semilattice(⋅) = CSemigroup(⋅) ∪ \{idem(⋅)\}
+* Lattice(∨,∧) = Semilattice(∨) ∪ Semilattice(∧) ∪ \{(x ∧ y) ∨ x = x, (x ∨ y) ∧ x = x\}
+* 𝐋 = ⟨L,∨,∧⟩ \text{ is a lattice if } 𝐋 ⊨ Lattice(∨,∧)
 * iden(⋅,e) = (x⋅e = x = e⋅x)
-* Mon(⋅,e) = Sgrp(⋅) ∪ \{iden(⋅)\}
-* Grp(⋅,^{-1},e) = Mon(⋅,e) ∪ \{x⋅x^{-1} = e\}
-* AbGrp(+,-,0) = Grp(+,-,0) ∪ \{comm(+)\}
+* Monoid(⋅,e) = Semigroup(⋅) ∪ \{iden(⋅)\}
+* Group(⋅,^{-1},e) = Monoid(⋅,e) ∪ \{x⋅x^{-1} = e\}
+* AbGroup(+,-,0) = Group(+,-,0) ∪ \{comm(+)\}
 * distr_l(⋅,+) = (x⋅(y+z) = x⋅y + x⋅z)
 * distr_r(⋅,+) = ((x+y)⋅z = x⋅z + y⋅z)
-* Ring(+,-,0,⋅) = AbGrp(+,-,0) ∪ Sgrp(⋅) ∪ \{dist_l(⋅,+), dist_r(⋅,+)\}
+* Ring(+,-,0,⋅) = AbGroup(+,-,0) ∪ Semigroup(⋅) ∪ \{dist_l(⋅,+), dist_r(⋅,+)\}
 * CRing(+,-,0,⋅) = Ring(+,-,0,⋅) ∪ \{comm(⋅)\}
 * URing(+,-,0,⋅,1) = Ring(+,-,0,⋅) ∪ \{iden(⋅,1)\}
 * CURing(+,-,0,⋅,1) = URing(+,-,0,⋅,1) ∪ \{comm(⋅)\}
