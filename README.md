@@ -125,24 +125,48 @@ In principle all of mathematics can be derived from these axioms
 * ∀n∈ℕ ∃p∈ℙ (n < p ≤ 2n)
 
 * asso(⋅) = ((x⋅y)⋅z = x⋅(y⋅z))
+* SemigroupAx(⋅) = asso(⋅)
+* Sgrp = Category(SemigroupAx(⋅))
+
 * comm(⋅) = (x⋅y = y⋅x)
+* CSemigroupAx(⋅) = SemigroupAx(⋅) and comm(⋅)
+* CSgrp = Category(CSemigroupAx(⋅))
+
 * idem(⋅) = (x⋅x = x)
-* Semigroup(⋅) = \{asso( ⋅)\}
-* CSemigroup(⋅) = Semigroup(⋅) ∪ \{comm(⋅)\}
-* Semilattice(⋅) = CSemigroup(⋅) ∪ \{idem(⋅)\}
-* Lattice(∨,∧) = Semilattice(∨) ∪ Semilattice(∧) ∪ \{(x ∧ y) ∨ x = x, (x ∨ y) ∧ x = x\}
+* SemilatticeAx(⋅) = CSemigroupAx(⋅) and idem(⋅)
+* Slat = Category(SemilatticeAx(⋅))
+
+* abso(∨,∧) = ((x∨y)∧x = x)
+* LatticeAx(∨,∧) = SemilatticeAx(∨) and SemilatticeAx(∧) and abso(∨,∧) and abso(∧,∨)
+* Lat = Category(LatticeAx(∨,∧))
 * 𝐋 = ⟨L,∨,∧⟩ \text{ is a lattice if } 𝐋 ⊨ Lattice(∨,∧)
+
 * iden(⋅,e) = (x⋅e = x = e⋅x)
-* Monoid(⋅,e) = Semigroup(⋅) ∪ \{iden(⋅)\}
-* Group(⋅,^{-1},e) = Monoid(⋅,e) ∪ \{x⋅x^{-1} = e\}
-* AbGroup(+,-,0) = Group(+,-,0) ∪ \{comm(+)\}
+* MonoidAx(⋅,e) = SemigroupAx(⋅) and iden(⋅)
+* Mon = Category(MonoidAx(⋅,e))
+
+* GroupAx(⋅,^{-1},e) = MonoidAx(⋅,e) and x⋅x^{-1} = e
+* Grp = Category(GroupAx(∨,∧))
+
+* AbGroupAx(+,-,0) = GroupAx(+,-,0) and comm(+)
+* AbGrp = Category(AbGroupAx(∨,∧))
+
 * distr_l(⋅,+) = (x⋅(y+z) = x⋅y + x⋅z)
 * distr_r(⋅,+) = ((x+y)⋅z = x⋅z + y⋅z)
-* Ring(+,-,0,⋅) = AbGroup(+,-,0) ∪ Semigroup(⋅) ∪ \{dist_l(⋅,+), dist_r(⋅,+)\}
-* CRing(+,-,0,⋅) = Ring(+,-,0,⋅) ∪ \{comm(⋅)\}
-* URing(+,-,0,⋅,1) = Ring(+,-,0,⋅) ∪ \{iden(⋅,1)\}
-* CURing(+,-,0,⋅,1) = URing(+,-,0,⋅,1) ∪ \{comm(⋅)\}
-* Field(+,-,0,⋅,1) = CURing(+,-,0,⋅,1) ∪ \{x≠0 ⟹ ∃y x⋅y=1, 0≠1\}
+* RingAx(+,-,0,⋅) = AbGroupAx(+,-,0) and SemigroupAx(⋅) and dist_l(⋅,+) and dist_r(⋅,+)
+* Rng = Category(RingAx(+,-,0,⋅))
+
+* CRingAx(+,-,0,⋅) = RingAx(+,-,0,⋅) and comm(⋅)
+* CRng = Category(CRingAx(+,-,0,⋅))
+
+* URingAx(+,-,0,⋅,1) = RingAx(+,-,0,⋅) and iden(⋅,1)
+* URng = Category(URingAx(+,-,0,⋅,1))
+
+* CURingAx(+,-,0,⋅,1) = URingAx(+,-,0,⋅,1) and comm(⋅)
+* CURng = Category(CURingAx(+,-,0,⋅,1))
+
+* FieldAx(+,-,0,⋅,1) = CURingAx(+,-,0,⋅,1) and x≠0 ⟹ ∃y x⋅y=1 and 0≠1
+* Fld = Category(FieldAx(+,-,0,⋅,1))
 
 Math fonts A
 * 𝔸 BbbA
