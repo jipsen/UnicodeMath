@@ -1,12 +1,10 @@
-# Python program to parse formulas in LaTeX files and check them in Python
+# Python program to parse UnicodeMath/LaTeX formulas producing a typechecked JSON AST
 
-# usage: python latex2py.py
+# usage: python um2json.py
 
 # Terms are read using Vaughn Pratt's top-down parsing algorithm
-# modified by Peter Jipsen 2017-04-22
-# distributed under LGPL 2.1 or later
-
-# terms are evaluated in a partial algebra A = Alg(size=n, op={"cdot":infix2, "-":prefix1, "e":const, ...}, ...)
+# modified by Peter Jipsen 2019-01-02
+# distributed under LGPL 3 or later
 
 """
 x \cdot y  --> A.op["cdot"][x][y]
@@ -510,3 +508,6 @@ def process(domain):
     fh.write(st)
     fh.close()
     subprocess.call(["pdflatex",domain+".tex"])
+
+
+# terms are evaluated in a partial algebra A = Alg(size=n, op={"cdot":infix2, "-":prefix1, "e":const, ...}, ...)

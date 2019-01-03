@@ -34,7 +34,7 @@ UnicodeMath is based on standard conventions for mathematical symbols and operat
 * formulas built from logical symbols applied to atomic formulas and formulas
 * metalogical symbols and large operator symbols that combine mathematical expressions from several of the above types (⊢,⊨,⋁,⋀,⋃,⋂,∑,∏,lim,∫,…)
 
-A subset of the variable, constant, function and relation symbols are considered to range over the set type (meaning they take sets as inputs and produce a set as output). Type checking consists of ensuring that such type constraints are observed, as well as that the above types are respected (e.g. a function symbol cannot take a formula as argument).
+A subset of the variable, constant, function and relation symbols are considered to range over the set type (meaning they take sets as inputs and/or produce a set as output). Type checking consists of ensuring that such type constraints are observed, as well as that the above types are respected (e.g. a function symbol cannot take a formula as argument).
 
 Standard mathematical notation makes liberal use of invisible "\cdot" and function application by juxtaposition (i.e., when two symbols are adjacent with the symbol on the left neither prefix nor infix and the symbols on the right neither infix nor postfix). The parser always treats this situation as a binary operation, and the types of the arguments are used to determine if this binary operation is function application or \cdot.
  
@@ -97,8 +97,14 @@ The abstract syntax tree contains the symbol (sym:string), type (typ:string) and
 * ∫_a^b f(x)dx = \lim_{n→∞}∑_{i=1}^n f(x_i^*)(b−a)/n
 * ∏_{i=1}^{n+1}a_i = (∏_{i=1}^n a_i)a_{n+1}
 * ∑_{i=1}^n i = n(n+1)/2
-
-
+* ∀x∈A P
+or 2xy+z sin(x+1)(x+2) ∀x,y∈A (P)
+or sin2⋅|x⋅y| or ∃x A
+or B = \{x∣x ∈ A or x∈B\}
+or 1+23 ∈ (⋁_{i=1}^m i) + sin x_12 = \{1,2\}+1 ∩ {2}-{1}
+or [1,2]+2=1 
+or 1+1 = 2
+or x_2|q^2
 
 The axioms of Zermelo-Fraenkel set theory with choice ZFC
 
@@ -106,7 +112,7 @@ In principle all of mathematics can be derived from these axioms
 1. Extensionality:  ∀X,Y (X=Y ⟺ ∀z(z∈X ⟺ z∈Y))
 2. Pairing:         ∀x,y ∃Z ∀z (z∈Z ⟺ z=x or z=y)
 3. Union:           ∀X ∃Y ∀y (y∈Y ⟺ ∃Z(Z∈X and y∈Z))
-4. Empty set:       ∃X ∀y (y ∉ X) -- this set X is denoted by ∅
+4. Empty set:       ∃X ∀y (y ∉ X)      -- this set X is denoted by ∅
 5. Infinity:        ∃X (∅ ∈ X and ∀x(x ∈ X ⟹ x ∪ {x} ∈ X))
 6. Power set:       ∀X ∃Y ∀Z (Z∈Y ⟺ ∀z(z∈Z ⟹ z∈X))
 7. Replacement:     ∀x∈X ∃!y P(x,y) ⟹ ∃Y ∀y (y∈Y ⟺ ∃x∈X P(x,y))
@@ -118,14 +124,25 @@ In principle all of mathematics can be derived from these axioms
 
 * ∀n∈ℕ ∃p∈ℙ (n < p ≤ 2n)
 
-* asso(⋅) = ((x⋅y)⋅z=x⋅(y⋅z))
-* comm(⋅) = (x⋅y=y⋅x)
-* idem(⋅) = (x⋅x=x)
+* asso(⋅) = ((x⋅y)⋅z = x⋅(y⋅z))
+* comm(⋅) = (x⋅y = y⋅x)
+* idem(⋅) = (x⋅x = x)
 * Sgrp(⋅) = \{asso( ⋅)\}
 * CSgrp(⋅) = Sgrp(⋅) ∪ \{comm(⋅)\}
 * Slat(⋅) = CSgrp(⋅) ∪ \{idem(⋅)\}
-* Lat(∨,∧) = Slat(∨) ∪ Slat(∧) ∪ \{(x ∧ y) ∨ x = x,\ (x ∨ y) ∧ x = x\}
+* Lat(∨,∧) = Slat(∨) ∪ Slat(∧) ∪ \{(x ∧ y) ∨ x = x, (x ∨ y) ∧ x = x\}
 * 𝐋 = ⟨L,∨,∧⟩ \text{ is a lattice if } 𝐋 ⊨ Lat(∨,∧)
+* iden(⋅,e) = (x⋅e = x = e⋅x)
+* Mon(⋅,e) = Sgrp(⋅) ∪ \{iden(⋅)\}
+* Grp(⋅,^{-1},e) = Mon(⋅,e) ∪ \{x⋅x^{-1} = e\}
+* AbGrp(+,-,0) = Grp(+,-,0) ∪ \{comm(+)\}
+* distr_l(⋅,+) = (x⋅(y+z) = x⋅y + x⋅z)
+* distr_r(⋅,+) = ((x+y)⋅z = x⋅z + y⋅z)
+* Ring(+,-,0,⋅) = AbGrp(+,-,0) ∪ Sgrp(⋅) ∪ \{dist_l(⋅,+), dist_r(⋅,+)\}
+* CRing(+,-,0,⋅) = Ring(+,-,0,⋅) ∪ \{comm(⋅)\}
+* URing(+,-,0,⋅,1) = Ring(+,-,0,⋅) ∪ \{iden(⋅,1)\}
+* CURing(+,-,0,⋅,1) = URing(+,-,0,⋅,1) ∪ \{comm(⋅)\}
+* Field(+,-,0,⋅,1) = CURing(+,-,0,⋅,1) ∪ \{x≠0 ⟹ ∃y x⋅y=1, 0≠1\}
 
 Math fonts A
 * 𝔸 BbbA
