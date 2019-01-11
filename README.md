@@ -138,6 +138,7 @@ In principle all of mathematics can be derived from these axioms
 
 * abso(∨,∧) = ((x∨y)∧x = x)
 * LatticeAx(∨,∧) = SemilatticeAx(∨) and SemilatticeAx(∧) and abso(∨,∧) and abso(∧,∨)
+
 Lat = Category(LatticeAx(∨,∧))
 * 𝐋 = ⟨L,∨,∧⟩ \text{ is a lattice if } 𝐋 ⊨ Lattice(∨,∧)
 
