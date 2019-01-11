@@ -124,50 +124,49 @@ In principle all of mathematics can be derived from these axioms
 
 * ∀n∈ℕ ∃p∈ℙ (n < p ≤ 2n)
 
-* asso(⋅) = ((x⋅y)⋅z = x⋅(y⋅z))
-* SemigroupAx(⋅) = asso(⋅)
-* Sgrp = Category(SemigroupAx(⋅))
+asso(⋅) = ((x⋅y)⋅z = x⋅(y⋅z))  
+SemigroupAx(⋅) = asso(⋅)  
+Sgrp = Category(SemigroupAx(⋅))  
 
-* comm(⋅) = (x⋅y = y⋅x)
-* CSemigroupAx(⋅) = SemigroupAx(⋅) and comm(⋅)
-* CSgrp = Category(CSemigroupAx(⋅))
+comm(⋅) = (x⋅y = y⋅x)  
+CSemigroupAx(⋅) = SemigroupAx(⋅) and comm(⋅)  
+CSgrp = Category(CSemigroupAx(⋅))  
 
-* idem(⋅) = (x⋅x = x)
-* SemilatticeAx(⋅) = CSemigroupAx(⋅) and idem(⋅)
-* Slat = Category(SemilatticeAx(⋅))
+idem(⋅) = (x⋅x = x)  
+SemilatticeAx(⋅) = CSemigroupAx(⋅) and idem(⋅)  
+Slat = Category(SemilatticeAx(⋅))  
 
-* abso(∨,∧) = ((x∨y)∧x = x)
-* LatticeAx(∨,∧) = SemilatticeAx(∨) and SemilatticeAx(∧) and abso(∨,∧) and abso(∧,∨)
-
+abso(∨,∧) = ((x∨y)∧x = x)  
+LatticeAx(∨,∧) = SemilatticeAx(∨) and SemilatticeAx(∧) and abso(∨,∧) and abso(∧,∨)  
 Lat = Category(LatticeAx(∨,∧))
 * 𝐋 = ⟨L,∨,∧⟩ \text{ is a lattice if } 𝐋 ⊨ Lattice(∨,∧)
 
-* iden(⋅,e) = (x⋅e = x = e⋅x)
-* MonoidAx(⋅,e) = SemigroupAx(⋅) and iden(⋅,e)
-* Mon = Category(MonoidAx(⋅,e))
+iden(⋅,e) = (x⋅e = x = e⋅x)  
+MonoidAx(⋅,e) = SemigroupAx(⋅) and iden(⋅,e)  
+Mon = Category(MonoidAx(⋅,e))  
 
-* GroupAx(⋅,^{-1},e) = MonoidAx(⋅,e) and x⋅x^{-1} = e
-* Grp = Category(GroupAx(∨,∧))
+GroupAx(⋅,^{-1},e) = MonoidAx(⋅,e) and x⋅x^{-1} = e  
+Grp = Category(GroupAx(∨,∧))
 
-* AbGroupAx(+,-,0) = GroupAx(+,-,0) and comm(+)
-* AbGrp = Category(AbGroupAx(∨,∧))
+AbGroupAx(+,-,0) = GroupAx(+,-,0) and comm(+)  
+AbGrp = Category(AbGroupAx(∨,∧))
 
-* distr_l(⋅,+) = (x⋅(y+z) = x⋅y + x⋅z)
-* distr_r(⋅,+) = ((x+y)⋅z = x⋅z + y⋅z)
-* RingAx(+,-,0,⋅) = AbGroupAx(+,-,0) and SemigroupAx(⋅) and dist_l(⋅,+) and dist_r(⋅,+)
-* Rng = Category(RingAx(+,-,0,⋅))
+distr_l(⋅,+) = (x⋅(y+z) = x⋅y + x⋅z)  
+distr_r(⋅,+) = ((x+y)⋅z = x⋅z + y⋅z)  
+RingAx(+,-,0,⋅) = AbGroupAx(+,-,0) and SemigroupAx(⋅) and dist_l(⋅,+) and dist_r(⋅,+)  
+Rng = Category(RingAx(+,-,0,⋅))
 
-* CRingAx(+,-,0,⋅) = RingAx(+,-,0,⋅) and comm(⋅)
-* CRng = Category(CRingAx(+,-,0,⋅))
+CRingAx(+,-,0,⋅) = RingAx(+,-,0,⋅) and comm(⋅)  
+CRng = Category(CRingAx(+,-,0,⋅))
 
-* URingAx(+,-,0,⋅,1) = RingAx(+,-,0,⋅) and iden(⋅,1)
-* URng = Category(URingAx(+,-,0,⋅,1))
+URingAx(+,-,0,⋅,1) = RingAx(+,-,0,⋅) and iden(⋅,1)  
+URng = Category(URingAx(+,-,0,⋅,1))
 
-* CURingAx(+,-,0,⋅,1) = URingAx(+,-,0,⋅,1) and comm(⋅)
-* CURng = Category(CURingAx(+,-,0,⋅,1))
+CURingAx(+,-,0,⋅,1) = URingAx(+,-,0,⋅,1) and comm(⋅)  
+CURng = Category(CURingAx(+,-,0,⋅,1))
 
-* FieldAx(+,-,0,⋅,1) = CURingAx(+,-,0,⋅,1) and x≠0 ⟹ ∃y x⋅y=1 and 0≠1
-* Fld = Category(FieldAx(+,-,0,⋅,1))
+FieldAx(+,-,0,⋅,1) = CURingAx(+,-,0,⋅,1) and x≠0 ⟹ ∃y x⋅y=1 and 0≠1  
+Fld = Category(FieldAx(+,-,0,⋅,1))
 
 Math fonts A
 * 𝔸 BbbA
