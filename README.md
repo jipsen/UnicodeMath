@@ -138,11 +138,11 @@ In principle all of mathematics can be derived from these axioms
 
 * abso(∨,∧) = ((x∨y)∧x = x)
 * LatticeAx(∨,∧) = SemilatticeAx(∨) and SemilatticeAx(∧) and abso(∨,∧) and abso(∧,∨)
-* Lat = Category(LatticeAx(∨,∧))
+Lat = Category(LatticeAx(∨,∧))
 * 𝐋 = ⟨L,∨,∧⟩ \text{ is a lattice if } 𝐋 ⊨ Lattice(∨,∧)
 
 * iden(⋅,e) = (x⋅e = x = e⋅x)
-* MonoidAx(⋅,e) = SemigroupAx(⋅) and iden(⋅)
+* MonoidAx(⋅,e) = SemigroupAx(⋅) and iden(⋅,e)
 * Mon = Category(MonoidAx(⋅,e))
 
 * GroupAx(⋅,^{-1},e) = MonoidAx(⋅,e) and x⋅x^{-1} = e
