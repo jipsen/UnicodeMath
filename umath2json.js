@@ -1,5 +1,5 @@
-// um2json.js: a Parser for UnicodeMath to a typechecked JSON AST
-// Peter Jipsen, Version of 2019-01-02, math.chapman.edu/~jipsen/UnicodeMath
+// umath2json.js: a Parser for UnicodeMath to a latex string
+// Peter Jipsen, Version of 2019-01-10, math.chapman.edu/~jipsen/UnicodeMath
 
 // Based on Douglas Crockford's Top Down Operator Precedence
 // In turn based on Vaughn Pratt's 1973 top down parsing algorithm
@@ -18,8 +18,7 @@ String.prototype.tokens = function () {
     var str;                    // The string value.
     var result = [];            // An array to hold the results.
 
-    var make = function (typ, sym) {
-// Make a token object.
+    var make = function (typ, sym) { // Make a token object.
         return {
             typ: typ,
             sym: sym,
@@ -57,7 +56,7 @@ String.prototype.tokens = function () {
             if (c <= ' ') {
                 i += 1;
                 c = this.charAt(i);
-	    } else if (c=='{' || c=='}') {// || c==' '){
+    	    } else if (c=='{' || c=='}') {// || c==' '){
                 str += c;
                 i += 1;
                 c = this.charAt(i);
@@ -73,32 +72,30 @@ String.prototype.tokens = function () {
                     }
                 }
                 if (str=="\\mbox") {
-		    str = "";
-		    i += 1;
-		    c = this.charAt(i);
+	        	    str = "";
+		            i += 1;
+		            c = this.charAt(i);
                     while (c>=' ' && c!='}') {
-			str += c;
-			i += 1;
-			c = this.charAt(i);
-		    }
-		    i += 1;
-		    c = this.charAt(i);
-		    result.push(make(null, '\\mbox'));
-		} else if (str=="\\left") {
+			            str += c;
+			            i += 1;
+			            c = this.charAt(i);
+		            }
+		            i += 1;
+		            c = this.charAt(i);
+		            result.push(make(null, '\\mbox'));
+		        } else if (str=="\\left") {
                     str += c;
-		    i += 1;
-		    c = this.charAt(i);
-		} else if (str=="\\right") {
+		            i += 1;
+		            c = this.charAt(i);
+		        } else if (str=="\\right") {
                     str += c;
-		    i += 1;
-		    c = this.charAt(i);
-		}
+		            i += 1;
+		            c = this.charAt(i);
+		        }
                 result.push(make(null, str));
-	    }
+	        }
 // number.
-
-// A number cannot start with a decimal point. It must start with a digit,
-// possibly '0'.
+// A number cannot start with a decimal point. It must start with a digit, possibly '0'.
         } else if (c >= '0' && c <= '9') {
             str = c;
             i += 1;
@@ -136,8 +133,8 @@ String.prototype.tokens = function () {
             do {
                 i += 1;
                 c = this.charAt(i);
-	    }
-	    while (c !== '\n' && c !== '\r' && c !== '');
+	        }
+	        while (c !== '\n' && c !== '\r' && c !== '');
 // single-character operator
         } else {
             i += 1;
@@ -196,21 +193,21 @@ var make_parse = function () {
         left = t.nud();
         while (rbp<token.lbp || token.lbp==0 && !nbl && rbp<72) {
             if (token.lbp==0 && !nbl && rbp<72) {
-		t = Object.create(symbol_table["\\,"]);
-		t.sym = "\\,";
+		        t = Object.create(symbol_table["\\,"]);
+		        t.sym = "\\,";
                 t.bp = 72;
-		t.error = parseerror;
-		t.typ = "term";
-		newleft = t.led(left, true);
+		        t.error = parseerror;
+		        t.typ = "term";
+		        newleft = t.led(left, true);
                 if (left.sym == "\\,") {
-		    left.arg.push(newleft.arg[1]);
-		} else left = newleft;
-	    }
-	    if (rbp<token.lbp) {
-		t = token;
-		advance();
-		left = t.led(left, nbl);
-	    }
+		            left.arg.push(newleft.arg[1]);
+		        } else left = newleft;
+	        }
+	        if (rbp<token.lbp) {
+		        t = token;
+		        advance();
+		        left = t.led(left, nbl);
+	        }
         }
         return left;
     };
@@ -237,7 +234,7 @@ var make_parse = function () {
             if (typ) s.typ = typ;
             if (vsym) s.vsym = vsym;
             s.lbp = bp;
-	    s.error = parseerror;
+    	    s.error = parseerror;
             symbol_table[id] = s;
         }
         return s;
@@ -267,17 +264,17 @@ var make_parse = function () {
             if (bp<=35) this.typ = this.arg.typ=="formula"&&this.arg2.typ=="formula"?"formula":"error";
             else if (this.typ=="set") this.typ=this.arg.typ=="set"&&this.arg2.typ=="set"?"set":"error";
 	    else { //check if all are term or func or null
-		if (this.arg.typ) {
-		    if (this.arg.typ=="formula"||this.arg.typ=="set") this.typ = "error";
-		    else if (this.arg.typ=="function") this.typ = "function";
-		}else if (this.arg2.typ) {
-		    if (this.arg2.typ=="formula"||this.arg2.typ=="set") this.typ = "error";
-		    else if (this.arg2.typ=="function") this.typ = "function";
-		}
-		if (this.typ != "error") {
-		    if (bp<=40) this.typ = "formula";
-		    else if (this.typ!="function") this.typ = "term";
-		}
+	    	if (this.arg.typ) {
+		        if (this.arg.typ=="formula"||this.arg.typ=="set") this.typ = "error";
+		        else if (this.arg.typ=="function") this.typ = "function";
+	    	} else if (this.arg2.typ) {
+		        if (this.arg2.typ=="formula"||this.arg2.typ=="set") this.typ = "error";
+		        else if (this.arg2.typ=="function") this.typ = "function";
+		    }
+		    if (this.typ != "error") {
+		        if (bp<=40) this.typ = "formula";
+		        else if (this.typ!="function") this.typ = "term";
+		    }
 	    }
 	    this.toLaTeX = function(){
 		if (this.sym=="\\choose")
@@ -469,8 +466,8 @@ var make_parse = function () {
     isLogical = function(s) {return 20<=s.bp && s.bp<39};
     infixr("\\to", 20);
     infixr("\\implies", 20);
-    infixr("\\Rightarrow", 20);
     infixr("\\Longrightarrow", 20);
+    infixr("\\Rightarrow", 20);
     infixr("\\iff", 20);
     infixr("\\Leftrightarrow", 20);
     infixr("\\equiv", 20);
@@ -800,17 +797,9 @@ typeerror = function (message, t) {
         var string, tree;
         try {
             tree = parse(source);
-            string = JSON.stringify(tree, ['key', 'name', 'message',
-		   'sym', 'bp', 'typ', 'vsym', 'arg', 'arg2', 'arg3'], 4);
         } catch (e) {
-            if (e.name=="SyntaxError") {
-                string = JSON.stringify(e, ['name', 'message', 'from', 'to',
-		    'key', 'sym', 'bp', 'typ', 'vsym', 'arg', 'arg2', 'arg3'], 4);
-            } else throw e;
+            throw e;
         }
-        document.getElementById('OUTPUT').innerHTML = string
-            .replace(/&/g, '&amp;')
-            .replace(/[<]/g, '&lt;');
         if (tree) return tree.toLaTeX();
         return "undefined"
     }
@@ -828,171 +817,3 @@ typeerror = function (message, t) {
         }
     }
 
-
-//not used
-
-function obj2str(obj, obj_name) {
-  var result = ""
-  for (var i in obj)
-    result += i + " = " + obj[i] + "; "
-  return result
-}
-
-function equalExpr(p,q) {
-if (p==null || q==null || p.sym==null || q.sym==null) {
-  document.write(obj2str(p),obj2str(q),"*******equalExpr*******");
-  return false;
-}
-  if (p.sym!=q.sym) return false;
-  if (p.arg.length!=q.arg.length) return false;
-  if (p.arg.length==0) return true;
-  for (var i=0; i<p.arg.length; i++)
-    if (!equalExpr(p.arg[i],q.arg[i])) return false;
-  return true;
-}
-
-function clone(t) {
-  var b=[];
-  for (var i=0; i<t.arg.length; i++)
-    b[i]=clone(t.arg[i]);
-  return new Expr(t.symbol,b,0);
-}
-
-// a substitution is a list of terms with sub[i] to replace vari[i]
-function appl(t,sub) {
-  if (t.symbol.vari || t.symbol.formulavari) 
-    if (sub[t.symbol.index]==null) 
-      return clone(currentSubstitution[t.symbol.index]);
-    else return clone(sub[t.symbol.index]);
-  var a=[];
-  for (var i=0; i<t.arg.length; i++)
-    a[i]=appl(t.arg[i],sub);
-  return new Expr(t.symbol,a,0);
-}
-
-substList=[];
-premsList=[];
-
-function match(q,t,sub) {
-// Find substitution such that q==sub(t); return true if found.
-//displayExprList(sub);
-  if (t.symbol.vari)
-    if (sub[t.symbol.index]==null) {
-      if (q.symbol.conn || q.symbol.pred || q.symbol.formulavari) return false;
-      sub[t.symbol.index]=q;
-      if (substList.length<defaultSubstitution.length)
-        add(substList,t.symbol.index);
-      return true;
-    } else 
-      return equalExpr(sub[t.symbol.index],q);
-  if (t.symbol.formulavari) {
-    if (sub[t.symbol.index]==null) {
-      if (!q.symbol.formulavari && !q.symbol.conn && !q.symbol.pred) 
-        return false;
-      sub[t.symbol.index]=q;
-      if (substList.length<defaultSubstitution.length)
-        add(substList,t.symbol.index);
-      return true;
-    } else 
-      return equalExpr(sub[t.symbol.index],q);
-  }
-  if (t.symbol.name!=q.symbol.name) return false;
-  if (t.arg.length!=q.arg.length) return false;
-  for (var i=0; i<t.arg.length; i++)
-    if (!match(q.arg[i],t.arg[i],sub)) return false;
-  return true;
-}
-
-function allrewrites(q, stq, ind, s, t, ri, fw, li, subexpr) {
-// Find all subst such that subst[i](s) is a subterm of q 
-// and replace this subterm by subst[i](t)
-  var sub=[];
-  if (match(stq.arg[ind],s,sub)) {
-    var temp=stq.arg[ind];
-    stq.arg[ind]=appl(t,sub);
-    add(li,{expr:clone(q.arg[0]),apply:true,rule:ri,forward:fw,
-            pos:[],subst:sub});
-    stq.arg[ind]=temp;
-  }
-//  if (subexpr) // match subexpr if not leq or implies   *************
-//modified so that it always matches, but for leq or implies still generate
-//monotonicity requirement and add to proof obligations 2003/5/15
-    for (var i=0; i<stq.arg[ind].arg.length; i++) 
-      allrewrites(q,stq.arg[ind],i,s,t,ri,fw,li,subexpr);
-}
-
-function oneStepEq(q,ru,ri,above) { 
-// q focus expr, ru rule applied, side above/below
-// return list of expressions after substitution, with rule
-  var li=[];
-  var nq=new Expr(minus,[q],0);
-  var iffeq=ru.symbol==eq || ru.symbol==iffSymbol;
-  if (iffeq || above)
-    allrewrites(nq,nq,0,ru.arg[0],ru.arg[1],ri,true,li,iffeq);
-  if (iffeq || !above)
-    allrewrites(nq,nq,0,ru.arg[1],ru.arg[0],ri,false,li,iffeq);
-  return li;
-}
-
-function matchConj(te,conj,sub,sl,li) {
-// updates sub while looking for match of all conjuncts in te
-// updates list of matching formulas, and substitution
-  if (conj.symbol!=andSymbol) {
-    for (var i=0; i<te.length; i++) {
-      if (match(te[i].expr,conj,sub))
-        add(li,{subst:sub.slice(0,sub.length),
-          premises:premsList.concat([te[i].index])});
-      if (substList.length>sl) {
-        for (var j=sl; j<substList.length; j++)
-          sub[substList[j]]=null;
-        substList.length=sl;
-      }
-    }
-  } else
-    for (var i=0; i<te.length; i++) {
-      if (match(te[i].expr,conj.arg[1],sub)) {
-        add(premsList,te[i].index);
-        matchConj(te,conj.arg[0],sub,substList.length,li);
-        premsList.length--;
-      }
-      if (substList.length>sl) {
-        for (var j=sl; j<substList.length; j++)
-          sub[substList[j]]=null;
-        substList.length=sl;
-      }
-    }
-}
-
-function oneStepForward(te,ru,ri) { 
-// te = true expr, ru rule applied
-// return list of expressions after substitution, with rule
-  var li=[];
-  var sub=[];
-  var concli=[];
-  substList=[];
-  premsList=[];
-  matchConj(te,ru.arg[0],sub,0,li);
-  for (var i=0; i<li.length; i++)
-    add(concli,{expr:appl(ru.arg[1],li[i].subst),apply:true,rule:ri,
-            premises:li[i].premises,subst:li[i].subst});
-  if (ru.symbol==iffSymbol) {
-    li=[];
-    sub=[];
-    substList=[];
-    premsList=[];
-    matchConj(te,ru.arg[1],sub,0,li);
-    for (var i=0; i<li.length; i++)
-      add(concli,{expr:appl(ru.arg[0],li[i].subst),apply:true,rule:ri,
-            premises:li[i].premises,subst:li[i].subst});
-  }
-  li=[];
-  var exprli;
-  for (var i=0; i<concli.length; i++)
-    if (concli[i].expr.symbol==andSymbol) {
-      exprli=conj2list(concli[i].expr,[]);
-      for (var j=0; j<exprli.length; j++)
-        add(li,{expr:exprli[j], apply:true, rule:ri, 
-          premises:concli[i].premises, subst:concli[i].subst});
-    } else add(li,concli[i]);
-  return li;
-}

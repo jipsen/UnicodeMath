@@ -1,0 +1,180 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>LaTeXM: Parsing mathematical LaTeX</title>
+<script src="um2json.js"></script>
+<script src="json2.js"></script>
+<script src="http://math.chapman.edu/~jipsen/mathjax/MathJax/MathJax.js">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+    tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]}
+  });
+</script>
+<style>
+body {margin:0px 80px 0px;padding: 0 0 20px;background: #eef;
+font:100%/1.5 arial,tahoma,verdana,sans-serif}
+p, ul, ol, li {margin: .5em 0}
+</style>
+</head>
+
+<body>
+<h1>LaTeXM: Parsing Mathematical LaTeX with JavaScript</h1>
+<center>
+| <a href="examples.html">Examples</a>
+| <a href="LaTeXMchecker.html">LaTeXM checker</a>
+| <a href="test.html">Testing</a> |
+</center>
+<p>Type a LaTeX math expression in the box and click "parse". It will
+be typeset using MathJax and if it passes the syntax check, then the
+parse tree is displayed below. If the check fails, the typeset LaTeX
+is underlined and the offending symbol is mentioned in the
+output.<!-- The output of a type check is also printed. If either
+check fails, the offending symbol is underlined.--></p>
+<textarea id="INPUT" style="
+    height: .5in;
+    width: 100%;">\sqrt x+y+z</textarea>
+<input id="PARSE" value=parse type=button onclick="goparse(document.getElementById('INPUT').value);UpdateMath(syntaxcheck(document.getElementById('INPUT').value));Output()">
+<noscript><p>You may not see it because you have JavaScript turned off</p></noscript>
+Typeset: <span id="MathOutput">${}$</span>
+
+<p id="LaTeXexamples">
+Examples of LaTeXM: $\forall x>0(x^ax^b=x^{a+b})$ &nbsp; &nbsp; &nbsp;
+
+$∀ x,y>0((xy)^a=x^ay^a)$ &nbsp; &nbsp; &nbsp;
+
+$|x+y|\le|x|+|y|$ &nbsp; &nbsp; &nbsp;
+
+$|xy|=(|x||y|)$ &nbsp; &nbsp; &nbsp;
+
+$a|b\iff\exists c\in \mathbb Z(ac=b)$ &nbsp; &nbsp; &nbsp;
+
+$A\cup B=\{x\mid x \in A\lor x\in B\}$ &nbsp; &nbsp; &nbsp;
+
+$\lim_{x\to a}f(x)=L\iff\forall \varepsilon>0\exists \delta>0\forall
+x(0< |x-a|< \delta\Rightarrow |f(x)-L|< ɛ)$ &nbsp; &nbsp; &nbsp;
+
+$\frac d{dx}(f(x))=\lim_{h\to0}\frac{f(x+h)-f(x)}h$ &nbsp; &nbsp; &nbsp;
+
+$\int_a^bf(x)dx=\lim_{n\to\infty}\sum_{i=1}^nf(x_i^*)\frac{b-a}n$ &nbsp; &nbsp; &nbsp;
+
+$\prod_{i=1}^{n+1} a_i=(\prod_{i=1}^n a_i)a_{n+1}$ &nbsp; &nbsp; &nbsp;
+
+<!--span style="color:red;"-->$\sum_{i=1}^n i=\frac{n(n+1)}2$<!--/span-->
+</p>
+<textarea id="txtarea" cols=100 rows=10 style="display:none"></textarea>
+<pre id=OUTPUT></pre>
+<script>
+(function () {
+  var que = MathJax.Hub.queue;
+  var math = null;
+  que.Push(function() {math = MathJax.Hub.getAllJax("MathOutput")[0];});
+  UpdateMath = function(st) {que.Push(["Text",math,"\\displaystyle{"+st+"}"]);}
+
+  var LaTeXex;
+  que.Push(function() {LaTeXex = MathJax.Hub.getAllJax("LaTeXexamples");});
+  Output = function() {
+      for (var i=0; i<LaTeXex.length; i++) {
+          nd = document.getElementById("txtarea");
+          nd.value += LaTeXex[i].originalText;
+          que.Push(["Text",LaTeXex[i],syntaxcheck(LaTeXex[i].originalText)]);
+      }
+  }
+})();
+
+MathJax.Hub.Queue(function () {Output();});
+//long test expression
+    //go("\forall x\in AP\lor 2xy+z\sin(x+1)(x+2)\forall x,y\in A(P)\lor\sin2\cdot |x\cdot y| \lor \exists xA\lor B=\{x|x \in A\lor x\in B\}+\forall \epsilon>0\exists d>0\forall x(0<|x-a|<d\to |f(x)-L|<e)\lor 1+23\in(\bigvee_{i=1}^m i)+\sin x_12=\{1,2\}+1\cap{2}-{1}\lor [1,2]+2=1 \lor 1+1=2 \lor x_2|q^2");
+
+    goparse(document.getElementById('INPUT').value);
+MathJax.Hub.Queue(function () {UpdateMath(syntaxcheck(document.getElementById('INPUT').value));});
+
+</script>
+
+Some remarks about the parsing and type checking:
+
+<ul>
+<li> The top-down parsing algorithm is due to Vaughan Pratt (1973).
+The implementation is based on Douglas Crockford's
+article <a href="http://javascript.crockford.com/tdop/tdop.html">Top
+Down Operator Precedence</a> where he uses the algorithm to parse
+Simplified JavaScript.
+
+<li> LaTeX is generally not considered suitable for capturing
+mathematical content in a machine readable way since, e.g., the
+superscript operator does not take a well-defined expression as left
+argument but rather considers only the last character on its
+left. Also, functions like \sin etc. do not have arguments but only
+form part of the LaTeX token stream. The claim is that verbose
+(unreadable) languages like Content MathML and/or OpenMath are needed
+to represent mathematics in machine readable form. However at the
+syntactic and type checking level, a subset of LaTeX is quite suitable
+for machine-readable <b>and human-readable</b> representation of
+mathematics. The current parser aims to validate this observation.
+
+<li> If the typeset LaTeX expression looks like sensible mathematics,
+then there should be a way to type the actual LaTeX such that it can
+be parsed in a unique and predictable way. The current language is
+based on standard conventions for mathematical symbols and
+operations. The types for symbols and expressions are
+
+<ul>
+<li> <b>variable symbols</b> single latin letters ($u,v,w,x,y,z$)
+with possible subscripts ($u_0,u_1,\dots,z_0,z_1,\dots$)
+<li> <b>constant symbols</b>, the default type for all
+LaTeX symbols not assigned to other types
+($a,b,\dots,\alpha,\beta,\dots,\emptyset,\infty,0,1,\dots$)
+<li> prefix/infix/postfix/mixfix <b>function symbols</b> with
+standard precedence ($+,-,\cdot,/,\cup,\cap,\sqrt{\phantom{x}},\ln,\sin,\dots$)
+<li> <b>terms</b> built from function symbols applied to
+variables, constants and terms
+<li> prefix/infix <b>relation symbols</b> with lower
+precedence than function symbols ($\in,=,\le,<,\ge,>,\dots$)
+<li> <b>atomic formulas</b> built from relation symbols applied
+to terms
+<li> prefix/infix <b>logical symbols</b> with lower precedence
+than relation symbols
+($\neg,\lor,\land,\to,\leftrightarrow,\exists,\forall,\dots$)
+<li> <b>formulas</b> built from logical symbols applied to
+atomic formulas and formulas
+<li> <b>metalogical symbols</b> and <b>large operator
+symbols</b> (osym) that combine mathematical expressions from several
+of the above types ($\vdash,\models,\bigvee,\bigwedge,\bigcup,\bigcap,\sum,\prod,\lim,\int,\dots$)
+</ul>
+
+<li> A subset of the variable, constant, function and relation symbols
+are considered to range over the <b>set</b> type (meaning they take
+sets as inputs and produce a set as output). Type checking consists of
+ensuring that such type constraints are observed, as well as that the
+above types are respected (e.g. a function symbol cannot take a
+formula as argument).
+
+<li> Standard mathematical notation makes liberal use of <b>invisible
+times</b> and <b>function application</b> by juxtaposition (i.e., when two
+symbols are adjacent with the symbol on the left neither prefix nor infix and
+the symbols on the right neither infix nor postfix). The parser always
+treats this situation as a binary operation called <b>blank</b>.
+
+<li> Infix symbols that are usually considered associative
+($+,\cdot,=$) have variable arity and chain over a list of arguments
+(rather than having left or right associated parse trees).
+
+<li> Many symbols are overloaded, but context is used to disambigute
+these situations. Each symbol has a default type, but its type can be
+changed dynamically.
+
+<li> When a string fails the syntax check or type check the offending
+symbol is underlined (it may very well be valid LaTeX and the output may
+look like valid mathematics, but the string is not considered a
+machine-readable LaTeXM expression).
+
+<li> The abstract syntax tree contains the symbol (sym:string), type
+(typ:string) and arguments (arg, arg2, arg3), where the latter three
+are either a tree or a list of trees.
+</ul>
+<p align="center">
+<small>Peter Jipsen --- October 2010 --- Chapman University</small>
+</p>
+</body>
+</html>
