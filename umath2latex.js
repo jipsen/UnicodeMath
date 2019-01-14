@@ -1,4 +1,4 @@
-// umath2json.js: a Parser for UnicodeMath to a latex string
+// umath2latex.js: a Parser for UnicodeMath to a latex string
 // Peter Jipsen, Version of 2019-01-10, math.chapman.edu/~jipsen/UnicodeMath
 
 // Based on Douglas Crockford's Top Down Operator Precedence
@@ -17,6 +17,7 @@ String.prototype.tokens = function () {
     var n;                      // The number value.
     var str;                    // The string value.
     var result = [];            // An array to hold the results.
+    var str_tokens = ["or","ln","and","lim","sin","cos","tan","cot","sec","csc","log","gcd","lcm","det"];
 
     var make = function (typ, sym) { // Make a token object.
         return {
@@ -39,6 +40,16 @@ String.prototype.tokens = function () {
             i += 1;
             c = this.charAt(i);
 // name.
+        } else if (str_tokens.indexOf(this.slice(i,i+3)) != -1) {
+            str = this.slice(i,i+3);
+            i += 3;
+            result.push(make(null, str));
+            c = this.charAt(i);
+        } else if (str_tokens.indexOf(this.slice(i,i+2)) != -1) {
+            str = this.slice(i,i+2);
+            i += 2;
+            result.push(make(null, str));
+            c = this.charAt(i);
         } else if (c >= 'a' && c <= 'z') {
             str = c;
             i += 1;
@@ -47,9 +58,9 @@ String.prototype.tokens = function () {
         } else if (c >= 'A' && c <= 'Z') {
             str = c;
             i += 1;
-            result.push(make('set', str));
+            result.push(make('set', str)); //remove this
             c = this.charAt(i);
-        } else if (c=='\\') {
+        } else if (c=='\\') {  // read LaTeX style names, but remove for UnicodeMath
             str = c;
             i += 1;
             c = this.charAt(i);
@@ -71,8 +82,8 @@ String.prototype.tokens = function () {
                         break;
                     }
                 }
-                if (str=="\\mbox") {
-	        	    str = "";
+                if (str=="\\mbox") { //remove this
+                    str = "";
 		            i += 1;
 		            c = this.charAt(i);
                     while (c>=' ' && c!='}') {
@@ -83,14 +94,6 @@ String.prototype.tokens = function () {
 		            i += 1;
 		            c = this.charAt(i);
 		            result.push(make(null, '\\mbox'));
-		        } else if (str=="\\left") {
-                    str += c;
-		            i += 1;
-		            c = this.charAt(i);
-		        } else if (str=="\\right") {
-                    str += c;
-		            i += 1;
-		            c = this.charAt(i);
 		        }
                 result.push(make(null, str));
 	        }
@@ -135,7 +138,7 @@ String.prototype.tokens = function () {
                 c = this.charAt(i);
 	        }
 	        while (c !== '\n' && c !== '\r' && c !== '');
-// single-character operator
+// single Unicode character operator
         } else {
             i += 1;
             result.push(make(null, c));
@@ -212,6 +215,15 @@ var make_parse = function () {
         return left;
     };
 
+    var wrapLaTeX = function (subt, t, infix_r, brace) {
+    	//console.log(subt.sym+":::"+subt.arg);
+	    if (subt.bp > t.bp || !subt.arg || //subt.bp == t.bp && !infix_r || //subt.arg3 ||
+            subt.arg && subt.arg.length==0 || subt.sym == t.sym && t.arg.length==1) 
+            return subt.toLaTeX();
+	    if (brace) return "{"+subt.toLaTeX()+"}";
+        return '('+subt.toLaTeX()+')';  // removed \\left, \\right
+    };
+
     var original_symbol = {
         nud: function () {
             this.error("Undefined.");
@@ -221,7 +233,7 @@ var make_parse = function () {
         }
     };
 
-    var symbol = function (id, bp, typ, vsym) {
+    var symbol = function (id, tex, bp, typ, vsym) {
         var s = symbol_table[id];
         bp = bp || 0;
         if (s) {
@@ -231,6 +243,7 @@ var make_parse = function () {
         } else {
             s = Object.create(original_symbol);
             s.sym = id;
+            s.tex = tex;
             if (typ) s.typ = typ;
             if (vsym) s.vsym = vsym;
             s.lbp = bp;
@@ -241,7 +254,7 @@ var make_parse = function () {
     };
 
     var constant = function (s, v, typ, vsym) {
-        var x = symbol(s, 0, typ, vsym);
+        var x = symbol(s, s, 0, typ, vsym);
         x.nud = function () {
             var s = symbol_table[this.sym];
             //console.log("***"+this.sym+"*"+this.typ+"****"+s.typ+"** ")
@@ -249,9 +262,18 @@ var make_parse = function () {
             if (s.typ) this.typ = s.typ;
             if (s.vsym) this.vsym = s.vsym;
             if (this.typ=="function") {
-                this.arg = expression(71);
-                this.bp = 71;
-                this.toLaTeX = function(){return this.sym+" "+wrapLaTeX(this.arg,this)};
+                if (tokens[token_nr]=="^") {
+                    this.typ = null
+                    return this;
+                }
+                //??this.arg = expression(100);
+                this.bp = 100
+                this.toLaTeX = function(){
+                    if (this.arg) {
+                        var st = wrapLaTeX(this.arg,this)
+                        return this.tex+(st.charAt(0)=="("?"":"(")+st+(st.charAt(0)=="("?"":")")
+                    } else return this.tex;
+                };
             }
             return this;
         };
@@ -262,8 +284,8 @@ var make_parse = function () {
         for (var i in a) constant(a[i], a[i], typ, vsym);
     };
 
-    var infix = function (id, bp, led) {
-        var s = symbol(id, bp);
+    var infix = function (id, tex, bp, led) {
+        var s = symbol(id, tex, bp);
         s.led = led || function (left, nbl) {
             this.arg = left;
             this.arg2 = expression(bp, nbl);
@@ -283,27 +305,25 @@ var make_parse = function () {
 		    }
 	    }
 	    this.toLaTeX = function(){
-		if (this.sym=="\\choose")
-                    return "{"+this.arg.toLaTeX()+"\\choose "+this.arg2.toLaTeX()+"}";
-                return wrapLaTeX(this.arg,this)+this.sym+
-		(this.sym.charAt(0)=="\\"?" ":"")+wrapLaTeX(this.arg2,this)};
+        return wrapLaTeX(this.arg,this)+this.tex+
+		    (this.tex.charAt(0)=="\\"?" ":"")+wrapLaTeX(this.arg2,this)};
             return this;
         };
     };
 
-    var infixr = function (id, bp, led) {
-        var s = symbol(id, bp);
+    var infixr = function (id, tex, bp, led) {
+        var s = symbol(id, tex, bp);
         s.led = led || function (left, nbl) {
             this.arg = left;
             this.arg2 = expression(bp - 1, nbl);
-            if (bp<=35) this.typ = this.arg.typ=="formula"&&this.arg2.typ=="formula"?"formula":"error";
-            else if (this.typ=="set") this.typ=this.arg.typ=="set"&&this.arg2.typ=="set"?"set":"error";
+            if (bp<=35) this.typ = this.arg.typ=="formula" && this.arg2.typ=="formula"?"formula":"error";
+            else if (this.typ=="set") this.typ=this.arg.typ=="set" && this.arg2.typ=="set"?"set":"error";
 	        else { //check if all are term or func or null
 		        if (this.arg.typ) {
-		            if (this.arg.typ=="formula"||this.arg.typ=="set") this.typ = "error";
+		            if (this.arg.typ=="formula" || this.arg.typ=="set") this.typ = "error";
 		            else if (this.arg.typ=="function") this.typ = "function";
 		        } else if (this.arg2.typ) {
-		            if (this.arg2.typ=="formula"||this.arg2.typ=="set") this.typ = "error";
+		            if (this.arg2.typ=="formula" || this.arg2.typ=="set") this.typ = "error";
 		            else if (this.arg2.typ=="function") this.typ = "function";
 		        }
 		        if (this.typ != "error") {
@@ -313,9 +333,9 @@ var make_parse = function () {
 	        }
 	        this.toLaTeX = function(){
 	    	    if (this.sym=="^" || this.sym=="_")
-                    return wrapLaTeX(this.arg,this,true)+this.sym+wrapLaTeX(this.arg2,this,true,true);
-                return wrapLaTeX(this.arg,this)+(this.bp<50?" ":"")+this.sym+(this.bp<50?" ":"")+
-                    (this.sym.charAt(0)=="\\"?" ":"")+wrapLaTeX(this.arg2,this);
+                    return wrapLaTeX(this.arg,this,true)+this.tex+wrapLaTeX(this.arg2,this,true,true);
+                return wrapLaTeX(this.arg,this)+(this.bp<50?" ":"")+this.tex+
+                    (this.bp<50 || this.tex.charAt(0)=="\\" ? " " : "")+wrapLaTeX(this.arg2,this);
             };
             return this;
         };
@@ -326,8 +346,8 @@ var make_parse = function () {
         return true;
     };
 
-    var infixchain = function (id, bp, led) {
-        var s = symbol(id, bp);
+    var infixchain = function (id, tex, bp, led) {
+        var s = symbol(id, tex, bp);
         s.led = led || function (left, nbl) {
             var a = [left];
             if (token.sym !== "(end)") {
@@ -342,7 +362,7 @@ var make_parse = function () {
             this.arg = a;
             if (bp<=35) this.typ = checkall(a,"formula")?"formula":"error";
             else if (this.typ=="set") this.typ = checkall(a,"set")?"set":"error";
-            else if (this.sym=="\\in") this.typ = checkall(a.slice(1),"set")?"formula":"error";
+            else if (this.sym=="∈") this.typ = checkall(a.slice(1),"set")?"formula":"error";
 	        else { //check if all are term or func or null
                 for (var i in a) {
                     if (a[i].typ) 
@@ -363,67 +383,51 @@ var make_parse = function () {
                     else for (var i in a) if (a[i].sym=="\\mbox") {this.typ = "formula"; break;}
                 }
                 this.toLaTeX = function(){
-                    var st = this.arg.length==0 ? this.sym : wrapLaTeX(this.arg[0],this);//,true);
+                    var st = this.arg.length==0 ? this.tex : wrapLaTeX(this.arg[0],this);//,true);
                     if (this.sym=="\\,") {
                         for (var i=1; i<this.arg.length; i++) {
-                            if (this.arg[i-1].typ=="function" && this.arg[i-1].vsym) 
-                                st += "("+this.arg[i].toLaTeX()+")";
-                            else if (i==this.arg.length-1 && this.arg[i].arg3) //prefixop
+                            //if (this.arg[i-1].typ=="function" && this.arg[i-1].vsym) 
+                            //    st += "("+this.arg[i].toLaTeX()+")";
+                            if (i==this.arg.length-1 && this.arg[i].arg3) //prefixop
                                 st += " "+this.arg[i].toLaTeX();
                             else st += wrapLaTeX(this.arg[i],this,true);  //deleted space after +=
                         }
                         return st;
                     }
+                    var st1 = this.bp<50 && this.sym!="," ? " " : ""
+                    var st2 = (this.bp<50 || this.tex.charAt(0)=="\\") && this.sym!="," ? " " : ""
                     for (var i=1; i<this.arg.length; i++) 
-                        st += (this.bp<50?" ":"")+this.sym+(this.bp<50||this.sym.charAt(0)=="\\"?" ":"")+
-                            wrapLaTeX(this.arg[i],this,true);
+                        st += st1+this.tex+st2+wrapLaTeX(this.arg[i],this,true);
                     return st;
                 };
             return this;
         };
     };
 
-    var postfix = function (id, bp, led) {
-        var s = symbol(id, bp);
+    var postfix = function (id, tex, bp, led) {
+        var s = symbol(id, tex, bp);
         s.led = led || function (left) {
             this.arg = left;
             this.bp = bp;
             if (left.typ) this.typ = left.typ;
             if (left.vsym) this.vsym = left.vsym;
-            this.toLaTeX = function(){return wrapLaTeX(this.arg,this)+this.sym};
+            this.toLaTeX = function(){return wrapLaTeX(this.arg,this)+this.tex};
             return this;
         };
     };
 
-    var prefix = function (id, bp, nud) {
-        var s = symbol(id);
+    var prefix = function (id, tex, bp, nud) {
+        var s = symbol(id, tex);
         s.nud = nud || function () {
             this.arg = expression(bp);
             this.bp = bp;
-            this.typ = this.sym=="\\mathbb" || this.sym=="\\mathcal"?"set":
-                       this.arg.typ=="term"?"term":"error";
-            if (this.sym=="\\mathcal" && this.arg.sym=="P") {  //get rid of this hack
-		        this.typ = "function";
-		        this.vsym = true;
-	        }
-            this.toLaTeX = function(){return this.sym+" "+wrapLaTeX(this.arg,this)};
+            this.toLaTeX = function(){return this.tex+" "+wrapLaTeX(this.arg,this)};
             return this;
         };
     };
 
-    var prefixLaTeX = function (id) {
-        var s = symbol(id);
-        s.nud = function () {
-            this.arg = expression(100);
-            this.bp = 100;
-            this.typ = this.arg.typ?this.arg.typ:"formula";
-            this.toLaTeX = function(){return this.sym+"{"+this.arg.toLaTeX()+"}"};
-            return this;
-        };
-    };
-
-    var prefixop = function (id, bp, nud) {
-        var s = symbol(id);
+    var prefixop = function (id, tex, bp, nud) {
+        var s = symbol(id, tex);
         s.nud = nud || function () {
             if (token.sym === "_") {
                 advance("_");
@@ -439,61 +443,58 @@ var make_parse = function () {
                        (!this.arg2||this.arg2.typ=="term"||!this.arg2.typ)&&
                        (this.arg3.typ==this.typ||!this.arg3.typ)?this.typ:"error";
             this.toLaTeX = function(){
-                return this.sym+(this.arg?"_{"+this.arg.toLaTeX()+"}":"")+
-		(this.arg2?"^"+wrapLaTeX(this.arg2,this,false,true):" ")+
-		wrapLaTeX(this.arg3,this);
+                return this.tex+(this.arg?"_"+wrapLaTeX(this.arg,this,false,true):"")+
+                //"_{"+this.arg.toLaTeX()+"}":"")+
+		        (this.arg2?"^"+wrapLaTeX(this.arg2,this,false,true):" ")+
+		        wrapLaTeX(this.arg3,this);
             };
             return this;
         };
     };
 
-    symbol("(end)", -1);
-    symbol("|", -1);
-    symbol(")", -1);
-    symbol("]", -1);
-    symbol("}", -1);
-    symbol("\\rfloor", -1);
-    symbol("\\rceil", -1);
-    symbol("\\right)", -1);
-    symbol("\\}", -1);
-    symbol("(literal)").nud = function() {return this;};
+    symbol("(end)", "", -1);
+    symbol("|", "|", -1);
+    symbol(")", ")", -1);
+    symbol("]", "]", -1);
+    symbol("}", "}", -1);
+    symbol("⌋", "\\rfloor", -1);
+    symbol("⌉", "\\rceil", -1);
+    symbol("\\}", "\\}", -1);
+    symbol("(literal)", "").nud = function() {return this;};
     constants(["f","g","F","G"], "function", true);
     constants(["L"], "term");
-    constants(["\\sin","\\cos","\\tan","\\cot","\\sec","\\csc","\\ln","\\log","\\gcd","\\lcm","\\det"], "function");
+    constants(["sin","cos","tan","cot","sec","csc","ln","log","gcd","lcm","det"], "function");
     constants(["\\cap","\\cup","\\setminus","\\bigcup","\\bigcap","\\subset","\\subseteq","\\supset","\\supseteq"], "set");
     constants(["\\bigvee","\\bigwedge","\\lor","\\land","\\neg","\\iff"], "formula", true);
 
     isMetaLogical = function(s) {return s.bp <20};
-    infixr("\\vdash", 10);
-    infixr("\\models", 10);
-    infix("\\mid", 15);
-    infix(":", 15);
+    infixr("⊢", "\\vdash", 10);
+    infixr("⊨", "\\models", 10);
+    infix("∣", "\\mid", 15);
+    infix(":", ":", 15);
 
     //logical symbols
     isLogical = function(s) {return 20<=s.bp && s.bp<39};
-    infixr("\\to", 20);
-    infixr("\\implies", 20);
-    infixr("\\Longrightarrow", 20);
-    infixr("\\Rightarrow", 20);
-    infixr("\\iff", 20);
-    infixr("\\Leftrightarrow", 20);
-    infixr("\\equiv", 20);
-    infixchain("\\land", 30);
-    infixchain("\\lor", 30);
-    prefix("\\neg", 35);
+    infixr("⟹", "\\implies", 20);
+    infixr("⟺", "\\iff", 20);
+    infixchain("and", "\\land", 30);
+    infixchain("or", "\\lor", 30);
+    prefix("¬", "\\neg", 35);
 
     //relation symbols
     isRelation = function(s) {return 40<=s.bp && s.bp<49};
-    infixchain("\\in", 40);
-    infixchain("=", 40);
-    infixchain("\\ne", 40);
-    infixchain("\\approx", 40);
-    infixchain("\\cong", 40);
-    infixchain("<", 40);
-    infixchain("\\le", 40);
-    infixchain(">", 40);
-    infixchain("\\ge", 40);
-    infix("|", 37, function (left, nbl) {
+    infixchain("∈", "\\in", 40);
+    infixchain("=", "=", 40);
+    infixchain("≠", "\\ne", 40);
+    infixchain("≈", "\\approx", 40);
+    infixchain("≅", "\\cong", 40);
+    infixchain("≡", "\\equiv", 40);
+    infixchain("<", "<", 40);
+    infixchain("≤", "\\le", 40);
+    infixchain(">", ">", 40);
+    infixchain("≥", "\\ge", 40);
+    infixr("→", "\\to", 40);
+    infix("|", "|", 37, function (left, nbl) {
             //if (nbl) return left;
             this.arg = left;
             this.arg2 = expression(37, nbl);
@@ -512,7 +513,7 @@ var make_parse = function () {
                 t.typ = left.typ=="term"&&right.typ=="term"?"term":"error";
                 t.arg = [left, right];
                 t.toLaTeX = function(){
-                    var st = this.arg.length==0 ? this.sym : wrapLaTeX(this.arg[0],this,true);
+                    var st = this.arg.length==0 ? this.tex : wrapLaTeX(this.arg[0],this,true);
                     for (var i=1; i<this.arg.length; i++) {
                     if (this.arg[i-1].typ=="function" && this.arg[i-1].vsym) 
                         st += "("+this.arg[i].toLaTeX()+")";
@@ -526,122 +527,91 @@ var make_parse = function () {
 	    }
         this.typ = (this.arg.typ=="term"||!this.arg.typ)&&(this.arg2.typ=="term"||!this.arg2.typ)?"formula":"error";
 	    this.toLaTeX = function(){
-            return wrapLaTeX(this.arg,this)+this.sym+wrapLaTeX(this.arg2,this)};
+            return wrapLaTeX(this.arg,this)+this.tex+wrapLaTeX(this.arg2,this)};
         return this;
 	});
-    infixr("R", 40); //relation symbol
-    infixchain("\\subset", 40);
-    infixchain("\\subseteq", 40);
-    infixchain("\\supset", 40);
-    infixchain("\\supseteq", 40);
-    infixchain(",", 45);
+    infixr("R", "R", 40); //relation symbol
+    infixchain("⊂", "\\subset", 40);
+    infixchain("⊆", "\\subseteq", 40);
+    infixchain("⊃", "\\supset", 40);
+    infixchain("⊇", "\\supseteq", 40);
+    infixchain(",", ",", 45);
 
     //function symbols
     isFunction = function(s) {return 50<=s.bp};
-    infixchain("\\setminus", 50);
-    infixchain("\\cup", 50);
-    infixchain("\\cap", 50);
-    infixchain("\\vee", 50);
-    infixchain("\\wedge", 50);
-    infixchain("+", 50);
-    infix("-", 50);
-    infix("\\pm", 50);
-    infixchain("\\times", 60);
-    infixchain("\\cdot", 60);
-    infixchain("\\circ", 60);
-    infix("/", 60);
-    infix("\\div", 60);
-    infix("\\mod", 60);
-    infix("\\choose", 60);
-    infixchain("\\,", 72);
-    infixr("^", 75);
-    infixr("_", 77);
+    infix("∖", "\\setminus", 50);
+    infix("∪", "\\cup", 50);
+    infix("∩", "\\cap", 50);
+    infix("∨", "\\vee", 50);
+    infix("∧", "\\wedge", 50);
+    infix("+", "+", 50);
+    infix("-", "-", 50);
+    infix("±", "\\pm", 50);
+    infix("×", "\\times", 60);
+    infix("⋅", "\\cdot", 60);
+    infix("∘", "\\circ", 60);
+    infix("/", "/", 60);
+    infix("div", "\\div", 60);
+    infix("mod", "\\mod", 60);
+    infixchain("\\,", "\\,", 72);
+    infixr("^", "^", 75);
+    infixr("_", "_", 77);
 
-    prefix("-", 70, function () {
+    prefix("-", "-", 70, function () {
 	    if (token.sym=="}") {
-    		this.toLaTeX = function(){return this.sym};
+    		this.toLaTeX = function(){return this.tex};
 	    	return this;
         }
         try {
             this.arg = expression(70);
         } catch(e) {
             if (e.name=="SyntaxError") {
-		        this.toLaTeX = function(){return this.sym};
+		        this.toLaTeX = function(){return this.tex};
 	        	return this;
 		    }
 	    }
         this.bp = 70;
-        this.toLaTeX = function(){return this.sym+" "+wrapLaTeX(this.arg,this)};
+        this.toLaTeX = function(){return this.tex+wrapLaTeX(this.arg,this)};
         return this;
     });
-    prefix("+", 70, function () {
-	    if (token.sym=="}") {
-	    	this.toLaTeX = function(){return this.sym};
-		    return this;
-        }
-        try {
-            this.arg = expression(70);
-        } catch(e) {
-            if (e.name=="SyntaxError") {
-		        this.toLaTeX = function(){return this.sym};
-		        return this;
-		    }
-	    }
-        this.bp = 70;
-        this.toLaTeX = function(){return this.sym+" "+wrapLaTeX(this.arg,this)};
-        return this;
-    });
-    prefix("\\pm", 70);
-    prefix("\\mathbb", 100);
-    prefix("\\mathbf", 100);
-    prefix("\\mathcal", 100);
-    prefixLaTeX("\\mbox");
-    prefixLaTeX("\\underline");
-    postfix("'", 100);
+    prefix("±", "\\pm", 70);
+    postfix("'", "'", 100);
 
-    prefixop("\\sum", 50);
-    prefixop("\\prod", 60);
-    prefixop("\\bigvee", 40);
-    prefixop("\\bigwedge", 40);
-    prefixop("\\bigcup", 60);
-    prefixop("\\bigcap", 60);
+    prefixop("∑", "\\sum", 50);
+    prefixop("∫", "\\int", 50);
+    prefixop("∏", "\\prod", 60);
+    prefixop("⋁", "\\bigvee", 40);
+    prefixop("⋀", "\\bigwedge", 40);
+    prefixop("⋃", "\\bigcup", 60);
+    prefixop("⋂", "\\bigcap", 60);
 
-    prefix("\\forall", 35, function () {
+    prefix("∀", "\\forall", 35, function () {
 	    this.arg = expression(35, true);
         this.arg2 = expression(35);
         this.typ = (this.arg.typ=="formula"||!this.arg.typ)&&(this.arg2.typ=="formula"||!this.arg2.typ)?"formula":"error";
         this.bp = 35;
         this.toLaTeX = function() {
             if (this.arg2.sym=="\\forall" || this.arg2.sym=="\\exists")
-                return "\\ \\forall "+this.arg.toLaTeX()+this.arg2.toLaTeX();
+                return "\\forall "+this.arg.toLaTeX()+this.arg2.toLaTeX();
 	    return "\\forall "+this.arg.toLaTeX()+"("+this.arg2.toLaTeX()+")";
         };
         return this;
     });
 
-    prefix("\\exists", 35, function () {
+    prefix("∃", "\\exists", 35, function () {
 	    this.arg = expression(35, true);
 	    this.arg2 = expression(35);
         this.typ = (this.arg.typ=="formula"||!this.arg.typ)&&(this.arg2.typ=="formula"||!this.arg2.typ)?"formula":"error";
         this.bp = 35;
         this.toLaTeX = function() {
             if (this.arg2.sym=="\\forall" || this.arg2.sym=="\\exists")
-                return "\\ \\exists "+this.arg.toLaTeX()+this.arg2.toLaTeX();
+                return "\\exists "+this.arg.toLaTeX()+this.arg2.toLaTeX();
 	    return "\\exists "+this.arg.toLaTeX()+"("+this.arg2.toLaTeX()+")";
         };
         return this;
     });
 
-    prefix("\\frac", 72, function () {
-        this.arg = expression(100, true);
-        this.arg2 = expression(100, true);
-        this.typ = (this.arg.typ=="term"||!this.arg.typ)&&(this.arg2.typ=="term"||!this.arg2.typ)?"term":"error";
-        this.bp = 72;
-        this.toLaTeX = function(){return "\\frac{"+this.arg.toLaTeX()+"}{"+this.arg2.toLaTeX()+"}"};
-        return this;
-    });
-
-    prefix("\\sqrt", 100, function () {
+    prefix("√", "\\sqrt", 100, function () {
         if (token.sym=="[") {
             advance("[");
 	    this.arg2 = expression(40);
@@ -656,7 +626,7 @@ var make_parse = function () {
         return this;
     });
 
-    prefix("\\lim", 55, function () {
+    prefix("lim", "\\lim", 55, function () {
         advance("_");
         this.arg = expression(55, true);
         this.arg2 = expression(55);
@@ -668,7 +638,7 @@ var make_parse = function () {
         return this;
     });
 
-    prefix("|", 80, function () {
+    prefix("|", "|", 80, function () {
         this.arg = expression(45);
         advance("|");
         this.typ = this.arg.typ=="term"||this.arg.typ=="set"||!this.arg.typ?"term":"error";
@@ -677,25 +647,19 @@ var make_parse = function () {
         return this;
     });
 
-    prefix("(", 0, function () {
+    prefix("(", "(", 0, function () {
         var e = expression(0);
         advance(")");
         return e;
     });
 
-    prefix("\\left(", 0, function () {
-        var e = expression(0);
-        advance("\\right)");
-        return e;
-    });
-
-    prefix("{", 0, function () {
+    prefix("{", "{", 0, function () {
         var e = expression(0);
         advance("}");
         return e;
     });
 
-    prefix("[", 100, function () {
+    prefix("[", "[", 100, function () {
         this.arg = expression(45);
         advance("]");
         this.typ = this.arg.typ=="term"||this.arg.typ=="set"||!this.arg.typ?"term":"error";
@@ -704,29 +668,29 @@ var make_parse = function () {
         return this;
     });
 
-    prefix("\\lfloor", 80, function () {
+    prefix("\lfloor", "\\lfloor", 80, function () {
         this.arg = expression(45);
-        advance("\\rfloor");
+        advance("\rfloor");
         this.typ = this.arg.typ=="term"||!this.arg.typ?"term":"error";
         this.bp = 80;
         this.toLaTeX = function(){return "\\lfloor "+this.arg.toLaTeX()+"\\rfloor "};
         return this;
     });
 
-    prefix("\\lceil", 80, function () {
+    prefix("\lceil", "\\lceil", 80, function () {
         this.arg = expression(45);
-        advance("\\rceil");
+        advance("\rceil");
         this.typ = this.arg.typ=="term"?"term"||!this.arg.typ:"error";
         this.bp = 80;
         this.toLaTeX = function(){return "\\lceil "+this.arg.toLaTeX()+"\\rceil "};
         return this;
     });
 
-    prefix("\\{", 38, function () {
+    prefix("\\{", "\\{", 38, function () {
         var a = [];
         if (token.sym !== "\\}") {
             a.push(expression(38,true));
-            if (token.sym == "|" || token.sym == ":" || token.sym == "\\mid") {
+            if (token.sym == "|" || token.sym == ":" || token.sym == "∣") {
                 advance();
                 this.arg = a[0];
                 this.arg2 = expression(10);
@@ -746,22 +710,13 @@ var make_parse = function () {
         this.typ = "set";
         this.bp = 60;
         this.toLaTeX = function(){
-            if (this.arg2) return "\\{"+this.arg.toLaTeX()+"\\mid "+this.arg2.toLaTeX()+"\\}";
+            if (this.arg2) return "\\{"+this.arg.toLaTeX()+" \\mid "+this.arg2.toLaTeX()+"\\}";
             var st = this.arg.length==0 ? "" : this.arg[0].toLaTeX();
 	    for (var i=1; i<this.arg.length; i++) st += ", "+this.arg[i].toLaTeX();
             return "\\{"+st+"\\}"
         };
         return this;
     });
-
-    var wrapLaTeX = function (subt, t, infix_r, brace) {
-    	//alert(subt.sym+":::"+subt.arg);
-	    if (subt.bp > t.bp || subt.bp == t.bp && !infix_r || !subt.arg || //subt.arg3 ||
-            subt.arg && subt.arg.length==0 || subt.sym == t.sym && t.arg.length==1) 
-            return subt.toLaTeX();
-	    if (brace) return "{"+subt.toLaTeX()+"}";
-        return '('+subt.toLaTeX()+')';  // removed \\left, \\right
-    };
 
     return function (source) {
         tokens = source.tokens();
@@ -789,14 +744,7 @@ parseerror = function (message, t) {
     t.message = message;
     throw t;
 };
-/*
-typeerror = function (message, t) {
-    t = t || this;
-    t.name = "TypeError";
-    t.message = message;
-    throw t;
-};
-*/
+
 var parse = make_parse();
 
 function prefixform(tree) {
@@ -805,7 +753,7 @@ function prefixform(tree) {
     if (tree.arg) {
         ar = tree.arg
         if (ar.length) {
-            for (i=0; i<ar.length-1; i++) st += prefixform(ar[i]) + ","
+            for (var i=0; i<ar.length-1; i++) st += prefixform(ar[i]) + ","
             st += prefixform(ar[ar.length-1])
         } else {
             st += prefixform(ar)
@@ -813,7 +761,7 @@ function prefixform(tree) {
     }
     if (tree.arg2) st += "," + prefixform(tree.arg2)
     if (tree.arg3) st += "," + prefixform(tree.arg3)
-    return st.slice(-1)=="(" ? st.slice(0,-1) : st + ")"
+    return st.slice(-1)=="(" ? st.slice(0,-1) : st + ")"   //remove () on constants
 }
 
 function goparse(source) {
@@ -823,26 +771,13 @@ function goparse(source) {
     return "undefined"
 }
 
-function syntaxcheck(source) {
-    var tree;
-    try {
-        tree = parse(source);
-        if (tree.typ=="error") return "\\underline{\\underline{"+tree.toLaTeX()+"}}";
-        return tree.toLaTeX();
-    } catch (e) {
-        if (e.name=="SyntaxError") {
-            return "\\underline{"+source+"}";
-        } else throw e;
-    }
-}
-
 process.stdin.on('data', function (data) {
     var tree
     arr = data.toString().split("\n")
     for (i in arr) {
         if (arr[i]!="") {
             tree = goparse(arr[i])
-            console.log(arr[i]+"\n"+tree.toLaTeX()+"\n"+prefixform(tree)+"\n");
+            console.log(arr[i]+"\n"+tree.toLaTeX()+"\n\n"+prefixform(tree)+"\n");
         }
     }
 });

@@ -1,0 +1,71 @@
+∀x>0 x^ax^b = x^(a+b)
+
+∀x>0x^ax^b = x^(a+b)
+
+∀x,y>0((xy)^a = x^ay^a)
+
+|x+y| ≤ |x|+|y|
+
+|xy| = (|x||y|)
+
+|xy| = |x||y|
+
+x+y = y+x
+
+(x+y)+z = x+(y+z)
+
+x+0 = x
+
+x+-x = 0
+
+-x+x = 0
+
+(xy)z = x(yz)
+
+x(y+z) = xy+xz
+
+(x+y)⋅z = x⋅z+y⋅z
+
+a|b ⟺ ∃c ∈ ℤ(ac=b)
+
+A ∪ B = \{x ∣ x ∈ A or x ∈ B\}
+
+d/dx(f(x)) = lim_{h→0}(f(x+h)-f(x))/h
+
+d/dx(f(x)g(x)) = d/dx(f(x))g(x) + f(x)d/dx(g(x))
+
+∫_a^b f(x) dx = lim_{n→∞} ∑_{i=1}^n f(x_i^*)(b-a)/n
+
+∫ f(x) dx = F(x)+C
+
+∫_C f(x) dx = 0
+
+∏_(i=1)^(n+1) a_i = (∏_(i=1)^n a_i)a_(n+1)
+
+sin xy
+
+sin x+y
+
+sinx
+
+f(x) y
+
+a:A×A→A
+
+A ⊨ φ
+
+1/2x
+
+1/2⋅x
+
+f(x,y,z,u,v,w)
+
+xRy and yRz ⟹ xRz
+
+f(x)^2
+
+f^2(x) = f(x)^2
+
+sin^2 x
+
+lim_{x→a} f(x) = L ⟺ ∀ɛ>0 ∃δ>0 ∀x(0 < |x-a| < δ ⟹ |f(x)-L| < ɛ)
