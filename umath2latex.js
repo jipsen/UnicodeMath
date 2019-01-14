@@ -193,8 +193,9 @@ var make_parse = function () {
         var left, newleft;
         var t = token;
         advance();
+        //console.log("calling t.nud "+t.sym+" rbp"+rbp+" toklbp"+token.lbp)
         left = t.nud();
-        while (rbp<token.lbp || token.lbp==0 && !nbl && rbp<72) {
+        while (rbp<token.lbp || (token.lbp==0 && !nbl && rbp<72)) {
             if (token.lbp==0 && !nbl && rbp<72) {
 		        t = Object.create(symbol_table["\\,"]);
 		        t.sym = "\\,";
@@ -207,7 +208,7 @@ var make_parse = function () {
 		        } else left = newleft;
 	        }
 	        if (rbp<token.lbp) {
-		        t = token;
+                t = token;
 		        advance();
 		        left = t.led(left, nbl);
 	        }
@@ -226,7 +227,7 @@ var make_parse = function () {
 
     var original_symbol = {
         nud: function () {
-            this.error("Undefined.");
+            this.error("Undefined null denotation: ");
         },
         led: function (left) {
             this.error("Missing operator.");
@@ -257,16 +258,11 @@ var make_parse = function () {
         var x = symbol(s, s, 0, typ, vsym);
         x.nud = function () {
             var s = symbol_table[this.sym];
-            //console.log("***"+this.sym+"*"+this.typ+"****"+s.typ+"** ")
-            //this.sym = s.sym
+            this.sym = s.sym
             if (s.typ) this.typ = s.typ;
             if (s.vsym) this.vsym = s.vsym;
-            if (this.typ=="function") {
-                if (tokens[token_nr]=="^") {
-                    this.typ = null
-                    return this;
-                }
-                //??this.arg = expression(100);
+            if (this.typ=="function" && token.sym!="^") {
+                this.arg = expression(100);
                 this.bp = 100
                 this.toLaTeX = function(){
                     if (this.arg) {
@@ -318,7 +314,7 @@ var make_parse = function () {
             this.arg2 = expression(bp - 1, nbl);
             if (bp<=35) this.typ = this.arg.typ=="formula" && this.arg2.typ=="formula"?"formula":"error";
             else if (this.typ=="set") this.typ=this.arg.typ=="set" && this.arg2.typ=="set"?"set":"error";
-	        else { //check if all are term or func or null
+	        else { //check if all are term or function or null
 		        if (this.arg.typ) {
 		            if (this.arg.typ=="formula" || this.arg.typ=="set") this.typ = "error";
 		            else if (this.arg.typ=="function") this.typ = "function";
@@ -741,7 +737,7 @@ if (typeof Object.create !== 'function') {
 parseerror = function (message, t) {
     t = t || this;
     t.name = "SyntaxError";
-    t.message = message;
+    t.message = message+t.sym;
     throw t;
 };
 
