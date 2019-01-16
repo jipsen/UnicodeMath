@@ -1,6 +1,6 @@
-∀x>0 x^ax^b = x^(a+b)
+∀x>0 x^a x^b = x^(a+b)
 
-∀x>0x^ax^b = x^(a+b)
+∀x>0x^ax^b=x^(a+b)
 
 ∀x,y>0((xy)^a = x^ay^a)
 
@@ -42,6 +42,8 @@ d/dx(f(x)g(x)) = d/dx(f(x))g(x) + f(x)d/dx(g(x))
 
 ∏_(i=1)^(n+1) a_i = (∏_(i=1)^n a_i)a_(n+1)
 
+lim_{x→a} f(x) = L ⟺ ∀ɛ>0 ∃δ>0 ∀x(0 < |x-a| < δ ⟹ |f(x)-L| < ɛ)
+
 sin xy
 
 sin x+y
@@ -68,4 +70,10 @@ f^2(x) = f(x)^2
 
 sin^2 x
 
-lim_{x→a} f(x) = L ⟺ ∀ɛ>0 ∃δ>0 ∀x(0 < |x-a| < δ ⟹ |f(x)-L| < ɛ)
+n:ℕ
+
+f'(x) = (f(x))' = d/dx(f(x))
+
+ℕ ⊂ ℤ ⊂ ℚ ⊂ ℝ ⊂ ℂ
+
+lim f(x)

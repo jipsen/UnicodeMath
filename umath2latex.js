@@ -58,7 +58,7 @@ String.prototype.tokens = function () {
         } else if (c >= 'A' && c <= 'Z') {
             str = c;
             i += 1;
-            result.push(make('set', str)); //remove this
+            result.push(make(null, str)); //remove this
             c = this.charAt(i);
         } else if (c=='\\') {  // read LaTeX style names, but remove for UnicodeMath
             str = c;
@@ -82,19 +82,6 @@ String.prototype.tokens = function () {
                         break;
                     }
                 }
-                if (str=="\\mbox") { //remove this
-                    str = "";
-		            i += 1;
-		            c = this.charAt(i);
-                    while (c>=' ' && c!='}') {
-			            str += c;
-			            i += 1;
-			            c = this.charAt(i);
-		            }
-		            i += 1;
-		            c = this.charAt(i);
-		            result.push(make(null, '\\mbox'));
-		        }
                 result.push(make(null, str));
 	        }
 // number.
@@ -186,14 +173,14 @@ var make_parse = function () {
         token.sym = v;
         if (a) token.typ = a;
         token.bp = o.lbp;
-        token.toLaTeX = function() {return this.sym.charAt(0)=="\\" ? this.sym+" " : this.sym};
+        token.toLaTeX = function() {return this.sym.charAt(0)=="\\" ? this.sym+" " : 
+            this.sym.length>1 ? "\\"+this.sym : this.sym};
     };
 
     var expression = function (rbp, nbl) {
         var left, newleft;
         var t = token;
         advance();
-        //console.log("calling t.nud "+t.sym+" rbp"+rbp+" toklbp"+token.lbp)
         left = t.nud();
         while (rbp<token.lbp || (token.lbp==0 && !nbl && rbp<72)) {
             if (token.lbp==0 && !nbl && rbp<72) {
@@ -218,7 +205,7 @@ var make_parse = function () {
 
     var wrapLaTeX = function (subt, t, infix_r, brace) {
     	//console.log(subt.sym+":::"+subt.arg);
-	    if (subt.bp > t.bp || !subt.arg || //subt.bp == t.bp && !infix_r || //subt.arg3 ||
+	    if (subt.bp > t.bp || !subt.arg ||         //subt.bp == t.bp && !infix_r || //subt.arg3 ||
             subt.arg && subt.arg.length==0 || subt.sym == t.sym && t.arg.length==1) 
             return subt.toLaTeX();
 	    if (brace) return "{"+subt.toLaTeX()+"}";
@@ -234,10 +221,11 @@ var make_parse = function () {
         }
     };
 
-    var symbol = function (id, tex, bp, typ, vsym) {
+    var symbol = function (id, tex, bp, typ) {
         var s = symbol_table[id];
         bp = bp || 0;
         if (s) {
+            s.tex = tex;
             if (bp >= s.lbp) {
                 s.lbp = bp;
             }
@@ -246,7 +234,6 @@ var make_parse = function () {
             s.sym = id;
             s.tex = tex;
             if (typ) s.typ = typ;
-            if (vsym) s.vsym = vsym;
             s.lbp = bp;
     	    s.error = parseerror;
             symbol_table[id] = s;
@@ -254,14 +241,13 @@ var make_parse = function () {
         return s;
     };
 
-    var constant = function (s, v, typ, vsym) {
-        var x = symbol(s, s, 0, typ, vsym);
+    var constant = function (s, typ) {
+        var x = symbol(s, s, 0, typ);
         x.nud = function () {
             var s = symbol_table[this.sym];
             this.sym = s.sym
             if (s.typ) this.typ = s.typ;
-            if (s.vsym) this.vsym = s.vsym;
-            if (this.typ=="function" && token.sym!="^") {
+            if (this.typ=="function" && token.sym!="^" && token.sym!="'") {
                 this.arg = expression(100);
                 this.bp = 100
                 this.toLaTeX = function(){
@@ -273,11 +259,11 @@ var make_parse = function () {
             }
             return this;
         };
-        x.sym = v?v:s;
+        x.sym = s;
     };
 
-    var constants = function (a, typ, vsym) {
-        for (var i in a) constant(a[i], a[i], typ, vsym);
+    var constants = function (a, typ) {
+        for (var i in a) constant(a[i], typ);
     };
 
     var infix = function (id, tex, bp, led) {
@@ -382,8 +368,6 @@ var make_parse = function () {
                     var st = this.arg.length==0 ? this.tex : wrapLaTeX(this.arg[0],this);//,true);
                     if (this.sym=="\\,") {
                         for (var i=1; i<this.arg.length; i++) {
-                            //if (this.arg[i-1].typ=="function" && this.arg[i-1].vsym) 
-                            //    st += "("+this.arg[i].toLaTeX()+")";
                             if (i==this.arg.length-1 && this.arg[i].arg3) //prefixop
                                 st += " "+this.arg[i].toLaTeX();
                             else st += wrapLaTeX(this.arg[i],this,true);  //deleted space after +=
@@ -406,7 +390,6 @@ var make_parse = function () {
             this.arg = left;
             this.bp = bp;
             if (left.typ) this.typ = left.typ;
-            if (left.vsym) this.vsym = left.vsym;
             this.toLaTeX = function(){return wrapLaTeX(this.arg,this)+this.tex};
             return this;
         };
@@ -415,11 +398,17 @@ var make_parse = function () {
     var prefix = function (id, tex, bp, nud) {
         var s = symbol(id, tex);
         s.nud = nud || function () {
-            this.arg = expression(bp);
-            this.bp = bp;
-            this.toLaTeX = function(){return this.tex+" "+wrapLaTeX(this.arg,this)};
+            if (token.sym!="^") {
+                this.arg = expression(bp);
+                this.bp = bp;
+                this.toLaTeX = function(){return this.tex+" "+wrapLaTeX(this.arg,this)};
+            }
             return this;
         };
+    };
+
+    var prefixs = function (a, bp) {
+        for (var i in a) prefix(a[i], "\\"+a[i], bp);
     };
 
     var prefixop = function (id, tex, bp, nud) {
@@ -440,7 +429,6 @@ var make_parse = function () {
                        (this.arg3.typ==this.typ||!this.arg3.typ)?this.typ:"error";
             this.toLaTeX = function(){
                 return this.tex+(this.arg?"_"+wrapLaTeX(this.arg,this,false,true):"")+
-                //"_{"+this.arg.toLaTeX()+"}":"")+
 		        (this.arg2?"^"+wrapLaTeX(this.arg2,this,false,true):" ")+
 		        wrapLaTeX(this.arg3,this);
             };
@@ -448,200 +436,40 @@ var make_parse = function () {
         };
     };
 
+    var aroundfix = function (idl, idr, texl, texr, bp, nud) {
+        var sl = symbol(idl, texl);
+        symbol(idr, texr, -1);
+        sl.nud = nud || function () {
+            this.arg = expression(45);
+            advance(idr);
+            this.typ = this.arg.typ=="term"||this.arg.typ=="set"||!this.arg.typ?"term":"error";
+            this.bp = bp;
+            this.toLaTeX = function(){return texl+this.arg.toLaTeX()+texr};
+            return this;
+        };
+    };
+
+    var quantifier = function (id, tex, bp, nud) {
+        var s = symbol(id, tex);
+        s.nud = nud || function () {
+            this.arg = expression(bp, true);
+            this.arg2 = expression(bp);
+            this.typ = (this.arg.typ=="formula"||!this.arg.typ)&&(this.arg2.typ=="formula"||!this.arg2.typ)?"formula":"error";
+            this.bp = bp;
+            this.toLaTeX = function() {
+                var nxt = this.arg2.sym=="∀" || this.arg2.sym=="∃";
+                return tex+" "+this.arg.toLaTeX()+(nxt?"":"(")+this.arg2.toLaTeX()+(nxt?"":")");
+            };
+            return this;
+        };
+    };
+
     symbol("(end)", "", -1);
-    symbol("|", "|", -1);
     symbol(")", ")", -1);
     symbol("]", "]", -1);
     symbol("}", "}", -1);
-    symbol("⌋", "\\rfloor", -1);
-    symbol("⌉", "\\rceil", -1);
     symbol("\\}", "\\}", -1);
     symbol("(literal)", "").nud = function() {return this;};
-    constants(["f","g","F","G"], "function", true);
-    constants(["L"], "term");
-    constants(["sin","cos","tan","cot","sec","csc","ln","log","gcd","lcm","det"], "function");
-    constants(["\\cap","\\cup","\\setminus","\\bigcup","\\bigcap","\\subset","\\subseteq","\\supset","\\supseteq"], "set");
-    constants(["\\bigvee","\\bigwedge","\\lor","\\land","\\neg","\\iff"], "formula", true);
-
-    isMetaLogical = function(s) {return s.bp <20};
-    infixr("⊢", "\\vdash", 10);
-    infixr("⊨", "\\models", 10);
-    infix("∣", "\\mid", 15);
-    infix(":", ":", 15);
-
-    //logical symbols
-    isLogical = function(s) {return 20<=s.bp && s.bp<39};
-    infixr("⟹", "\\implies", 20);
-    infixr("⟺", "\\iff", 20);
-    infixchain("and", "\\land", 30);
-    infixchain("or", "\\lor", 30);
-    prefix("¬", "\\neg", 35);
-
-    //relation symbols
-    isRelation = function(s) {return 40<=s.bp && s.bp<49};
-    infixchain("∈", "\\in", 40);
-    infixchain("=", "=", 40);
-    infixchain("≠", "\\ne", 40);
-    infixchain("≈", "\\approx", 40);
-    infixchain("≅", "\\cong", 40);
-    infixchain("≡", "\\equiv", 40);
-    infixchain("<", "<", 40);
-    infixchain("≤", "\\le", 40);
-    infixchain(">", ">", 40);
-    infixchain("≥", "\\ge", 40);
-    infixr("→", "\\to", 40);
-    infix("|", "|", 37, function (left, nbl) {
-            //if (nbl) return left;
-            this.arg = left;
-            this.arg2 = expression(37, nbl);
-            if (token.sym == "|") {
-                advance();
-                var t = Object.create(symbol_table["\\,"]);
-                var right = Object.create(symbol_table["|"]);
-                right.sym = "|";
-                t.sym = "\\,";
-                t.bp = 72;
-                t.error = right.error = parseerror;
-                right.bp = 80;
-                right.arg = this.arg2;
-                right.typ = right.arg.typ=="term"||right.arg.typ=="set"||!right.arg.typ?"term":"error";
-                right.toLaTeX = function(){return "|"+this.arg.toLaTeX()+"|"};
-                t.typ = left.typ=="term"&&right.typ=="term"?"term":"error";
-                t.arg = [left, right];
-                t.toLaTeX = function(){
-                    var st = this.arg.length==0 ? this.tex : wrapLaTeX(this.arg[0],this,true);
-                    for (var i=1; i<this.arg.length; i++) {
-                    if (this.arg[i-1].typ=="function" && this.arg[i-1].vsym) 
-                        st += "("+this.arg[i].toLaTeX()+")";
-                    else if (i==this.arg.length-1 && this.arg[i].arg3) //prefixop
-                        st += " "+this.arg[i].toLaTeX();
-                    else st += " "+wrapLaTeX(this.arg[i],this,true);
-                }
-                return st;
-		    }
-            return t;
-	    }
-        this.typ = (this.arg.typ=="term"||!this.arg.typ)&&(this.arg2.typ=="term"||!this.arg2.typ)?"formula":"error";
-	    this.toLaTeX = function(){
-            return wrapLaTeX(this.arg,this)+this.tex+wrapLaTeX(this.arg2,this)};
-        return this;
-	});
-    infixr("R", "R", 40); //relation symbol
-    infixchain("⊂", "\\subset", 40);
-    infixchain("⊆", "\\subseteq", 40);
-    infixchain("⊃", "\\supset", 40);
-    infixchain("⊇", "\\supseteq", 40);
-    infixchain(",", ",", 45);
-
-    //function symbols
-    isFunction = function(s) {return 50<=s.bp};
-    infix("∖", "\\setminus", 50);
-    infix("∪", "\\cup", 50);
-    infix("∩", "\\cap", 50);
-    infix("∨", "\\vee", 50);
-    infix("∧", "\\wedge", 50);
-    infix("+", "+", 50);
-    infix("-", "-", 50);
-    infix("±", "\\pm", 50);
-    infix("×", "\\times", 60);
-    infix("⋅", "\\cdot", 60);
-    infix("∘", "\\circ", 60);
-    infix("/", "/", 60);
-    infix("div", "\\div", 60);
-    infix("mod", "\\mod", 60);
-    infixchain("\\,", "\\,", 72);
-    infixr("^", "^", 75);
-    infixr("_", "_", 77);
-
-    prefix("-", "-", 70, function () {
-	    if (token.sym=="}") {
-    		this.toLaTeX = function(){return this.tex};
-	    	return this;
-        }
-        try {
-            this.arg = expression(70);
-        } catch(e) {
-            if (e.name=="SyntaxError") {
-		        this.toLaTeX = function(){return this.tex};
-	        	return this;
-		    }
-	    }
-        this.bp = 70;
-        this.toLaTeX = function(){return this.tex+wrapLaTeX(this.arg,this)};
-        return this;
-    });
-    prefix("±", "\\pm", 70);
-    postfix("'", "'", 100);
-
-    prefixop("∑", "\\sum", 50);
-    prefixop("∫", "\\int", 50);
-    prefixop("∏", "\\prod", 60);
-    prefixop("⋁", "\\bigvee", 40);
-    prefixop("⋀", "\\bigwedge", 40);
-    prefixop("⋃", "\\bigcup", 60);
-    prefixop("⋂", "\\bigcap", 60);
-
-    prefix("∀", "\\forall", 35, function () {
-	    this.arg = expression(35, true);
-        this.arg2 = expression(35);
-        this.typ = (this.arg.typ=="formula"||!this.arg.typ)&&(this.arg2.typ=="formula"||!this.arg2.typ)?"formula":"error";
-        this.bp = 35;
-        this.toLaTeX = function() {
-            if (this.arg2.sym=="\\forall" || this.arg2.sym=="\\exists")
-                return "\\forall "+this.arg.toLaTeX()+this.arg2.toLaTeX();
-	    return "\\forall "+this.arg.toLaTeX()+"("+this.arg2.toLaTeX()+")";
-        };
-        return this;
-    });
-
-    prefix("∃", "\\exists", 35, function () {
-	    this.arg = expression(35, true);
-	    this.arg2 = expression(35);
-        this.typ = (this.arg.typ=="formula"||!this.arg.typ)&&(this.arg2.typ=="formula"||!this.arg2.typ)?"formula":"error";
-        this.bp = 35;
-        this.toLaTeX = function() {
-            if (this.arg2.sym=="\\forall" || this.arg2.sym=="\\exists")
-                return "\\exists "+this.arg.toLaTeX()+this.arg2.toLaTeX();
-	    return "\\exists "+this.arg.toLaTeX()+"("+this.arg2.toLaTeX()+")";
-        };
-        return this;
-    });
-
-    prefix("√", "\\sqrt", 100, function () {
-        if (token.sym=="[") {
-            advance("[");
-	    this.arg2 = expression(40);
-            advance("]");
-        }
-        this.arg = expression(100);
-        this.typ = (this.arg.typ=="term"||!this.arg.typ)&&(!this.arg2||this.arg2.typ=="term"||!this.arg2.typ)?"term":"error";
-        this.bp = 100;
-        this.toLaTeX = function(){
-            return "\\sqrt"+(this.arg2?"["+this.arg2.toLaTeX()+"]":"")+"{"+this.arg.toLaTeX()+"}";
-        };
-        return this;
-    });
-
-    prefix("lim", "\\lim", 55, function () {
-        advance("_");
-        this.arg = expression(55, true);
-        this.arg2 = expression(55);
-        this.typ = (this.arg.sym=="\\to")&&(this.arg2.typ=="term"||!this.arg2.typ)?"term":"error";
-        this.bp = 75;
-        this.toLaTeX = function(){
-            return "\\lim_{"+this.arg.toLaTeX()+"}"+this.arg2.toLaTeX();
-        };
-        return this;
-    });
-
-    prefix("|", "|", 80, function () {
-        this.arg = expression(45);
-        advance("|");
-        this.typ = this.arg.typ=="term"||this.arg.typ=="set"||!this.arg.typ?"term":"error";
-        this.bp = 80;
-        this.toLaTeX = function(){return "|"+this.arg.toLaTeX()+"|"};
-        return this;
-    });
 
     prefix("(", "(", 0, function () {
         var e = expression(0);
@@ -655,30 +483,111 @@ var make_parse = function () {
         return e;
     });
 
-    prefix("[", "[", 100, function () {
-        this.arg = expression(45);
-        advance("]");
-        this.typ = this.arg.typ=="term"||this.arg.typ=="set"||!this.arg.typ?"term":"error";
-        this.bp = 80;
-        this.toLaTeX = function(){return "["+this.arg.toLaTeX()+"]"};
-        return this;
-    });
+    constants(["f","g","F","G"], "function");
+    //constants(["∩","∪","∖","⋃","⋂","⊂","⊆","⊃","⊇"], "set");
+    //constants(["\\bigvee","\\bigwedge","\\lor","\\land","\\neg","\\iff"], "formula");
 
-    prefix("\lfloor", "\\lfloor", 80, function () {
-        this.arg = expression(45);
-        advance("\rfloor");
-        this.typ = this.arg.typ=="term"||!this.arg.typ?"term":"error";
-        this.bp = 80;
-        this.toLaTeX = function(){return "\\lfloor "+this.arg.toLaTeX()+"\\rfloor "};
-        return this;
-    });
+    //metaLogical symbols
+    infixr("⊢", "\\vdash", 10);
+    infixr("⊨", "\\models", 10);
+    infix("∣", "\\mid", 15);
+    infix(":", ":", 15);
 
-    prefix("\lceil", "\\lceil", 80, function () {
-        this.arg = expression(45);
-        advance("\rceil");
-        this.typ = this.arg.typ=="term"?"term"||!this.arg.typ:"error";
-        this.bp = 80;
-        this.toLaTeX = function(){return "\\lceil "+this.arg.toLaTeX()+"\\rceil "};
+    //logical symbols
+    infixr("⟹", "\\implies", 20);
+    infixr("⟺", "\\iff", 20);
+    infixchain("and", "\\land", 30);
+    infixchain("or", "\\lor", 30);
+    prefix("¬", "\\neg", 35);
+    quantifier("∀", "\\forall", 35);
+    quantifier("∃", "\\exists", 35);
+
+    //relation symbols
+    infixchain("∈", "\\in", 40);
+    infixchain("=", "=", 40);
+    infixchain("≠", "\\ne", 40);
+    infixchain("≈", "\\approx", 40);
+    infixchain("≅", "\\cong", 40);
+    infixchain("≡", "\\equiv", 40);
+    infixchain("<", "<", 40);
+    infixchain("≤", "\\le", 40);
+    infixchain(">", ">", 40);
+    infixchain("≥", "\\ge", 40);
+    infixr("→", "\\to", 40);
+    infixr("R", "R", 40); //relation symbol
+    infixchain("⊂", "\\subset", 40);
+    infixchain("⊆", "\\subseteq", 40);
+    infixchain("⊃", "\\supset", 40);
+    infixchain("⊇", "\\supseteq", 40);
+
+    infixchain(",", ",", 45);
+
+    //function symbols
+    infix("∖", "\\setminus", 50);
+    infix("∪", "\\cup", 50);
+    infix("∩", "\\cap", 50);
+    prefixop("⋃", "\\bigcup", 50);
+    prefixop("⋂", "\\bigcap", 50);
+    infix("∨", "\\vee", 50);
+    infix("∧", "\\wedge", 50);
+    prefixop("⋁", "\\bigvee", 50);
+    prefixop("⋀", "\\bigwedge", 50);
+    infix("+", "+", 50);
+    prefixop("∑", "\\sum", 50);
+    prefixop("∫", "\\int", 50);
+    infix("-", "-", 50);
+    infix("±", "\\pm", 50);
+    prefixop("lim", "\\lim", 55);
+
+    infix("×", "\\times", 60);
+    prefixop("∏", "\\prod", 60);
+    infix("⋅", "\\cdot", 60);
+    infix("∘", "\\circ", 60);
+    infix("/", "/", 60);
+
+    prefixs(["sin","cos","tan","cot","sec","csc","ln","gcd","lcm","det","div","mod"], 70);
+    prefixop("log", "\\log", 70);
+    prefix("±", "\\pm", 70);
+    infixchain("\\,", "\\,", 72);
+    infixr("^", "^", 75);
+    infixr("_", "_", 77);
+
+    aroundfix("|", "|", "|", "|", 80);
+    aroundfix("⌊", "⌋", "\\lfloor ", "\\rfloor ", 80);
+    aroundfix("⌈", "⌉", "\\lceil ", "\\rceil", 80);
+    postfix("'", "'", 100);
+
+    infix("|", "|", 37, function (left, nbl) {
+        this.arg = left;
+        this.arg2 = expression(37, nbl);
+        if (token.sym == "|") {
+            advance();
+            var t = Object.create(symbol_table["\\,"]);
+            var right = Object.create(symbol_table["|"]);
+            right.sym = "|";
+            t.sym = "\\,";
+            t.bp = 72;
+            t.error = right.error = parseerror;
+            right.bp = 80;
+            right.arg = this.arg2;
+            right.typ = right.arg.typ=="term"||right.arg.typ=="set"||!right.arg.typ?"term":"error";
+            right.toLaTeX = function(){return "|"+this.arg.toLaTeX()+"|"};
+            t.typ = left.typ=="term"&&right.typ=="term"?"term":"error";
+            t.arg = [left, right];
+            t.toLaTeX = function(){
+                var st = this.arg.length==0 ? this.tex : wrapLaTeX(this.arg[0],this,true);
+                for (var i=1; i<this.arg.length; i++) {
+                    if (i==this.arg.length-1 && this.arg[i].arg3) //prefixop
+                        st += " "+this.arg[i].toLaTeX();
+                    else st += " "+wrapLaTeX(this.arg[i],this,true);
+                }
+                return st;
+            }
+            return t;
+        }
+        this.typ = (this.arg.typ=="term"||!this.arg.typ)&&(this.arg2.typ=="term"||!this.arg2.typ)?"formula":"error";
+        this.toLaTeX = function(){
+            return wrapLaTeX(this.arg,this)+this.tex+wrapLaTeX(this.arg2,this)};
         return this;
     });
 
@@ -708,22 +617,62 @@ var make_parse = function () {
         this.toLaTeX = function(){
             if (this.arg2) return "\\{"+this.arg.toLaTeX()+" \\mid "+this.arg2.toLaTeX()+"\\}";
             var st = this.arg.length==0 ? "" : this.arg[0].toLaTeX();
-	    for (var i=1; i<this.arg.length; i++) st += ", "+this.arg[i].toLaTeX();
+        for (var i=1; i<this.arg.length; i++) st += ", "+this.arg[i].toLaTeX();
             return "\\{"+st+"\\}"
         };
         return this;
     });
 
+    prefix("-", "-", 70, function () {
+	    if (token.sym=="}") {
+    		this.toLaTeX = function(){return this.tex};
+	    	return this;
+        }
+        try {
+            this.arg = expression(70);
+        } catch(e) {
+            if (e.name=="SyntaxError") {
+		        this.toLaTeX = function(){return this.tex};
+	        	return this;
+		    }
+	    }
+        this.bp = 70;
+        this.toLaTeX = function(){return this.tex+wrapLaTeX(this.arg,this)};
+        return this;
+    });
+
+    prefix("√", "\\sqrt", 100, function () {
+        if (token.sym=="[") {
+            advance("[");
+    	    this.arg2 = expression(40);
+            advance("]");
+        }
+        this.arg = expression(100);
+        this.typ = (this.arg.typ=="term"||!this.arg.typ)&&(!this.arg2||this.arg2.typ=="term"||!this.arg2.typ)?"term":"error";
+        this.bp = 100;
+        this.toLaTeX = function(){
+            return "\\sqrt"+(this.arg2?"["+this.arg2.toLaTeX()+"]":"")+"{"+this.arg.toLaTeX()+"}";
+        };
+        return this;
+    });
+
+    prefix("[", "[", 100, function () {
+        this.arg = expression(45);
+        advance("]");
+        this.typ = this.arg.typ=="term"||this.arg.typ=="set"||!this.arg.typ?"term":"error";
+        this.bp = 80;
+        this.toLaTeX = function(){return "["+this.arg.toLaTeX()+"]"};
+        return this;
+    });
+
     return function (source) {
         tokens = source.tokens();
-        //st="";for (var i in tokens)st+=tokens[i].sym+" ";
         token_nr = 0;
         advance();
         var s = expression(0);
         return s;
     };
 };
-
 
 if (typeof Object.create !== 'function') {
     Object.create = function (o) {
@@ -777,5 +726,3 @@ process.stdin.on('data', function (data) {
         }
     }
 });
-
-
