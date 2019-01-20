@@ -1,5 +1,9 @@
 # UnicodeMath, a formal math language for us and them
 
+Under construction ...
+
+http://math.chapman.edu/~jipsen/unicodemath
+
 Unicode contains a large number of mathematical symbols, making it suitable for a human **and** computer readable mathematical language that aims to be as close to standard mathematics as possible. UnicodeMath is a linear format (with _, ^ for sub- and superscripts), and Unicode characters correspond to standard LaTeX equivalents. Simple bidirectional textual conversions exist between UnicodeMath and a controlled subset of LaTeX.
 
 ### 240 useful Unicode math characters

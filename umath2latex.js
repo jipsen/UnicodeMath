@@ -50,15 +50,15 @@ String.prototype.tokens = function () {
             i += 2;
             result.push(make(null, str));
             c = this.charAt(i);
-        } else if (c >= 'a' && c <= 'z') {
-            str = c;
-            i += 1;
-            result.push(make(null, str));
+        } else if (str = /^[a-zA-Z]{2,}\(/.exec(this.slice(i))) {
+            str = str.toString().slice(0,-1);
+            if (str.length==2 && str.charAt(0)=='d') str = "d";
+            i += str.length;
+            result.push(make(str=="d"?null:"function", str));
             c = this.charAt(i);
-        } else if (c >= 'A' && c <= 'Z') {
-            str = c;
+        } else if (str = /[a-zA-Z]/.exec(c)) {
             i += 1;
-            result.push(make(null, str)); //remove this
+            result.push(make(null, str.toString()));
             c = this.charAt(i);
         } else if (c=='\\') {  // read LaTeX style names, but remove for UnicodeMath
             str = c;
@@ -135,7 +135,7 @@ String.prototype.tokens = function () {
     return result;
 };
 
-var make_parse = function () {
+var parse = function (source) {
     var symbol_table = {};
     var token;
     var tokens;
@@ -147,7 +147,7 @@ var make_parse = function () {
             token.error("Expected '" + id + "'.");
         }
         if (token_nr >= tokens.length) {
-            token = symbol_table["(end)"];
+            token = symbol_table[")end)"];
             return;
         }
         t = tokens[token_nr];
@@ -164,7 +164,10 @@ var make_parse = function () {
             o = symbol_table["(literal)"];
             a = "term";
         } else {
-            t.error("Unexpected token.");
+            if (a == "function") {      // long name function
+                constant(v,"\\text{"+v+"}","function");
+                o = symbol_table[v];
+            } else t.error("Unexpected token.");
         }
         token = Object.create(o);
         token.error = parseerror;
@@ -173,13 +176,16 @@ var make_parse = function () {
         token.sym = v;
         if (a) token.typ = a;
         token.bp = o.lbp;
-        token.toLaTeX = function() {return this.sym.charAt(0)=="\\" ? this.sym+" " : 
-            this.sym.length>1 ? "\\"+this.sym : this.sym};
+        token.toLaTeX = function() {
+            return this.tex ? this.tex.charAt(0)=="\\"? this.tex+" " : this.tex : 
+                this.sym.charAt(0)=="\\" ? this.sym+" " : 
+                this.sym.length>1 && /[a-zA-Z]/.test(this.sym.charAt(0))  ? "\\"+this.sym : this.sym};
     };
 
     var expression = function (rbp, nbl) {
         var left, newleft;
         var t = token;
+        //console.log("***"+t.sym)
         advance();
         left = t.nud();
         while (rbp<token.lbp || (token.lbp==0 && !nbl && rbp<72)) {
@@ -208,12 +214,15 @@ var make_parse = function () {
 	    if (subt.bp > t.bp || !subt.arg ||         //subt.bp == t.bp && !infix_r || //subt.arg3 ||
             subt.arg && subt.arg.length==0 || subt.sym == t.sym && t.arg.length==1) 
             return subt.toLaTeX();
-	    if (brace) return "{"+subt.toLaTeX()+"}";
-        return '('+subt.toLaTeX()+')';  // removed \\left, \\right
+        if (brace) return "{"+subt.toLaTeX()+"}";
+        var st = subt.toLaTeX()
+        if (st.charAt(0) == "[") return st;
+        return '('+st+')';
     };
 
     var original_symbol = {
         nud: function () {
+            return this
             this.error("Undefined null denotation: ");
         },
         led: function (left) {
@@ -241,29 +250,32 @@ var make_parse = function () {
         return s;
     };
 
-    var constant = function (s, typ) {
-        var x = symbol(s, s, 0, typ);
+    infx = /['^:,+⋅/)]/
+
+    var constant = function (s, tex, typ) {
+        var x = symbol(s, tex, 0, typ);
         x.nud = function () {
             var s = symbol_table[this.sym];
             this.sym = s.sym
             if (s.typ) this.typ = s.typ;
-            if (this.typ=="function" && token.sym!="^" && token.sym!="'") {
+            if (this.typ=="function" && !(infx.test(token.sym.charAt(0)))) {
                 this.arg = expression(100);
                 this.bp = 100
                 this.toLaTeX = function(){
                     if (this.arg) {
                         var st = wrapLaTeX(this.arg,this)
-                        return this.tex+(st.charAt(0)=="("?"":"(")+st+(st.charAt(0)=="("?"":")")
+                        var fl = st.charAt(0)=="(" || st.charAt(0) == "["
+                        return this.tex+(fl?"":"(")+st+(fl?"":")")
                     } else return this.tex;
                 };
             }
             return this;
         };
-        x.sym = s;
+        //x.sym = s;
     };
 
     var constants = function (a, typ) {
-        for (var i in a) constant(a[i], typ);
+        for (var i in a) constant(a[i], a[i], typ);
     };
 
     var infix = function (id, tex, bp, led) {
@@ -273,22 +285,23 @@ var make_parse = function () {
             this.arg2 = expression(bp, nbl);
             if (bp<=35) this.typ = this.arg.typ=="formula"&&this.arg2.typ=="formula"?"formula":"error";
             else if (this.typ=="set") this.typ=this.arg.typ=="set"&&this.arg2.typ=="set"?"set":"error";
-	    else { //check if all are term or func or null
-	    	if (this.arg.typ) {
-		        if (this.arg.typ=="formula"||this.arg.typ=="set") this.typ = "error";
-		        else if (this.arg.typ=="function") this.typ = "function";
-	    	} else if (this.arg2.typ) {
-		        if (this.arg2.typ=="formula"||this.arg2.typ=="set") this.typ = "error";
-		        else if (this.arg2.typ=="function") this.typ = "function";
-		    }
-		    if (this.typ != "error") {
-		        if (bp<=40) this.typ = "formula";
-		        else if (this.typ!="function") this.typ = "term";
-		    }
-	    }
-	    this.toLaTeX = function(){
-        return wrapLaTeX(this.arg,this)+this.tex+
-		    (this.tex.charAt(0)=="\\"?" ":"")+wrapLaTeX(this.arg2,this)};
+    	    else { //check if all are term or func or null
+	        	if (this.arg.typ) {
+		            if (this.arg.typ=="formula"||this.arg.typ=="set") this.typ = "error";
+		            else if (this.arg.typ=="function") this.typ = "function";
+	        	} else if (this.arg2.typ) {
+		            if (this.arg2.typ=="formula"||this.arg2.typ=="set") this.typ = "error";
+		            else if (this.arg2.typ=="function") this.typ = "function";
+		        }
+		        if (this.typ != "error") {
+		            if (bp<=40) this.typ = "formula";
+		            else if (this.typ!="function") this.typ = "term";
+		        }
+	        }
+	        this.toLaTeX = function() {
+                return wrapLaTeX(this.arg,this)+this.tex+
+                    (this.tex.charAt(0)=="\\"?" ":"")+wrapLaTeX(this.arg2,this)
+                };
             return this;
         };
     };
@@ -332,7 +345,7 @@ var make_parse = function () {
         var s = symbol(id, tex, bp);
         s.led = led || function (left, nbl) {
             var a = [left];
-            if (token.sym !== "(end)") {
+            if (token.sym !== ")end)") {
                 while (true) {
                     a.push(expression(bp, nbl));
                     if (token.sym !== id) {
@@ -398,17 +411,13 @@ var make_parse = function () {
     var prefix = function (id, tex, bp, nud) {
         var s = symbol(id, tex);
         s.nud = nud || function () {
-            if (token.sym!="^") {
+            if (!infx.test(token.sym.charAt(0))) {
                 this.arg = expression(bp);
                 this.bp = bp;
                 this.toLaTeX = function(){return this.tex+" "+wrapLaTeX(this.arg,this)};
             }
             return this;
         };
-    };
-
-    var prefixs = function (a, bp) {
-        for (var i in a) prefix(a[i], "\\"+a[i], bp);
     };
 
     var prefixop = function (id, tex, bp, nud) {
@@ -464,7 +473,21 @@ var make_parse = function () {
         };
     };
 
-    symbol("(end)", "", -1);
+    var op = function (bp, fix, lst, same) {
+        var id, tex;
+        if (!lst.length) lst = [lst]
+        for (var i in lst) {
+            id = same?lst[i]:lst[i].charAt(0)
+            tex = "\\"+(same?lst[i]:lst[i].slice(2))
+            if (fix=="prefix") prefix(id, tex, bp);
+            else if (fix=="prefixop") prefixop(id, tex, bp);
+            else if (fix=="constant") constant(id, tex, bp);
+            else if (fix=="infix") infix(id, tex, bp);
+            else if (fix=="infixchain") infixchain(id, tex, bp);
+        }
+    };
+
+    symbol(")end)", "", -1);
     symbol(")", ")", -1);
     symbol("]", "]", -1);
     symbol("}", "}", -1);
@@ -483,6 +506,16 @@ var make_parse = function () {
         return e;
     });
 
+    op(0, "constant", ["α alpha", "β beta", "χ chi", "δ delta", "Δ Delta", "γ gamma", "Γ Gamma", 
+    "ϵ epsilon", "ɛ varepsilon", "η eta", "κ kappa", "λ lambda", "Λ Lambda", "μ mu", "ν nu", 
+    "ω omega", "Ω Omega", "ϕ phi", "φ varphi", "Φ Phi", "π pi", "Π Pi", "ψ psi", "Ψ Psi", 
+    "ρ rho", "σ sigma", "Σ Sigma", "τ tau", "θ theta", "ϑ vartheta", "Θ Theta", "υ upsilon", 
+    "ξ xi", "Ξ Xi", "ζ zeta"])
+    op(0, "constant", ["ℕ mathbb N", "ℤ mathbb Z", "ℚ mathbb Q", "ℝ mathbb R", "ℂ mathbb C", 
+    "∅ emptyset", "℘ wp", "ℵ aleph", "ℶ beth", "ℑ Im", "ℜ Re", "∠ angle", "⦜ Angle",
+    "⊥ bot", "⊤ top", "✓ checkmark", "♣ clubsuit", "♢ diamondsuit", "♡ heartsuit", "♠ spadesuit", 
+    "† dagger", "° degree", "… dots", "⋰ adots", "⋯ cdots", "⋱ ddots", "ℓ ell", "€ euro", 
+    "♭ flat", "♯ sharp", "⌢ frown", "⌣ smile", "ħ hbar", "∞ infty"]);
     constants(["f","g","F","G"], "function");
     //constants(["∩","∪","∖","⋃","⋂","⊂","⊆","⊃","⊇"], "set");
     //constants(["\\bigvee","\\bigwedge","\\lor","\\land","\\neg","\\iff"], "formula");
@@ -494,58 +527,52 @@ var make_parse = function () {
     infix(":", ":", 15);
 
     //logical symbols
-    infixr("⟹", "\\implies", 20);
+    infixr("⟹", "\\implies", 20); // uses amsmath pkg
+    infixr("⟸", "\\impliedby", 20); // uses amsmath pkg
     infixr("⟺", "\\iff", 20);
-    infixchain("and", "\\land", 30);
-    infixchain("or", "\\lor", 30);
+    infixchain("and", "\\text{ and }", 30);
+    infixchain("or", "\\text{ or }", 30);
     prefix("¬", "\\neg", 35);
     quantifier("∀", "\\forall", 35);
     quantifier("∃", "\\exists", 35);
 
     //relation symbols
-    infixchain("∈", "\\in", 40);
     infixchain("=", "=", 40);
-    infixchain("≠", "\\ne", 40);
-    infixchain("≈", "\\approx", 40);
-    infixchain("≅", "\\cong", 40);
-    infixchain("≡", "\\equiv", 40);
     infixchain("<", "<", 40);
-    infixchain("≤", "\\le", 40);
     infixchain(">", ">", 40);
-    infixchain("≥", "\\ge", 40);
-    infixr("→", "\\to", 40);
+    op(40, "infixchain", ["∈ in", "≠ ne", "≈ approx", "≅ cong", "≡ equiv", "≤ le", "≥ ge", 
+    "⊂ subset", "⊆ subseteq", "⊃ supset", "⊇ supseteq", "≯ ngtr", "≮ nless", "∤ nmid", 
+    "≺ prec", "⊀ nprec", "⪯ preceq", "≻ succ", "⊁ nsucc", "⪰ succeq", "∥ parallel", "∦ nparallel", 
+    "∝ propto", "∼ sim", "⊏ sqsubset", "⊑ sqsubseteq", "⊐ sqsupset", "⊒ sqsupseteq"]);
     infixr("R", "R", 40); //relation symbol
-    infixchain("⊂", "\\subset", 40);
-    infixchain("⊆", "\\subseteq", 40);
-    infixchain("⊃", "\\supset", 40);
-    infixchain("⊇", "\\supseteq", 40);
-
     infixchain(",", ",", 45);
 
     //function symbols
-    infix("∖", "\\setminus", 50);
-    infix("∪", "\\cup", 50);
-    infix("∩", "\\cap", 50);
-    prefixop("⋃", "\\bigcup", 50);
-    prefixop("⋂", "\\bigcap", 50);
-    infix("∨", "\\vee", 50);
-    infix("∧", "\\wedge", 50);
-    prefixop("⋁", "\\bigvee", 50);
-    prefixop("⋀", "\\bigwedge", 50);
-    infix("+", "+", 50);
-    prefixop("∑", "\\sum", 50);
-    prefixop("∫", "\\int", 50);
     infix("-", "-", 50);
-    infix("±", "\\pm", 50);
-    prefixop("lim", "\\lim", 55);
+    infix("+", "+", 50);
+    op(50, "infix", ["∖ setminus", "∪ cup", "∩ cap", "⊎ uplus", "∨ vee", "∧ wedge", "± pm", 
+    "⊖ ominus", "⊕ oplus", "⊓ sqcap", "⊔ sqcup", "◃ triangleleft", "▹ triangleright"]);
+    infixchain("→", "\\to", 50);
+    prefix("∁", "\\complement", 50);
+    prefix("∂", "\\partial", 50);
+    prefix("∇", "\\del", 50);
+    op(50, "prefixop", ["⋁ bigvee", "⋀ bigwedge", "⋃ bigcup", "⋂ bigcap", "⨄ biguplus", "∑ sum", 
+        "∫ int", "∬ iint", "∭ iiint", "∮ oint", "∯ oiint", "∰ oiiint", "∐ coprod"]);
+    prefixop("lim", "\\lim", 50);
 
-    infix("×", "\\times", 60);
-    prefixop("∏", "\\prod", 60);
-    infix("⋅", "\\cdot", 60);
-    infix("∘", "\\circ", 60);
+    op(60, "infix", ["⋅ cdot", "∘ circ", "⊙ odot", "⊘ oslash", "⦸ obslash", "⨿ amalg", 
+        "⋉ ltimes", "⋊ rtimes", "⋈ bowtie", "⅋ upand", "≀ wr"]);
+    infixchain("×", "\\times", 60);
+    infix("*", "*", 60);
     infix("/", "/", 60);
-
-    prefixs(["sin","cos","tan","cot","sec","csc","ln","gcd","lcm","det","div","mod"], 70);
+    prefixop("∏", "\\prod", 60);
+        
+    prefix("◊", "\\lozenge", 65);
+    prefix("□", "\\square",65);
+    op(70, "prefix", ["sin","cos","tan","cot","sec","csc","ln","gcd","lcm","det","div","mod"], true);
+    op(70, "prefix", ["↓ downarrow", "↑ uparrow", "↕ updownarrow", "⇓ Downarrow", "⇑ Uparrow", "⇕ Updownarrow", 
+        "↪ hookrightarrow", "↣ rightarrowtail", "↠ twoheadrightarrow", "↦ mapsto", "↤ mapsfrom", 
+        "← leftarrow, ↔ leftrightarrow", "⇒ Rightarrow", "⇐ Leftarrow", "⇔ Leftrightarrow"])
     prefixop("log", "\\log", 70);
     prefix("±", "\\pm", 70);
     infixchain("\\,", "\\,", 72);
@@ -555,6 +582,8 @@ var make_parse = function () {
     aroundfix("|", "|", "|", "|", 80);
     aroundfix("⌊", "⌋", "\\lfloor ", "\\rfloor ", 80);
     aroundfix("⌈", "⌉", "\\lceil ", "\\rceil", 80);
+    aroundfix("⟨", "⟩", "\\langle", "\\rangle", 100);
+    aroundfix("⟦", "⟧", "\\llbracket", "\\rrbracket", 100);
     postfix("'", "'", 100);
 
     infix("|", "|", 37, function (left, nbl) {
@@ -623,7 +652,7 @@ var make_parse = function () {
         return this;
     });
 
-    prefix("-", "-", 70, function () {
+    prefix("-", "-", 70, function () {  // x → a^-  or x → a^+ fix this
 	    if (token.sym=="}") {
     		this.toLaTeX = function(){return this.tex};
 	    	return this;
@@ -655,7 +684,7 @@ var make_parse = function () {
         };
         return this;
     });
-
+    
     prefix("[", "[", 100, function () {
         this.arg = expression(45);
         advance("]");
@@ -665,34 +694,22 @@ var make_parse = function () {
         return this;
     });
 
-    return function (source) {
-        tokens = source.tokens();
-        token_nr = 0;
-        advance();
-        var s = expression(0);
-        return s;
-    };
+    tokens = source.tokens();
+    token_nr = 0;
+    advance();
+    var s = expression(0);
+    return s;
 };
-
-if (typeof Object.create !== 'function') {
-    Object.create = function (o) {
-        function F() {}
-        F.prototype = o;
-        return new F();
-    };
-}
 
 // Transform a token object into an exception object and throw it.
 parseerror = function (message, t) {
     t = t || this;
     t.name = "SyntaxError";
-    t.message = message+t.sym;
+    t.message = message+t.sym+t.tex;
     throw t;
 };
 
-var parse = make_parse();
-
-function prefixform(tree) {
+function prefixform(tree) {   // to check how expression was parsed
     var st, ar, i
     st = tree.sym + "("
     if (tree.arg) {
@@ -709,20 +726,29 @@ function prefixform(tree) {
     return st.slice(-1)=="(" ? st.slice(0,-1) : st + ")"   //remove () on constants
 }
 
-function goparse(source) {
-    var string, tree;
-    tree = parse(source);
-    if (tree) return tree;
-    return "undefined"
-}
+convert = function(str) {
+    var tree, st = "", tex, tst = "";
+    var arr = str.split("\n")
+    for (i in arr) {
+        if (arr[i]!="") {
+            tree = parse(arr[i])
+            tex = tree.toLaTeX()
+            st += arr[i]+"\n"+tex+"\n\n"+prefixform(tree)+"\n\n"
+            tst += "$"+tex+"$<p>"
+        }
+    }
+    return [st,tst];
+};
 
 process.stdin.on('data', function (data) {
     var tree
     arr = data.toString().split("\n")
     for (i in arr) {
         if (arr[i]!="") {
-            tree = goparse(arr[i])
+            tree = parse(arr[i])
             console.log(arr[i]+"\n"+tree.toLaTeX()+"\n\n"+prefixform(tree)+"\n");
+            //console.log("$"+tree.toLaTeX()+"$\n");
         }
     }
 });
+

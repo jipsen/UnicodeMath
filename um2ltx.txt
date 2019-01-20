@@ -28,11 +28,17 @@ x(y+z) = xy+xz
 
 a|b ⟺ ∃c ∈ ℤ(ac=b)
 
+a∣b ⟺ ∃c ∈ ℤ(ac=b)
+
 A ∪ B = \{x ∣ x ∈ A or x ∈ B\}
 
 d/dx(f(x)) = lim_{h→0}(f(x+h)-f(x))/h
 
 d/dx(f(x)g(x)) = d/dx(f(x))g(x) + f(x)d/dx(g(x))
+
+(fg)' = f'g+fg'
+
+x+⋅y
 
 ∫_a^b f(x) dx = lim_{n→∞} ∑_{i=1}^n f(x_i^*)(b-a)/n
 
@@ -41,6 +47,8 @@ d/dx(f(x)g(x)) = d/dx(f(x))g(x) + f(x)d/dx(g(x))
 ∫_C f(x) dx = 0
 
 ∏_(i=1)^(n+1) a_i = (∏_(i=1)^n a_i)a_(n+1)
+
+δ + 1
 
 lim_{x→a} f(x) = L ⟺ ∀ɛ>0 ∃δ>0 ∀x(0 < |x-a| < δ ⟹ |f(x)-L| < ɛ)
 
@@ -77,3 +85,21 @@ f'(x) = (f(x))' = d/dx(f(x))
 ℕ ⊂ ℤ ⊂ ℚ ⊂ ℝ ⊂ ℂ
 
 lim f(x)
+
+2(1+1) = -21.0
+
+f[X] = \{f(x) ∣ x ∈ X\}
+
+A×A×A×A→A→A→A→A
+
+h : ℝ^m → ℝ^n
+
+(f+g)(x)
+
+(f,…,g)
+
+f
+
+abso(∨,∧) = ((x∨y)∧x = x)  
+
+LatticeAx(∨,∧) = (SemilatticeAx(∨) and SemilatticeAx(∧) and abso(∨,∧) and abso(∧,∨))

@@ -1,0 +1,214 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>UMath2LaTeX: Parsing UnicodeMath and converting to LaTeX</title>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.js" integrity="sha384-K3vbOmF2BtaVai+Qk37uypf7VrgBubhQreNQe9aGsz9lB63dIFiQVlJbr92dw2Lx" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/contrib/auto-render.min.js" integrity="sha384-kmZOZB5ObwgQnS/DuDg6TScgOiWWBiVt0plIRkZCmE6rDZGrEOQeHM5PcHi+nyqe" crossorigin="anonymous"
+    onload="renderMathInElement(document.body,{delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false},]});"></script>
+<script src="umath2latex.js"></script>
+<style> .katex { font-size: 1.1em; } body { margin: 100px; }</style>
+</head>
+
+<body>
+<h1>UMath2LaTeX: Parsing UnicodeMath and converting to LaTeX</h1>
+<p>All UnicodeMath expressions in the box below are converted when you click the "Parse" button. <br>
+    Feel free to edit the expressions. 
+    Typing Unicode in a browser is a bit of an issue, but you can copy paste symbols below.</p>
+
+<textarea id="INPUT" style="height: 3in; width: 100%;">
+∀x>0 x^a x^b = x^(a+b)
+
+∀x>0x^ax^b=x^(a+b)
+
+∀x,y>0((xy)^a = x^ay^a)
+
+|x+y| ≤ |x|+|y|
+
+|xy| = (|x||y|)
+
+|xy| = |x||y|
+
+x+y = y+x
+
+(x+y)+z = x+(y+z)
+
+x+0 = x
+
+x+-x = 0
+
+-x+x = 0
+
+(xy)z = x(yz)
+
+x(y+z) = xy+xz
+
+(x+y)⋅z = x⋅z+y⋅z
+
+a|b ⟺ ∃c ∈ ℤ(ac=b)
+
+a∣b ⟺ ∃c ∈ ℤ(ac=b)
+
+A ∪ B = \{x ∣ x ∈ A or x ∈ B\}
+
+d/dx(f(x)) = lim_{h→0}(f(x+h)-f(x))/h
+
+d/dx(f(x)g(x)) = d/dx(f(x))g(x) + f(x)d/dx(g(x))
+
+(fg)' = f'g+fg'
+
+x+⋅y
+
+∫_a^b f(x) dx = lim_{n→∞} ∑_{i=1}^n f(x_i^*)(b-a)/n
+
+∫ f(x) dx = F(x)+C
+
+∫_C f(x) dx = 0
+
+∏_(i=1)^(n+1) a_i = (∏_(i=1)^n a_i)a_(n+1)
+
+δ + 1
+
+lim_{x→a} f(x) = L ⟺ ∀ɛ>0 ∃δ>0 ∀x(0 < |x-a| < δ ⟹ |f(x)-L| < ɛ)
+
+sin xy
+
+sin x+y
+
+sinx
+
+f(x) y
+
+a:A×A→A
+
+A ⊨ φ
+
+1/2x
+
+1/2⋅x
+
+f(x,y,z,u,v,w)
+
+xRy and yRz ⟹ xRz
+
+f(x)^2
+
+f^2(x) = f(x)^2
+
+sin^2 x
+
+n:ℕ
+
+f'(x) = (f(x))' = d/dx(f(x))
+
+ℕ ⊂ ℤ ⊂ ℚ ⊂ ℝ ⊂ ℂ
+
+lim f(x)
+
+2(1+1) = -21.0
+
+f[X] = \{f(x) ∣ x ∈ X\}
+
+A×A×A×A→A→A→A→A
+
+h : ℝ^m → ℝ^n
+
+(f+g)(x)
+
+(f,…,g)
+
+f
+
+asso(⋅) = ((x⋅y)⋅z = x⋅(y⋅z))
+
+comm(⋅) = (x⋅y = y⋅x)  
+
+idem(⋅) = (x⋅x = x)  
+
+SemilatticeAx(⋅) = asso(⋅) and comm(⋅) and idem(⋅)  
+
+abso(∨,∧) = ((x∨y)∧x = x)  
+
+LatticeAx(∨,∧) = (SemilatticeAx(∨) and SemilatticeAx(∧) and abso(∨,∧) and abso(∧,∨))
+</textarea>
+
+<input id="PARSE" value=parse type=button 
+onclick="var out = convert(document.getElementById('INPUT').value);
+document.getElementById('OUTPUT').innerHTML = out[0];
+document.getElementById('MathOutput').innerHTML = out[1];
+renderMathInElement(document.getElementById('MathOutput'),{delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false},]});">
+<noscript><p>You may not see any output if you have JavaScript turned off</p></noscript>
+
+<p></p>
+
+<h3>Typeset output:</h3> 
+<span id="MathOutput"></span>
+
+<p></p>
+<hr>
+<p></p>
+
+<h3>Raw input / LaTeX / Prefix form (to check term-tree)</h3>
+<pre id=OUTPUT></pre>
+
+Some remarks about the parser:
+
+<ul>
+<li> The top-down parsing algorithm is due to Vaughan Pratt (1973).
+The implementation is based on Douglas Crockford's
+article <a href="http://javascript.crockford.com/tdop/tdop.html">Top
+Down Operator Precedence</a> where he uses the algorithm to parse
+Simplified JavaScript.
+
+
+<li> The current input language is UnicodeMath,
+based on standard conventions for mathematical symbols and
+operations. The types for symbols and expressions are
+
+<ul>
+<li> <b>variable symbols</b> single latin letters ($u,v,w,x,y,z$)
+with possible subscripts ($u_0,u_1,\dots,z_0,z_1,\dots$)
+<li> <b>constant symbols</b>, the default type for all symbols not assigned to other types
+($a,b,\dots,\alpha,\beta,\dots,\emptyset,\infty,0,1,\dots$)
+<li> prefix/infix/postfix/aroundfix <b>function symbols</b> with
+standard precedence ($+,-,\cdot,/,\cup,\cap,\sqrt{\phantom{x}},\ln,\sin,|&nbsp;&nbsp;|, \dots$)
+<li> <b>terms</b> built from function symbols applied to constants and terms
+<li> prefix/infix <b>relation symbols</b> with lower
+precedence than function symbols ($∈,=,≤,<,≥,>,…$)
+<li> <b>atomic formulas</b> built from relation symbols applied
+to terms
+<li> prefix/infix <b>logical symbols</b> with lower precedence
+than relation symbols
+($\neg$, or, and, $\implies,\iff,\exists,\forall,\dots$)
+<li> <b>formulas</b> built from logical symbols applied to
+atomic formulas and formulas
+<li> <b>metalogical symbols</b> and <b>large operator
+symbols</b> (osym) that combine mathematical expressions from several
+of the above types ($\vdash,\models,\bigvee,\bigwedge,\bigcup,\bigcap,\sum,\prod,\lim,\int,\dots$)
+</ul>
+
+<li> Standard mathematical notation makes liberal use of <b>invisible
+times</b> and <b>function application</b> by juxtaposition (i.e., when two
+symbols are adjacent with the symbol on the left neither prefix nor infix and
+the symbols on the right neither infix nor postfix). The parser
+treats this situation as a binary operation called <b>\,</b> (LaTeX thin space).
+
+<li> Infix symbols that are usually considered associative
+($+,\cdot,=$) have variable arity and chain over a list of arguments
+(rather than having left or right associated parse trees).
+
+<li> Many symbols are overloaded, but context is used to disambigute
+these situations. Each symbol has a default type, but its type can be
+changed dynamically.
+
+<li> The abstract syntax tree contains the symbol (sym:string), and 
+    arguments (arg, arg2, arg3), where the latter three are either a tree or a list of trees.
+</ul>
+<hr>
+<p align="center">
+<small>Peter Jipsen --- January 2019 --- Chapman University</small>
+</p>
+</body>
+</html>
