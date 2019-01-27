@@ -596,4 +596,59 @@ Adjustment={\fontdimen
 . and font adjustment code:
 . \fontdimen 8\font =0.4pt\relax \relax \fontdimen 9\font =2.0pt\relax \relax
 . \fontdimen 10\font =1.67pt\relax \relax \fontdimen 11\font =1.11pt\relax
-. \relax \fontdimen 12\font =6.0pt\relax \relax \fontdim
+. \relax \fontdimen 12\font =6.0pt\relax \relax \fontdimen 13\font =0pt\relax 
+. - 'bold' (bx/n) with NFSS spec.:
+. <->s*[0.99999]"[latinmodern-math.otf]/OT:script=math;language=DFLT;"
+. - 'bold small caps'  (bx/sc) with NFSS spec.: 
+. and font adjustment code:
+. \fontdimen 8\font =0.4pt\relax \relax \fontdimen 9\font =2.0pt\relax \relax
+. \fontdimen 10\font =1.67pt\relax \relax \fontdimen 11\font =1.11pt\relax
+. \relax \fontdimen 12\font =6.0pt\relax \relax \fontdimen 13\font =0pt\relax 
+.................................................
+LaTeX Font Info:    Encoding `OMX' has changed to `TU' for symbol font
+(Font)              `largesymbols' in the math version `normal' on input line 4
+.
+LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `normal'
+(Font)                  OMX/cmex/m/n --> TU/latinmodern-math.otf(2)/m/n on inpu
+t line 4.
+LaTeX Font Info:    Encoding `OMX' has changed to `TU' for symbol font
+(Font)              `largesymbols' in the math version `bold' on input line 4.
+LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `bold'
+(Font)                  OMX/cmex/m/n --> TU/latinmodern-math.otf(2)/bx/n on inp
+ut line 4.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
+(Font)              scaled to size 10.00015pt on input line 6.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
+(Font)              scaled to size 7.01247pt on input line 6.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
+(Font)              scaled to size 4.9808pt on input line 6.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
+(Font)              scaled to size 9.99985pt on input line 6.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
+(Font)              scaled to size 7.01224pt on input line 6.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
+(Font)              scaled to size 4.98067pt on input line 6.
+
+./Untitled.tex:31: Undefined control sequence.
+<recently read> \CalA 
+                      
+l.31 $\CalA
+           $
+? 
+./Untitled.tex:31: Emergency stop.
+<recently read> \CalA 
+                      
+l.31 $\CalA
+           $
+End of file on the terminal!
+
+ 
+Here is how much of TeX's memory you used:
+ 13862 strings out of 493005
+ 278806 string characters out of 6134596
+ 425320 words of memory out of 5000000
+ 17818 multiletter control sequences out of 15000+600000
+ 5954 words of font info for 32 fonts, out of 8000000 for 9000
+ 1348 hyphenation exceptions out of 8191
+ 42i,3n,71p,10375b,251s stack positions out of 5000i,500n,10000p,200000b,80000s
+No pages of output.

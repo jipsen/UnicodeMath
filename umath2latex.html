@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>UMath2LaTeX: Parsing UnicodeMath and converting to LaTeX</title>
+    <title>UMath2LaTeX: Parsing UnicodeMath and converting to it LaTeX</title>
 <meta charset="utf-8">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.js" integrity="sha384-K3vbOmF2BtaVai+Qk37uypf7VrgBubhQreNQe9aGsz9lB63dIFiQVlJbr92dw2Lx" crossorigin="anonymous"></script>
@@ -134,7 +134,7 @@ abso(∨,∧) = ((x∨y)∧x = x)
 LatticeAx(∨,∧) = (SemilatticeAx(∨) and SemilatticeAx(∧) and abso(∨,∧) and abso(∧,∨))
 </textarea>
 
-<input id="PARSE" value=parse type=button 
+<input id="PARSE" value=Parse type=button 
 onclick="var out = convert(document.getElementById('INPUT').value);
 document.getElementById('OUTPUT').innerHTML = out[0];
 document.getElementById('MathOutput').innerHTML = out[1];
