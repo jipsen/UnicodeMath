@@ -739,7 +739,7 @@ convert = function(str) {
     }
     return [st,tst];
 };
-
+/*
 process.stdin.on('data', function (data) {
     var tree
     arr = data.toString().split("\n")
@@ -751,4 +751,4 @@ process.stdin.on('data', function (data) {
         }
     }
 });
-
+*/
