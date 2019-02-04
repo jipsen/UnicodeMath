@@ -6,9 +6,27 @@
   </head>
   <body>
 <h2>Live Demo</h2>
-  <textarea id="text-area"  placeholder="Type to see magic!" rows=5> hi </textarea>
-<h2>
+  <textarea id="text-area"  placeholder="Type to see magic!" rows=5> hi 
+hi2
 
+  </textarea>
+  <input type="button" id="trigger" value="Check"/>
+
+        <script>
+                document.getElementById("trigger").addEventListener("click", function(){
+                        var myElement = document.getElementById('text-area');
+                        var startPosition = myElement.selectionStart;
+                        var endPosition = myElement.selectionEnd;
+                        
+                        // Check if you've selected text
+                        if(startPosition == endPosition){
+                            alert("The position of the cursor is (" + startPosition + "/" + myElement.value.length + ")");
+                        }else{
+                            alert("Selected text from ("+ startPosition +" to "+ endPosition + " of " + myElement.value.length + ")");
+                        }
+                    },false);
+                </script>
+                
     <script src="https://rawgithub.com/atmb4u/AutoJS/master/auto.max.min.js" type="text/javascript"></script>
               <script type="text/javascript">
               window.onload = function () {

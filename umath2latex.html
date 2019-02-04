@@ -47,58 +47,35 @@
     
     /*
      * An autosuggest textbox control.
-     * @class
-     * @scope public
      */
-    function AutoSuggestControl(id_or_element /*:HTMLInputElement*/) {
-        this.provider /*:SuggestionProvider*/ = new wordSuggestions();
-        /**
-         * The textbox to capture, specified by element_id.
-         * @scope private
-         */
-        this.textbox /*:HTMLInputElement*/ = typeof id_or_element == "string" ? document.getElementById(id_or_element) : id_or_element;
-    
-        //initialize the control
+    function AutoSuggestControl(id_or_element) {
+        this.provider = new wordSuggestions();
+        this.textbox = typeof id_or_element == "string" ? document.getElementById(id_or_element) : id_or_element;
         this.init();
     
     }
-    
-    
+
     /**
      * Autosuggests one or more suggestions for what the user has typed.
      * If no suggestions are passed in, then no autosuggest occurs.
-     * @scope private
-     * @param aSuggestions An array of suggestion strings.
      */
-    AutoSuggestControl.prototype.autosuggest = function (aSuggestions /*:Array*/) {
-    
-        //make sure there's at least one suggestion
-    
+    AutoSuggestControl.prototype.autosuggest = function (aSuggestions) {
         if (aSuggestions.length > 0) {
                 this.typeAhead(aSuggestions[0]);
         }
     };
-    
     
     /**
      * Handles keyup events.
      * @scope private
      * @param oEvent The event object for the keyup event.
      */
-    AutoSuggestControl.prototype.handleKeyUp = function (oEvent /*:Event*/) {
-    
+    AutoSuggestControl.prototype.handleKeyUp = function (oEvent) {
         var iKeyCode = oEvent.keyCode;
         var evtobj = oEvent;
         window.eventobj = evtobj;
-        if ((iKeyCode != 16 && iKeyCode < 32) || (iKeyCode >= 33 && iKeyCode <= 46) || (iKeyCode >= 112 && iKeyCode <= 123) || 
-           (iKeyCode == 65 && evtobj.ctrlKey) || (iKeyCode == 90 && evtobj.ctrlKey)) {
-            //ignore
-            if (iKeyCode == 90 && evtobj.ctrlKey) {
-                // window.getSelection().deleteFromDocument();
-                // TODO: need to find a way to select the rest of the text and delete.
-            }
-        } else {
-            //request suggestions from the suggestion provider
+        if (!((iKeyCode != 16 && iKeyCode < 32) || (iKeyCode >= 33 && iKeyCode <= 46) || (iKeyCode >= 112 && iKeyCode <= 123) || 
+           (iKeyCode == 65 && evtobj.ctrlKey) || (iKeyCode == 90 && evtobj.ctrlKey))) {
             this.provider.requestSuggestions(this)
         }
     };
@@ -106,27 +83,23 @@
     /**
      * Initializes the textarea with event handlers for
      * auto suggest functionality.
-     * @scope private
      */
     AutoSuggestControl.prototype.init = function () {
-    
         //save a reference to this object
         var oThis = this;
         //assign the onkeyup event handler
         lastDate = new Date();
         oThis.textbox.onkeyup = function (oEvent) {
-    
             //check for the proper location of the event object
             if (!oEvent) {
                 oEvent = window.event;
             }
             newDate = new Date();
             if (newDate.getTime() > lastDate.getTime() + 200) {
-                    oThis.handleKeyUp(oEvent);
-                    lastDate = newDate;
+                oThis.handleKeyUp(oEvent);
+                lastDate = newDate;
             }
-            };
-    
+        };
     };
     
     /**
@@ -135,140 +108,103 @@
      * @param iStart The start index (base 0) of the selection.
      * @param iLength The number of characters to select.
      */
-    AutoSuggestControl.prototype.selectRange = function (iStart /*:int*/, iLength /*:int*/) {
+    AutoSuggestControl.prototype.selectRange = function (iStart, iLength) {
         //use text ranges for Internet Explorer
         if (this.textbox.createTextRange) {
             var oRange = this.textbox.createTextRange();
             oRange.moveStart("character", iStart);
             oRange.moveEnd("character", iLength);
             oRange.select();
-    
         //use setSelectionRange() for Mozilla
         } else if (this.textbox.setSelectionRange) {
             this.textbox.setSelectionRange(iStart, iLength);
         }
-    
-        //set focus back to the textbox
         this.textbox.focus();
     };
     
     /**
      * Inserts a suggestion into the textbox, highlighting the
      * suggested part of the text.
-     * @scope private
-     * @param sSuggestion The suggestion for the textbox.
      */
-    AutoSuggestControl.prototype.typeAhead = function (sSuggestion /*:String*/) {
-    
-        //check for support of typeahead functionality
+    AutoSuggestControl.prototype.typeAhead = function (sSuggestion) {
         if (this.textbox.createTextRange || this.textbox.setSelectionRange){
-            var lastSpace = this.textbox.value.lastIndexOf(" ");
-            var lastQuote = this.textbox.value.lastIndexOf("'");
-            var lastHypen = this.textbox.value.lastIndexOf("-");
-            var lastDoubleQuote = this.textbox.value.lastIndexOf('"');
-            var lastEnter = this.textbox.value.lastIndexOf("\n");
-            var lastIndex = Math.max(lastSpace, lastEnter, lastQuote, lastHypen, lastDoubleQuote) + 1;
-            var contentStripped = this.textbox.value.substring(0, lastIndex);
-            var lastWord = this.textbox.value.substring(lastIndex, this.textbox.value.length);
-            this.textbox.value = contentStripped + sSuggestion; //.replace(lastWord,"");
-            var start = this.textbox.value.length - sSuggestion.replace(lastWord,"").length;
-            var end = this.textbox.value.length;
-            this.selectRange(start, end);
+            var b = this.textbox.selectionStart;
+            var e = this.textbox.selectionEnd;
+            var v = this.textbox.value;
+            var p = v.slice(0,b).lastIndexOf('\\');
+            if (v.slice(b-1,b)==" ") {
+                this.textbox.value = v.slice(0,p) + sSuggestion.slice(-1) + v.slice(e);
+                this.selectRange(p+1,p+1);
+            } else {
+                this.textbox.value = v.slice(0,b) + sSuggestion.slice(b-p-1) + v.slice(e);
+                this.selectRange(b, e+sSuggestion.length-b+p+1);
             }
+        }
     };
     
     
     
     /**
      * Request suggestions for the given autosuggest control.
-     * @scope protected
-     * @param oAutoSuggestControl The autosuggest control to provide suggestions for.
      */
-    wordSuggestions.prototype.requestSuggestions = function (oAutoSuggestControl /*:AutoSuggestControl*/) {
+    wordSuggestions.prototype.requestSuggestions = function (oAutoSuggestControl) {
         var aSuggestions = [];
+        var b = oAutoSuggestControl.textbox.selectionStart;
+        var e = oAutoSuggestControl.textbox.selectionEnd;
         var sTextbox = oAutoSuggestControl.textbox.value;
-        var sTextboxSplit = sTextbox.split(/[\s,]+/);
-        var sTextboxLast = sTextboxSplit[sTextboxSplit.length-1];
-        var sTextboxValue = sTextboxLast;
-        if (sTextboxValue.length > 0){
-            //search for matching words
-            for (var i=0; i < this.words.length; i++) {
-                if (this.words[i].indexOf(sTextboxValue.toLowerCase()) == 0) {
-                    if (this.words[i].indexOf(sTextboxValue) == 0){
-                        aSuggestions.push(this.words[i]);
-                    }
-                    else if (this.words[i].indexOf(sTextboxValue.charAt(0).toLowerCase() + sTextboxValue.slice(1)) == 0) {
-                        aSuggestions.push(this.words[i].charAt(0).toUpperCase() + this.words[i].slice(1));
-                    }
+        var p = sTextbox.slice(0,b).lastIndexOf('\\');
+        //console.log(p+','+b+sTextbox.slice(p,b)+"***")
+        if (p >= 0 && p+1 < b && !(/\W/.test(sTextbox.slice(p+1,b-1)))) { // \W = any non-word char
+            var bl = (sTextbox.slice(b-1,b)==" ")
+            //console.log("bl"+sTextbox.slice(b-1,b)+(bl?"true":"false"))
+            if (bl || !(/\W/.test(sTextbox.slice(b-1,b)))) {
+                var sTextboxValue = sTextbox.slice(p+1,bl?b-1:b);
+                for (var i=0; i < this.words.length && this.words[i].indexOf(sTextboxValue) != 0; i++) {}
+                if (i < this.words.length) {
+                    //console.log(sTextboxValue+"****"+(bl?"true":"false")+this.words[i].slice(-1))
+                    aSuggestions.push(bl?this.words[i].slice(-1):this.words[i]);
                 }
             }
         }
-    
-        //provide suggestions to the control
         oAutoSuggestControl.autosuggest(aSuggestions);
     };
+
     /**
      * Provides suggestions for each word.
-     * @class
-     * @scope public
      */
     function wordSuggestions() {
-        this.words = ['\\theta','and','that','for','with','you','are','your','from','have','more','but','new','not','will','what',
-        'about','all','one','they','get','like','out','their','who','people','been','can','how','there','which','were','apple',
-        'time','when','just','into','said','our','here','also','year','view','these','comment','had','would','other','now','than']        
+        this.words = [
+        'neg ¬','lor ∨','land ∧','implies ⟹','Longleftarrow ⟸','iff ⟺','forall ∀','exists ∃','nexists ∄',
+        'lozenge ◊','square □','bot ⊥','top ⊤','vdash ⊢','nvdash ⊬','Vdash ⊩','vDash ⊨','nvDash ⊭',
+        'in ∈','notin ∉','ni ∋','notni ∌','emptyset ∅','wp ℘','subset ⊂','nsubset ⊄','subseteq ⊆',
+        'nsubseteq ⊈','subsetneq ⊊','supset ⊃','nsupset ⊅','supseteq ⊇','nsupseteq ⊉','supsetneq ⊋',
+        'cap ∩','cup ∪','complement ∁','bigcap ⋂','bigcup ⋃','biguplus ⨄',
+        'downarrow ↓','uparrow ↑','updownarrow ↕','Downarrow ⇓',
+        'Uparrow ⇑','Updownarrow ⇕','hookrightarrow ↪','rightarrowtail ↣','twoheadrightarrow ↠',
+        'mapsto ↦','mapsfrom ↤','to →','rightarrow →','leftarrow ←','leftrightarrow ↔',
+        'Rightarrow ⇒','Leftarrow ⇐','Leftrightarrow ⇔',
+        'alpha α','beta β','chi χ','delta δ','Delta Δ','gamma γ','Gamma Γ','epsilon ϵ','varepsilon ɛ',
+        'eta η','kappa κ','lambda λ','Lambda Λ','mu μ','nu ν','omega ω','Omega Ω','phi ϕ','varphi φ',
+        'Phi Φ','pi π','Pi Π','psi ψ','Psi Ψ','rho ρ','sigma σ','Sigma Σ','tau τ','theta θ','vartheta ϑ',
+        'Theta Θ','upsilon υ','xi ξ','Xi Ξ','zeta ζ','aleph ℵ','beth ℶ',
+        'infty ∞','cdot ⋅','circ ∘','bullet •','div ÷','dotminus ∸','minusdot ⨪','mp ∓','pm ±',
+        'oplus ⊕','odot ⊙','ominus ⊖','oslash ⊘','obslash ⦸','sqcap ⊓','sqcup ⊔','amalg ⨿','times ×',
+        'ltimes ⋉','rtimes ⋊','bowtie ⋈','triangleleft ◃','triangleright ▹','barcap ⩃','barcup ⩂','uplus ⊎',
+        'vee ∨','wedge ∧','barvee ⊽','barwedge ⊼','wr ≀','Im ℑ','Re ℜ','sqrt √','cbrt ∛','fourthroot ∜',
+        'langle ⟨','rangle ⟩','lceil ⌈','rceil ⌉','lfloor ⌊','rfloor ⌋','llbracket ⟦','rrbracket ⟧',
+        'ldots …','adots ⋰','cdots ⋯','ddots ⋱','therefore ∴','approx ≈','cong ≅','equiv ≡','le ≤','nle ≰',
+        'ge ≥','nge ≱','leqq ≦','geqq ≧','ll ≪','gg ≫','ne ≠','ngtr ≯','nless ≮','mid ∣','nmid ∤',
+        'prec ≺','nprec ⊀','preceq ⪯','succ ≻','nsucc ⊁','succeq ⪰','parallel ∥','nparallel ∦','propto ∝',
+        'sim ∼','sqsubset ⊏','sqsubseteq ⊑','sqsupset ⊐','sqsupseteq ⊒','angle ∠','Angle ⦜','checkmark ✓',
+        'clubsuit ♣','diamondsuit ♢','heartsuit ♡','spadesuit ♠','dagger †','degree °','ell ℓ','euro €',
+        'flat ♭','sharp ♯','frown ⌢','smile ⌣','hbar ħ','downzigzagarrow ↯','qed ∎','bigoplus ⨁',
+        'bigotimes ⨂','bigodot ⨀','bigsqcap ⨅','bigsqcup ⨆','bigstar ★','bigtimes ⨉','biguplus ⨃',
+        'bigvee ⋁','bigwedge ⋀','int ∫','iint ∬','iiint ∭','oint ∮','oiint ∯','oiiint ∰','partial ∂',
+        'del ∇','sum ∑','prod ∏','coprod ∐','False 𝔽','True 𝕋',
+        'Booleans 𝔹','Complex ℂ','Naturals ℕ','Primes ℙ','Rationals ℚ','Reals ℝ','Integers ℤ',
+        'BbbA 𝔸','mbfA 𝐀','mfrakA 𝔄','mbffrakA 𝕬','mitA 𝐴',
+        'mbfit 𝑨','msansA 𝖠','mbfsansA 𝗔','mitsansA 𝘈','mbfitsansA 𝘼','mscrA 𝒜','mbfscrA 𝓐','mttA 𝙰'];
     }
-    
-    /*
-function insertAtCursor(myField, myValue) {
-    //IE support
-    if (document.selection) {
-        myField.focus();
-        sel = document.selection.createRange();
-        sel.text = myValue;
-    }
-    // Microsoft Edge
-    else if(window.navigator.userAgent.indexOf("Edge") > -1) {
-      var startPos = myField.selectionStart; 
-      var endPos = myField.selectionEnd; 
-
-      myField.value = myField.value.substring(0, startPos)+ myValue 
-             + myField.value.substring(endPos, myField.value.length); 
-
-      var pos = startPos + myValue.length;
-      myField.focus();
-      myField.setSelectionRange(pos, pos);
-    }
-    //MOZILLA and others
-    else if (myField.selectionStart || myField.selectionStart == '0') {
-        var startPos = myField.selectionStart;
-        var endPos = myField.selectionEnd;
-        myField.value = myField.value.substring(0, startPos)
-            + myValue
-            + myField.value.substring(endPos, myField.value.length);
-    } else {
-        myField.value += myValue;
-    }
-    triggerEvent(myField,'input');
-}
-
-function triggerEvent(el, type){
-  if ('createEvent' in document) {
-    // modern browsers, IE9+
-    var e = document.createEvent('HTMLEvents');
-    e.initEvent(type, false, true);
-    el.dispatchEvent(e);
-  } else {
-    // IE 8
-    var e = document.createEventObject();
-    e.eventType = type;
-    el.fireEvent('on'+e.eventType, e);
-  }
-}
-    
-document.getElementById('btn').onclick = function() {
-  insertAtCursor(document.getElementById('text'), 'Hello');
-}    
-    */
     </script>
 <script type="text/javascript">
     window.onload = function () {
@@ -399,7 +335,7 @@ abso(∨,∧) = ((x∨y)∧x = x)
 
 LatticeAx(∨,∧) = (SemilatticeAx(∨) and SemilatticeAx(∧) and abso(∨,∧) and abso(∧,∨))
 
-a</textarea>
+s</textarea>
 
 <input id="PARSE" value=Parse type=button 
 onclick="var out = convert(document.getElementById('INPUT').value);
