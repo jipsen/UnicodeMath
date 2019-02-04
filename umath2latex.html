@@ -9,7 +9,9 @@
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/contrib/auto-render.min.js" integrity="sha384-kmZOZB5ObwgQnS/DuDg6TScgOiWWBiVt0plIRkZCmE6rDZGrEOQeHM5PcHi+nyqe" crossorigin="anonymous"
     onload="renderMathInElement(document.body,{delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false},]});"></script>
 <script src="umath2latex.js"></script>
-<script>/*!
+<script>/*
+    * Modified for Unicode input by Peter Jipsen, jipsen@chapman.edu, 2019-2-4 
+    *
     * Copyright (c) 2013 Profoundis Labs Pvt. Ltd., and individual contributors.
     *
     * All rights reserved.
@@ -48,11 +50,10 @@
     /*
      * An autosuggest textbox control.
      */
-    function AutoSuggestControl(id_or_element) {
+    function AutoSuggestControl(id) {
         this.provider = new wordSuggestions();
-        this.textbox = typeof id_or_element == "string" ? document.getElementById(id_or_element) : id_or_element;
+        this.textbox = document.getElementById(id);
         this.init();
-    
     }
 
     /**
@@ -134,15 +135,13 @@
             var p = v.slice(0,b).lastIndexOf('\\');
             if (v.slice(b-1,b)==" ") {
                 this.textbox.value = v.slice(0,p) + sSuggestion.slice(-1) + v.slice(e);
-                this.selectRange(p+1,p+1);
+                this.selectRange(p+1,p+1); //place cursor after character
             } else {
                 this.textbox.value = v.slice(0,b) + sSuggestion.slice(b-p-1) + v.slice(e);
-                this.selectRange(b, e+sSuggestion.length-b+p+1);
+                this.selectRange(b, e+sSuggestion.length-b+p+1); //highlight LaTeX completion
             }
         }
     };
-    
-    
     
     /**
      * Request suggestions for the given autosuggest control.
