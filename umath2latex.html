@@ -173,82 +173,288 @@
      */
     function wordSuggestions() {
         this.words = [
-        'neg ¬','lor ∨','land ∧','implies ⟹','Longleftarrow ⟸','iff ⟺','forall ∀','exists ∃','nexists ∄',
-        'lozenge ◊','square □','bot ⊥','top ⊤','vdash ⊢','nvdash ⊬','Vdash ⊩','vDash ⊨','nvDash ⊭',
-        'in ∈','notin ∉','ni ∋','notni ∌','emptyset ∅','wp ℘','subset ⊂','nsubset ⊄','subseteq ⊆',
-        'nsubseteq ⊈','subsetneq ⊊','supset ⊃','nsupset ⊅','supseteq ⊇','nsupseteq ⊉','supsetneq ⊋',
-        'cap ∩','cup ∪','complement ∁','bigcap ⋂','bigcup ⋃','biguplus ⨄',
-        'downarrow ↓','uparrow ↑','updownarrow ↕','Downarrow ⇓',
-        'Uparrow ⇑','Updownarrow ⇕','hookrightarrow ↪','rightarrowtail ↣','twoheadrightarrow ↠',
-        'mapsto ↦','mapsfrom ↤','to →','rightarrow →','leftarrow ←','leftrightarrow ↔',
-        'Rightarrow ⇒','Leftarrow ⇐','Leftrightarrow ⇔',
-        'alpha α','beta β','chi χ','delta δ','Delta Δ','gamma γ','Gamma Γ','epsilon ϵ','varepsilon ɛ',
-        'eta η','kappa κ','lambda λ','Lambda Λ','mu μ','nu ν','omega ω','Omega Ω','phi ϕ','varphi φ',
-        'Phi Φ','pi π','Pi Π','psi ψ','Psi Ψ','rho ρ','sigma σ','Sigma Σ','tau τ','theta θ','vartheta ϑ',
-        'Theta Θ','upsilon υ','xi ξ','Xi Ξ','zeta ζ','aleph ℵ','beth ℶ',
-        'infty ∞','cdot ⋅','circ ∘','bullet •','div ÷','dotminus ∸','minusdot ⨪','mp ∓','pm ±',
-        'oplus ⊕','odot ⊙','ominus ⊖','oslash ⊘','obslash ⦸','sqcap ⊓','sqcup ⊔','amalg ⨿','times ×',
-        'ltimes ⋉','rtimes ⋊','bowtie ⋈','triangleleft ◃','triangleright ▹','barcap ⩃','barcup ⩂','uplus ⊎',
-        'vee ∨','wedge ∧','barvee ⊽','barwedge ⊼','wr ≀','Im ℑ','Re ℜ','sqrt √','cbrt ∛','fourthroot ∜',
-        'langle ⟨','rangle ⟩','lceil ⌈','rceil ⌉','lfloor ⌊','rfloor ⌋','llbracket ⟦','rrbracket ⟧',
-        'ldots …','adots ⋰','cdots ⋯','ddots ⋱','therefore ∴','approx ≈','cong ≅','equiv ≡','le ≤','nle ≰',
-        'ge ≥','nge ≱','leqq ≦','geqq ≧','ll ≪','gg ≫','ne ≠','ngtr ≯','nless ≮','mid ∣','nmid ∤',
-        'prec ≺','nprec ⊀','preceq ⪯','succ ≻','nsucc ⊁','succeq ⪰','parallel ∥','nparallel ∦','propto ∝',
-        'sim ∼','sqsubset ⊏','sqsubseteq ⊑','sqsupset ⊐','sqsupseteq ⊒','angle ∠','Angle ⦜','checkmark ✓',
-        'clubsuit ♣','diamondsuit ♢','heartsuit ♡','spadesuit ♠','dagger †','degree °','ell ℓ','euro €',
-        'flat ♭','sharp ♯','frown ⌢','smile ⌣','hbar ħ','downzigzagarrow ↯','qed ∎','bigoplus ⨁',
-        'bigotimes ⨂','bigodot ⨀','bigsqcap ⨅','bigsqcup ⨆','bigstar ★','bigtimes ⨉','biguplus ⨃',
-        'bigvee ⋁','bigwedge ⋀','int ∫','iint ∬','iiint ∭','oint ∮','oiint ∯','oiiint ∰','partial ∂',
-        'del ∇','sum ∑','prod ∏','coprod ∐','False 𝔽','True 𝕋',
-        'Booleans 𝔹','Complex ℂ','Naturals ℕ','Primes ℙ','Rationals ℚ','Reals ℝ','Integers ℤ',
-        'BbbA 𝔸','mbfA 𝐀','mfrakA 𝔄','mbffrakA 𝕬','mitA 𝐴',
-        'mbfit 𝑨','msansA 𝖠','mbfsansA 𝗔','mitsansA 𝘈','mbfitsansA 𝘼','mscrA 𝒜','mbfscrA 𝓐','mttA 𝙰'];
+'neg ¬',
+'lor ∨',
+'land ∧',
+'implies ⟹',
+'Longleftarrow ⟸',
+'iff ⟺',
+'forall ∀',
+'exists ∃',
+'nexists ∄',
+'lozenge ◊',
+'square □',
+'bot ⊥',
+'top ⊤',
+'vdash ⊢',
+'nvdash ⊬',
+'Vdash ⊩',
+'vDash ⊨',
+'nvDash ⊭',
+'in ∈',
+'notin ∉',
+'ni ∋',
+'notni ∌',
+'emptyset ∅',
+'wp ℘',
+'subset ⊂',
+'nsubset ⊄',
+'subseteq ⊆',
+'nsubseteq ⊈',
+'subsetneq ⊊',
+'supset ⊃',
+'nsupset ⊅',
+'supseteq ⊇',
+'nsupseteq ⊉',
+'supsetneq ⊋',
+'cap ∩',
+'cup ∪',
+'complement ∁',
+'bigcap ⋂',
+'bigcup ⋃',
+'biguplus ⨄',
+'downarrow ↓',
+'uparrow ↑',
+'updownarrow ↕',
+'Downarrow ⇓',
+'Uparrow ⇑',
+'Updownarrow ⇕',
+'hookrightarrow ↪',
+'rightarrowtail ↣',
+'twoheadrightarrow ↠',
+'mapsto ↦',
+'mapsfrom ↤',
+'to →',
+'rightarrow →',
+'leftarrow ←',
+'leftrightarrow ↔',
+'Rightarrow ⇒',
+'Leftarrow ⇐',
+'Leftrightarrow ⇔',
+'alpha α',
+'beta β',
+'chi χ',
+'delta δ',
+'Delta Δ',
+'gamma γ',
+'Gamma Γ',
+'epsilon ϵ',
+'varepsilon ɛ',
+'eta η',
+'kappa κ',
+'lambda λ',
+'Lambda Λ',
+'mu μ',
+'nu ν',
+'omega ω',
+'Omega Ω',
+'phi ϕ',
+'varphi φ',
+'Phi Φ',
+'pi π',
+'Pi Π',
+'psi ψ',
+'Psi Ψ',
+'rho ρ',
+'sigma σ',
+'Sigma Σ',
+'tau τ',
+'theta θ',
+'vartheta ϑ',
+'Theta Θ',
+'upsilon υ',
+'xi ξ',
+'Xi Ξ',
+'zeta ζ',
+'aleph ℵ',
+'beth ℶ',
+'infty ∞',
+'cdot ⋅',
+'circ ∘',
+'bullet •',
+'div ÷',
+'dotminus ∸',
+'minusdot ⨪',
+'mp ∓',
+'pm ±',
+'oplus ⊕',
+'odot ⊙',
+'ominus ⊖',
+'oslash ⊘',
+'obslash ⦸',
+'sqcap ⊓',
+'sqcup ⊔',
+'amalg ⨿',
+'times ×',
+'ltimes ⋉',
+'rtimes ⋊',
+'bowtie ⋈',
+'triangleleft ◃',
+'triangleright ▹',
+'barcap ⩃',
+'barcup ⩂',
+'uplus ⊎',
+'vee ∨',
+'wedge ∧',
+'barvee ⊽',
+'barwedge ⊼',
+'wr ≀',
+'Im ℑ',
+'Re ℜ',
+'sqrt √',
+'cbrt ∛',
+'fourthroot ∜',
+'langle ⟨',
+'rangle ⟩',
+'lceil ⌈',
+'rceil ⌉',
+'lfloor ⌊',
+'rfloor ⌋',
+'llbracket ⟦',
+'rrbracket ⟧',
+'ldots …',
+'adots ⋰',
+'cdots ⋯',
+'ddots ⋱',
+'therefore ∴',
+'approx ≈',
+'cong ≅',
+'equiv ≡',
+'le ≤',
+'nle ≰',
+'ge ≥',
+'nge ≱',
+'leqq ≦',
+'geqq ≧',
+'ll ≪',
+'gg ≫',
+'ne ≠',
+'ngtr ≯',
+'nless ≮',
+'mid ∣',
+'nmid ∤',
+'prec ≺',
+'nprec ⊀',
+'preceq ⪯',
+'succ ≻',
+'nsucc ⊁',
+'succeq ⪰',
+'parallel ∥',
+'nparallel ∦',
+'propto ∝',
+'sim ∼',
+'sqsubset ⊏',
+'sqsubseteq ⊑',
+'sqsupset ⊐',
+'sqsupseteq ⊒',
+'angle ∠',
+'Angle ⦜',
+'checkmark ✓',
+'clubsuit ♣',
+'diamondsuit ♢',
+'heartsuit ♡',
+'spadesuit ♠',
+'dagger †',
+'degree °',
+'ell ℓ',
+'euro €',
+'flat ♭',
+'sharp ♯',
+'frown ⌢',
+'smile ⌣',
+'hbar ħ',
+'downzigzagarrow ↯',
+'qed ∎',
+'bigoplus ⨁',
+'bigotimes ⨂',
+'bigodot ⨀',
+'bigsqcap ⨅',
+'bigsqcup ⨆',
+'bigstar ★',
+'bigtimes ⨉',
+'biguplus ⨃',
+'bigvee ⋁',
+'bigwedge ⋀',
+'int ∫',
+'iint ∬',
+'iiint ∭',
+'oint ∮',
+'oiint ∯',
+'oiiint ∰',
+'partial ∂',
+'del ∇',
+'sum ∑',
+'prod ∏',
+'coprod ∐',
+'False 𝔽',
+'True 𝕋',
+'Booleans 𝔹',
+'Complex ℂ',
+'Naturals ℕ',
+'Primes ℙ',
+'Rationals ℚ',
+'Reals ℝ',
+'Integers ℤ',
+'BbbA 𝔸',
+'mbfA 𝐀',
+'mfrakA 𝔄',
+'mbffrakA 𝕬',
+'mitA 𝐴',
+'mbfit 𝑨',
+'msansA 𝖠',
+'mbfsansA 𝗔',
+'mitsansA 𝘈',
+'mbfitsansA 𝘼',
+'mscrA 𝒜',
+'mbfscrA 𝓐',
+'mttA 𝙰',
+];
     }
     </script>
 <script type="text/javascript">
     window.onload = function () {
         var oTextbox = new AutoSuggestControl("INPUT");        
+        var oTextbox2 = new AutoSuggestControl("INPUT2");        
       }
 </script>
-<style> .katex { font-size: 1.1em; } body { margin: 100px; }</style>
+<style type="text/css">
+    @font-face {
+      font-family: "Computer Modern";
+      src: url('http://mirrors.ctan.org/fonts/cm-unicode/fonts/otf/cmunss.otf');
+    }
+    @font-face {
+      font-family: "Computer Modern";
+      src: url('http://mirrors.ctan.org/fonts/cm-unicode/fonts/otf/cmunsx.otf');
+      font-weight: bold;
+    }
+    @font-face {
+      font-family: "Computer Modern";
+      src: url('http://mirrors.ctan.org/fonts/cm-unicode/fonts/otf/cmunsi.otf');
+      font-style: italic, oblique;
+    }
+    @font-face {
+      font-family: "Computer Modern";
+      src: url('http://mirrors.ctan.org/fonts/cm-unicode/fonts/otf/cmunbxo.otf');
+      font-weight: bold;
+      font-style: italic, oblique;
+    }
+  
+    body, textarea {
+      font-family: "Computer Modern", sans-serif;
+    }
+  </style>
+  <style> .katex { font-size: 1.1em; } body { margin: 100px; }</style>
 </head>
 
 <body>
 <h1>UMath2LaTeX: Parsing UnicodeMath and converting to LaTeX</h1>
-<p>All UnicodeMath expressions in the box below are converted when you click the "Parse" button. <br>
-    Feel free to edit the expressions. 
-    Typing Unicode in a browser is a bit of an issue, but you can copy paste symbols below.</p>
+<p>All UnicodeMath expressions in the box below are converted when you click the "Parse" button.
+    Feel free to edit the expressions.  <br>
+    Typing Unicode in a browser is a bit of an issue, but you can try LaTeX commands followed by [space].</p>
+    <!--textarea id="INPUT2" style="height: .5in; width: 100%; font-size: 44pt;"></textarea-->
 
-<textarea id="INPUT" style="height: 3in; width: 100%;">
+<i><textarea id="INPUT" style="height: 5in; width: 100%; font-style: italic, oblique; font-size: 24pt;">
 ∀x>0 x^a x^b = x^(a+b)
-
-∀x>0x^ax^b=x^(a+b)
-
-∀x,y>0((xy)^a = x^ay^a)
-
-|x+y| ≤ |x|+|y|
-
-|xy| = (|x||y|)
-
-|xy| = |x||y|
-
-x+y = y+x
-
-(x+y)+z = x+(y+z)
-
-x+0 = x
-
-x+-x = 0
-
--x+x = 0
-
-(xy)z = x(yz)
-
-x(y+z) = xy+xz
-
-(x+y)⋅z = x⋅z+y⋅z
-
-a|b ⟺ ∃c ∈ ℤ(ac=b)
 
 a∣b ⟺ ∃c ∈ ℤ(ac=b)
 
@@ -334,7 +540,34 @@ abso(∨,∧) = ((x∨y)∧x = x)
 
 LatticeAx(∨,∧) = (SemilatticeAx(∨) and SemilatticeAx(∧) and abso(∨,∧) and abso(∧,∨))
 
-s</textarea>
+∀x>0x^ax^b=x^(a+b)
+
+∀x,y>0((xy)^a = x^ay^a)
+
+|x+y| ≤ |x|+|y|
+
+|xy| = (|x||y|)
+
+|xy| = |x||y|
+
+x+y = y+x
+
+(x+y)+z = x+(y+z)
+
+x+0 = x
+
+x+-x = 0
+
+-x+x = 0
+
+(xy)z = x(yz)
+
+x(y+z) = xy+xz
+
+(x+y)⋅z = x⋅z+y⋅z
+
+a|b ⟺ ∃c ∈ ℤ(ac=b)
+</textarea></i>
 
 <input id="PARSE" value=Parse type=button 
 onclick="var out = convert(document.getElementById('INPUT').value);
