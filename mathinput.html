@@ -1,5 +1,31 @@
-// Math Unicode Input by Peter Jipsen, jipsen@chapman.edu, 2019-02-04
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>MathInput: Typing Math Unicode in a browser</title>
+<meta charset="utf-8">
+<!--link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.js" integrity="sha384-K3vbOmF2BtaVai+Qk37uypf7VrgBubhQreNQe9aGsz9lB63dIFiQVlJbr92dw2Lx" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/contrib/auto-render.min.js" integrity="sha384-kmZOZB5ObwgQnS/DuDg6TScgOiWWBiVt0plIRkZCmE6rDZGrEOQeHM5PcHi+nyqe" crossorigin="anonymous"
+    onload="renderMathInElement(document.body,{delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false},]});"></script-->
+<script src="mathinput.js"></script>
+<script>window.onload = function () {new MathInput("INPUT");}</script>
+<style> .katex { font-size: 1.1em; } body { margin: 100px; font-family: "STIXGeneral";}</style>
+</head>
 
+<body>
+<h1>MathInput: Typing Math Unicode in a browser</h1>
+<p>Typing mathematical symbols in a browser is easy if you know LaTeX: try "\"+LaTeX commands followed by [space].
+    This feature is enabled by 50 lines of JavaScript plus a customizable list of symbols and their names 
+    (see the code below). On a mobile device you can also use "z"+LaTeX rather than "\".</p>
+
+<textarea id="INPUT" style="height: 5in; width: 100%; font-family: 'STIXGeneral'; font-size: 24pt;">
+A ⊆ B ⟺ ∀x (x ∈ A ⟹ x ∈ B)
+Typed with: A \su  B \if  \f  x (x \i  A \im  x \i  B)
+Now try typing:
+lim_(x→a) f(x) = L ⟺ ∀ɛ>0 ∃δ>0 ∀x (0<|x-a|<δ ⟹ |f(x)-L|<ɛ)</textarea>
+<hr>
+<pre>
 function MathInput(id) {
     tbox = document.getElementById(id);
     pdate = new Date();
@@ -8,7 +34,7 @@ function MathInput(id) {
         ndate = new Date();
         if (ndate.getTime() > pdate.getTime() + 150) {
             var kc = evt.keyCode;
-            if (kc == 16 || kc == 32 || kc>=48 && kc<=111) MIsearchSymbols(tbox);
+            if (kc == 16 || kc == 32) MIsearchSymbols(tbox);
             pdate = ndate;
         }
     };
@@ -297,3 +323,10 @@ MIsymbols = [
        'Xi Ξ',
        'xi ξ',
      'zeta ζ'];
+    </pre>
+<hr>
+<p align="center">
+<small>Peter Jipsen --- February 2019 --- Chapman University</small>
+</p>
+</body>
+</html>
